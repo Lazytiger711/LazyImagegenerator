@@ -869,6 +869,27 @@ export default function App() {
     }
   };
 
+  const handleDeckItemClick = (item, type) => {
+    // Re-use logic from handleDragEnd for adding new items
+    const newItem = {
+      ...item,
+      type: type,
+      uid: `workspace-item-${Date.now()}-${Math.random()}`
+    };
+
+    setWorkspaceItems((items) => {
+      // Check if item of this type already exists
+      const existingIndex = items.findIndex(i => i.type === newItem.type);
+      if (existingIndex !== -1) {
+        // Replace existing
+        const newItems = [...items];
+        newItems[existingIndex] = newItem;
+        return newItems;
+      }
+      return [...items, newItem];
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 pb-24 select-none">
 
@@ -903,7 +924,8 @@ export default function App() {
       </header>
 
 
-      <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col-reverse md:flex-row overflow-hidden h-[calc(100vh-64px)]">
+      {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
+      <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden h-[calc(100vh-64px)]">
 
         <DndContext
           sensors={sensors}
@@ -911,7 +933,7 @@ export default function App() {
           onDragEnd={handleDragEnd}
         >
           {/* Left Panel: Asset Deck */}
-          <AssetDeck disabledIds={disabledOptions} />
+          <AssetDeck disabledIds={disabledOptions} onItemClick={handleDeckItemClick} />
 
           {/* Right Panel: Canvas & Workspace */}
           <div className="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 relative">

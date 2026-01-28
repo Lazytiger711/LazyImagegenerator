@@ -13,7 +13,7 @@ import {
 } from '../data/constants';
 
 // Draggable Icon Card (Updated for Dial/Card Look)
-const DraggableAsset = ({ item, type, disabled }) => {
+const DraggableAsset = ({ item, type, disabled, onClick }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: `asset-${type}-${item.id}`,
         data: { item, type, source: 'deck' },
@@ -33,11 +33,12 @@ const DraggableAsset = ({ item, type, disabled }) => {
             }}
             {...listeners}
             {...attributes}
+            onClick={() => !disabled && onClick && onClick(item, type)} // Add Click Handler
             // Increased size to w-60 (240px) to show ~1 card at a time
             className={`flex-shrink-0 w-60 flex flex-col items-center justify-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-all select-none relative overflow-hidden
                 ${disabled
                     ? 'opacity-40 grayscale cursor-not-allowed border-gray-100'
-                    : 'hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group snap-center'
+                    : 'hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group snap-center active:scale-95'
                 }`}
         >
             <div className="w-16 h-16 mb-2 rounded-md flex items-center justify-center transition-colors z-10">
@@ -57,7 +58,7 @@ const DraggableAsset = ({ item, type, disabled }) => {
     );
 };
 
-const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds }) => {
+const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onItemClick }) => {
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
@@ -115,6 +116,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                                 item={item}
                                 type={type}
                                 disabled={disabledIds?.includes(item.id)}
+                                onClick={onItemClick}
                             />
                         ))}
                         {/* Padding spacer for end */}
@@ -135,7 +137,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
     );
 };
 
-export default function AssetDeck({ disabledIds = [] }) {
+export default function AssetDeck({ disabledIds = [], onItemClick }) {
     const [openSections, setOpenSections] = useState({
         shot: true,
         angle: true,
@@ -184,6 +186,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('resolution')}
                     description="이미지 크기와 비율 설정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
                 <CategorySection
                     title="Facing Direction"
@@ -194,6 +197,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('facing')}
                     description="인물이 바라보는 방향 결정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
                 <CategorySection
                     title="Art Style"
@@ -204,6 +208,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('style')}
                     description="전체적인 화풍과 톤 결정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
                 <CategorySection
                     title="Lighting"
@@ -214,6 +219,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('lighting')}
                     description="빛의 종류와 분위기 설정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
                 <CategorySection
                     title="Shot Type"
@@ -224,6 +230,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('shot')}
                     description="피사체와의 거리 설정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
                 <CategorySection
                     title="Angle"
@@ -234,6 +241,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('angle')}
                     description="카메라의 높낮이와 각도 설정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
                 <CategorySection
                     title="Composition"
@@ -244,6 +252,7 @@ export default function AssetDeck({ disabledIds = [] }) {
                     onToggle={() => toggleSection('composition')}
                     description="화면 내 피사체의 배치 결정"
                     disabledIds={disabledIds}
+                    onItemClick={onItemClick}
                 />
             </div>
         </div>
