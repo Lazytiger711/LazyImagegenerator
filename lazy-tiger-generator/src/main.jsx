@@ -3,14 +3,14 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
-import LandingPage from './pages/LandingPage.jsx'
+import GuidePage from './pages/GuidePage.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/app" element={<App />} />
+        <Route path="/" element={<App />} />
+        <Route path="/guide" element={<GuidePage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

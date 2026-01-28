@@ -58,8 +58,9 @@ export default function App() {
 
   // Deck Builder State
   const [workspaceItems, setWorkspaceItems] = useState([]);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [activeDragItem, setActiveDragItem] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false); // Feedback Modal State
+
 
 
   const [isDragging, setIsDragging] = useState(false);
@@ -892,368 +893,367 @@ export default function App() {
     });
   };
 
-  import FeedbackModal from './components/FeedbackModal'; // Import Feedback Modal
 
-  // ... (existing imports)
 
-  // --- Main Component ---
-  export default function App() {
-    // ... (existing state)
-    const [showFeedback, setShowFeedback] = useState(false); // Feedback Modal State
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 pb-24 select-none">
 
-    // ... (existing code)
-
-    return (
-      <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 pb-24 select-none">
-
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 py-4 sticky top-0 z-20 shadow-sm">
-          <div className="max-w-4xl mx-auto px-4 flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <span className="text-lg font-bold tracking-tight">Lazy <span className="text-orange-500">Image Generator</span></span>
-              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200 overflow-hidden">
-                <img src="/logo.png" alt="Tiger Logo" className="w-full h-full object-cover" />
-              </div>
-              {/* Supabase Connection Status Indicator (Simple) */}
-              <div className={`w-2 h-2 rounded-full ${supabase ? 'bg-green-500' : 'bg-red-500'}`} title="Supabase Connected"></div>
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 py-4 sticky top-0 z-20 shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <span className="text-lg font-bold tracking-tight">Lazy <span className="text-orange-500">Image Generator</span></span>
+            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200 overflow-hidden">
+              <img src="/logo.png" alt="Tiger Logo" className="w-full h-full object-cover" />
             </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setShowFeedback(true)}
-                className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors mr-1"
-                title="개발자에게 피드백 보내기"
-              >
-                <MessageSquare size={18} />
-              </button>
-              <button
-                onClick={() => setShowGallery(true)}
-                className="px-3 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 rounded-lg text-sm font-bold transition-colors flex items-center"
-              >
-                <ImageIcon size={16} className="mr-1.5" />
-                내 갤러리
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                title="초기화"
-              >
-                <RefreshCw size={18} />
-              </button>
-            </div>
+            {/* Supabase Connection Status Indicator (Simple) */}
+            <div className={`w-2 h-2 rounded-full ${supabase ? 'bg-green-500' : 'bg-red-500'}`} title="Supabase Connected"></div>
           </div>
-        </header>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => window.open('/guide', '_blank')}
+              className="hidden md:flex px-3 py-1.5 text-gray-500 hover:text-orange-600 font-bold transition-colors items-center mr-1 text-sm"
+              title="사용법 보기"
+            >
+              <Info size={16} className="mr-1.5" />
+              사용법
+            </button>
+            <button
+              onClick={() => setShowFeedback(true)}
+              className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors mr-1"
+              title="개발자에게 피드백 보내기"
+            >
+              <MessageSquare size={18} />
+            </button>
+            <button
+              onClick={() => setShowGallery(true)}
+              className="px-3 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 rounded-lg text-sm font-bold transition-colors flex items-center"
+            >
+              <ImageIcon size={16} className="mr-1.5" />
+              내 갤러리
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              title="초기화"
+            >
+              <RefreshCw size={18} />
+            </button>
+          </div>
+        </div>
+      </header>
 
 
-        {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
-        <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden h-[calc(100vh-64px)]">
+      {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
+      <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden h-[calc(100vh-64px)]">
 
-          <DndContext
-            sensors={sensors}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          >
-            {/* Left Panel: Asset Deck */}
-            <AssetDeck disabledIds={disabledOptions} onItemClick={handleDeckItemClick} />
+        <DndContext
+          sensors={sensors}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          {/* Left Panel: Asset Deck */}
+          <AssetDeck disabledIds={disabledOptions} onItemClick={handleDeckItemClick} />
 
-            {/* Right Panel: Canvas & Workspace */}
-            <div className="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 relative">
+          {/* Right Panel: Canvas & Workspace */}
+          <div className="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 relative">
 
-              {/* Top Area: Inputs */}
-              <div className="p-6 pb-4 shrink-0 border-b border-gray-200 bg-white z-20 shadow-sm">
-                <div className="flex flex-col space-y-3">
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={subjectText}
-                      onChange={(e) => setSubjectText(e.target.value)}
-                      placeholder="무엇을 그리실 건가요? (예: 귀여운 호랑이)"
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={contextText}
-                      onChange={(e) => setContextText(e.target.value)}
-                      placeholder="배경이나 상황 (예: 카페에서)"
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
-                    />
-                  </div>
+            {/* Top Area: Inputs */}
+            <div className="p-6 pb-4 shrink-0 border-b border-gray-200 bg-white z-20 shadow-sm">
+              <div className="flex flex-col space-y-3">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={subjectText}
+                    onChange={(e) => setSubjectText(e.target.value)}
+                    placeholder="무엇을 그리실 건가요? (예: 귀여운 호랑이)"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
+                  />
+                </div>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={contextText}
+                    onChange={(e) => setContextText(e.target.value)}
+                    placeholder="배경이나 상황 (예: 카페에서)"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
+                  />
                 </div>
               </div>
+            </div>
 
-              {/* Middle Area: Workspace (Scaled to ~80% visually via padding/flex) */}
-              <div className="flex-1 overflow-hidden relative flex flex-col p-4">
-                {/* Wrapper to control size if needed, but flex-1 with padding works well to isolate it */}
-                <div className="flex-1 border-2 border-dashed border-gray-200 rounded-3xl overflow-hidden bg-gray-100/50">
-                  <Workspace items={workspaceItems} onRemove={handleRemoveItem} />
-                </div>
+            {/* Middle Area: Workspace (Scaled to ~80% visually via padding/flex) */}
+            <div className="flex-1 overflow-hidden relative flex flex-col p-4">
+              {/* Wrapper to control size if needed, but flex-1 with padding works well to isolate it */}
+              <div className="flex-1 border-2 border-dashed border-gray-200 rounded-3xl overflow-hidden bg-gray-100/50">
+                <Workspace items={workspaceItems} onRemove={handleRemoveItem} />
               </div>
+            </div>
 
-              {/* Bottom Area: Visual Feedback */}
-              <div className="p-4 pt-0 shrink-0 border-t border-gray-200 bg-white/50 backdrop-blur-sm flex flex-col items-center pb-6">
+            {/* Bottom Area: Visual Feedback */}
+            <div className="p-4 pt-0 shrink-0 border-t border-gray-200 bg-white/50 backdrop-blur-sm flex flex-col items-center pb-6">
 
-                {/* Toolbar */}
-                <div className="w-full max-w-2xl flex items-center justify-between mb-4 bg-white p-2 rounded-2xl shadow-sm border border-orange-100">
-                  {/* Left: Tools */}
-                  <div className="flex items-center space-x-2">
-                    <div className="flex bg-gray-100 rounded-lg p-1">
-                      <button
-                        onClick={() => setToolMode('brush')}
-                        className={`p-2 rounded-md transition-all ${toolMode === 'brush' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
-                        title="브러시"
-                      >
-                        <Brush size={16} />
-                      </button>
-                      <button
-                        onClick={() => setToolMode('stamp')}
-                        className={`p-2 rounded-md transition-all ${toolMode === 'stamp' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
-                        title="스탬프"
-                      >
-                        <Stamp size={16} />
-                      </button>
-                    </div>
-
-                    {/* Stamp Selector (Visible only in Stamp Mode) */}
-                    {toolMode === 'stamp' && (
-                      <div className="flex items-center space-x-1 pl-2 border-l border-gray-200 ml-2">
-                        {STAMPS.map(stamp => (
-                          <button
-                            key={stamp.id}
-                            onClick={() => setSelectedStamp(stamp.id)}
-                            className={`p-1.5 rounded-lg transition-all ${selectedStamp === stamp.id ? 'bg-orange-100 text-orange-600 ring-2 ring-orange-200' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}`}
-                            title={stamp.label}
-                          >
-                            <stamp.icon size={18} />
-                          </button>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Divider */}
-                    <div className="w-px h-6 bg-gray-200 mx-2"></div>
-
-                    {/* Size Slider */}
-                    <div className="flex items-center px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 space-x-3">
-                      <span className="text-xs font-bold text-gray-400">SIZE</span>
-                      <input
-                        type="range"
-                        min="5"
-                        max="100" // Expanded range
-                        value={brushSize}
-                        onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                        className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
-                      />
-                      <span className="text-xs font-bold text-gray-400 w-4 text-center">{brushSize}</span>
-                    </div>
-
+              {/* Toolbar */}
+              <div className="w-full max-w-2xl flex items-center justify-between mb-4 bg-white p-2 rounded-2xl shadow-sm border border-orange-100">
+                {/* Left: Tools */}
+                <div className="flex items-center space-x-2">
+                  <div className="flex bg-gray-100 rounded-lg p-1">
                     <button
-                      onClick={clearCanvas}
-                      className="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-colors"
-                      title="모두 지우기"
+                      onClick={() => setToolMode('brush')}
+                      className={`p-2 rounded-md transition-all ${toolMode === 'brush' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
+                      title="브러시"
                     >
-                      <Trash2 size={18} />
+                      <Brush size={16} />
+                    </button>
+                    <button
+                      onClick={() => setToolMode('stamp')}
+                      className={`p-2 rounded-md transition-all ${toolMode === 'stamp' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
+                      title="스탬프"
+                    >
+                      <Stamp size={16} />
                     </button>
                   </div>
 
-                  {/* Right: Palette */}
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-                      {paletteColors.map((p) => (
+                  {/* Stamp Selector (Visible only in Stamp Mode) */}
+                  {toolMode === 'stamp' && (
+                    <div className="flex items-center space-x-1 pl-2 border-l border-gray-200 ml-2">
+                      {STAMPS.map(stamp => (
                         <button
-                          key={p.id}
-                          onClick={() => setSelectedColor(p)}
-                          className={`
-                                w-8 h-8 rounded-full flex items-center justify-center transition-all relative
-                                ${selectedColor.id === p.id ? 'ring-2 ring-orange-400 scale-110 z-10' : 'hover:scale-105 opacity-80 hover:opacity-100'}
-                              `}
-                          style={{ backgroundColor: p.color || '#eee' }}
-                          title={p.label}
+                          key={stamp.id}
+                          onClick={() => setSelectedStamp(stamp.id)}
+                          className={`p-1.5 rounded-lg transition-all ${selectedStamp === stamp.id ? 'bg-orange-100 text-orange-600 ring-2 ring-orange-200' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}`}
+                          title={stamp.label}
                         >
-                          {p.icon && <p.icon size={14} className="text-gray-500" />}
-                          {selectedColor.id === p.id && !p.icon && <Check size={14} className="text-white drop-shadow-md" />}
+                          <stamp.icon size={18} />
                         </button>
                       ))}
                     </div>
+                  )}
 
-                    {/* Add Object Button */}
-                    {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
-                      <button
-                        onClick={handleAddObject}
-                        className="w-8 h-8 rounded-full border border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-300 transition-colors bg-white"
-                        title="새로운 개체 추가"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    )}
+                  {/* Divider */}
+                  <div className="w-px h-6 bg-gray-200 mx-2"></div>
+
+                  {/* Size Slider */}
+                  <div className="flex items-center px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 space-x-3">
+                    <span className="text-xs font-bold text-gray-400">SIZE</span>
+                    <input
+                      type="range"
+                      min="5"
+                      max="100" // Expanded range
+                      value={brushSize}
+                      onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                      className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                    />
+                    <span className="text-xs font-bold text-gray-400 w-4 text-center">{brushSize}</span>
                   </div>
+
+                  <button
+                    onClick={clearCanvas}
+                    className="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-colors"
+                    title="모두 지우기"
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </div>
 
-                {/* Grid Visual Preview */}
-                <div className="bg-white p-4 rounded-3xl shadow-sm border border-orange-100 flex flex-col items-center relative group-preview">
+                {/* Right: Palette */}
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+                    {paletteColors.map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setSelectedColor(p)}
+                        className={`
+                                w-8 h-8 rounded-full flex items-center justify-center transition-all relative
+                                ${selectedColor.id === p.id ? 'ring-2 ring-orange-400 scale-110 z-10' : 'hover:scale-105 opacity-80 hover:opacity-100'}
+                              `}
+                        style={{ backgroundColor: p.color || '#eee' }}
+                        title={p.label}
+                      >
+                        {p.icon && <p.icon size={14} className="text-gray-500" />}
+                        {selectedColor.id === p.id && !p.icon && <Check size={14} className="text-white drop-shadow-md" />}
+                      </button>
+                    ))}
+                  </div>
 
-                  {/* Grid Container */}
-                  <div
-                    ref={gridRef}
-                    className={`
+                  {/* Add Object Button */}
+                  {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
+                    <button
+                      onClick={handleAddObject}
+                      className="w-8 h-8 rounded-full border border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-300 transition-colors bg-white"
+                      title="새로운 개체 추가"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Grid Visual Preview */}
+              <div className="bg-white p-4 rounded-3xl shadow-sm border border-orange-100 flex flex-col items-center relative group-preview">
+
+                {/* Grid Container */}
+                <div
+                  ref={gridRef}
+                  className={`
                             relative rounded-xl overflow-hidden p-0 select-none
                             ${toolMode === 'brush' ? 'cursor-crosshair' : 'cursor-pointer'}
                         `}
+                  style={{
+                    aspectRatio: `${selections.resolution.width} / ${selections.resolution.height}`,
+                    height: '240px',
+                    width: 'auto',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e5e7eb',
+                    borderWidth: '1px',
+                    boxShadow: '0 0 0 4px #f3f4f6',
+                    color: '#000000',
+                  }}
+                  onMouseDown={handleCanvasMouseDown}
+                  onMouseMove={handleCanvasMouseMove}
+                >
+                  {/* 1. Background Grid (Reference for Position) */}
+                  <div
+                    className="absolute inset-0 z-0 pointer-events-none opacity-50"
                     style={{
-                      aspectRatio: `${selections.resolution.width} / ${selections.resolution.height}`,
-                      height: '240px',
-                      width: 'auto',
-                      backgroundColor: '#ffffff',
-                      borderColor: '#e5e7eb',
-                      borderWidth: '1px',
-                      boxShadow: '0 0 0 4px #f3f4f6',
-                      color: '#000000',
-                    }}
-                    onMouseDown={handleCanvasMouseDown}
-                    onMouseMove={handleCanvasMouseMove}
-                  >
-                    {/* 1. Background Grid (Reference for Position) */}
-                    <div
-                      className="absolute inset-0 z-0 pointer-events-none opacity-50"
-                      style={{
-                        backgroundImage: `
+                      backgroundImage: `
                             linear-gradient(to right, #e5e7eb 1px, transparent 1px),
                             linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
                         `,
-                        backgroundSize: '20px 20px'
-                      }}
-                    />
+                      backgroundSize: '20px 20px'
+                    }}
+                  />
 
-                    {/* 2. Drawing Canvas (Interactive Layer) - z-10 puts it above z-0 background */}
-                    <canvas
-                      ref={canvasRef}
-                      className="absolute inset-0 z-10 w-full h-full cursor-none"
-                    />
+                  {/* 2. Drawing Canvas (Interactive Layer) - z-10 puts it above z-0 background */}
+                  <canvas
+                    ref={canvasRef}
+                    className="absolute inset-0 z-10 w-full h-full cursor-none"
+                  />
 
-                    {/* Visual Cursor Overlay */}
-                    {cursorPos && (
-                      <div
-                        className="pointer-events-none absolute border border-gray-400 rounded-full flex items-center justify-center transition-transform duration-75 z-50"
-                        style={{
-                          left: 0,
-                          top: 0,
-                          // Dimensions: Divide by scale to maintain correct visual size on screen
-                          width: (toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1),
-                          height: (toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1),
-                          // Position: Use CSS pixel coordinates directly
-                          // Center offset: Half of the DISPLAY size
-                          transform: `translate(${cursorPos.x - ((toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1)) / 2}px, 
+                  {/* Visual Cursor Overlay */}
+                  {cursorPos && (
+                    <div
+                      className="pointer-events-none absolute border border-gray-400 rounded-full flex items-center justify-center transition-transform duration-75 z-50"
+                      style={{
+                        left: 0,
+                        top: 0,
+                        // Dimensions: Divide by scale to maintain correct visual size on screen
+                        width: (toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1),
+                        height: (toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1),
+                        // Position: Use CSS pixel coordinates directly
+                        // Center offset: Half of the DISPLAY size
+                        transform: `translate(${cursorPos.x - ((toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1)) / 2}px, 
                                             ${cursorPos.y - ((toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1)) / 2}px)`,
-                          backgroundColor: toolMode === 'brush' ? selectedColor.color : 'transparent',
-                          borderColor: toolMode === 'brush' ? 'rgba(0,0,0,0.2)' : 'rgba(251, 146, 60, 0.5)',
-                          opacity: 0.8
-                        }}
-                      >
-                        {toolMode === 'stamp' && selectedStamp && (
-                          <PixelArtIcon
-                            type="stamp"
-                            name={selectedStamp}
-                            className="w-full h-full opacity-50"
-                            style={{ fill: selectedColor.color }}
-                          />
-                        )}
-                      </div>
-                    )}
-
-                    {/* 3. Composition Guides (Overlay) - z-20 puts it on top, pointer-events-none lets clicks pass to canvas */}
-                    <div className="absolute inset-0 z-20 pointer-events-none">
-                      <CompositionGuides type={selections.composition.id} />
+                        backgroundColor: toolMode === 'brush' ? selectedColor.color : 'transparent',
+                        borderColor: toolMode === 'brush' ? 'rgba(0,0,0,0.2)' : 'rgba(251, 146, 60, 0.5)',
+                        opacity: 0.8
+                      }}
+                    >
+                      {toolMode === 'stamp' && selectedStamp && (
+                        <PixelArtIcon
+                          type="stamp"
+                          name={selectedStamp}
+                          className="w-full h-full opacity-50"
+                          style={{ fill: selectedColor.color }}
+                        />
+                      )}
                     </div>
-                  </div>
+                  )}
 
-                  {/* Generate Button (Floating) */}
-                  <button
-                    onClick={generatePrompt}
-                    disabled={isGenerating}
-                    className={`
+                  {/* 3. Composition Guides (Overlay) - z-20 puts it on top, pointer-events-none lets clicks pass to canvas */}
+                  <div className="absolute inset-0 z-20 pointer-events-none">
+                    <CompositionGuides type={selections.composition.id} />
+                  </div>
+                </div>
+
+                {/* Generate Button (Floating) */}
+                <button
+                  onClick={generatePrompt}
+                  disabled={isGenerating}
+                  className={`
                           absolute -bottom-5 left-1/2 transform -translate-x-1/2 
                           px-6 py-2 rounded-full font-black text-white shadow-lg 
                           flex items-center space-x-2 z-40 transition-all text-sm whitespace-nowrap
                           ${isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-red-500 hover:scale-105 hover:shadow-orange-200'}
                         `}
-                  >
-                    {isGenerating ? (
-                      <RefreshCw className="animate-spin w-4 h-4 mr-1" />
-                    ) : (
-                      <Wand2 className="w-4 h-4 mr-1" />
-                    )}
-                    {isGenerating ? '생성 중...' : '프롬프트 생성'}
-                  </button>
-                </div>
+                >
+                  {isGenerating ? (
+                    <RefreshCw className="animate-spin w-4 h-4 mr-1" />
+                  ) : (
+                    <Wand2 className="w-4 h-4 mr-1" />
+                  )}
+                  {isGenerating ? '생성 중...' : '프롬프트 생성'}
+                </button>
               </div>
-
-
-
-              {/* Result Overlay (If shown) */}
-              {showResult && (
-                <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end justify-center sm:items-center p-4">
-                  <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up">
-                    <div className="bg-gray-900 p-4 flex justify-between items-center text-white">
-                      <h3 className="font-bold flex items-center"><Check className="mr-2 text-green-400" /> 생성 완료</h3>
-                      <button onClick={() => setShowResult(false)} className="p-1 hover:bg-gray-800 rounded-full"><X size={20} /></button>
-                    </div>
-
-                    <div className="p-6">
-                      {/* Generated Image Preview */}
-                      {generatedImage && (
-                        <div className="mb-4 rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 flex justify-center relative group">
-                          <img src={generatedImage} alt="Generated Map" className="max-h-48 object-contain" />
-                          <div className="absolute top-2 right-2 flex space-x-2">
-                            <button onClick={handleCopyMapImage} className="p-2 bg-white/90 rounded-lg hover:text-blue-600 shadow-sm"><Brush size={14} /></button>
-                            <button onClick={handleDownloadMapImage} className="p-2 bg-white/90 rounded-lg hover:text-green-600 shadow-sm"><Download size={14} /></button>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 break-words mb-4">
-                        {finalPrompt}
-                      </div>
-
-                      <div className="flex gap-2">
-                        <button onClick={handleOpenGemini} className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl flex items-center justify-center hover:opacity-90">
-                          <Sparkles size={16} className="mr-2" /> AI로 보내기
-                        </button>
-                        <button onClick={handleSaveToSupabase} className="flex-1 py-3 bg-orange-100 text-orange-700 font-bold rounded-xl flex items-center justify-center hover:bg-orange-200">
-                          <Save size={16} className="mr-2" /> 저장
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
             </div>
 
-            {/* Drag Overlay (Ghost) */}
-            <DragOverlay dropAnimation={null}>
-              {activeDragItem ? (
-                <div className="w-24 h-24 bg-white rounded-xl shadow-2xl border-2 border-orange-500 flex flex-col items-center justify-center rotate-3 cursor-grabbing opacity-90 z-50 transition-transform">
-                  <div className="w-10 h-10 mb-1 rounded-lg bg-orange-50 flex items-center justify-center">
-                    <PixelArtIcon type={activeDragItem.type} name={activeDragItem.item.id} className="w-6 h-6" />
+
+
+            {/* Result Overlay (If shown) */}
+            {showResult && (
+              <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end justify-center sm:items-center p-4">
+                <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up">
+                  <div className="bg-gray-900 p-4 flex justify-between items-center text-white">
+                    <h3 className="font-bold flex items-center"><Check className="mr-2 text-green-400" /> 생성 완료</h3>
+                    <button onClick={() => setShowResult(false)} className="p-1 hover:bg-gray-800 rounded-full"><X size={20} /></button>
                   </div>
-                  <span className="text-[10px] font-bold text-gray-800 truncate px-2">{activeDragItem.item.label}</span>
+
+                  <div className="p-6">
+                    {/* Generated Image Preview */}
+                    {generatedImage && (
+                      <div className="mb-4 rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 flex justify-center relative group">
+                        <img src={generatedImage} alt="Generated Map" className="max-h-48 object-contain" />
+                        <div className="absolute top-2 right-2 flex space-x-2">
+                          <button onClick={handleCopyMapImage} className="p-2 bg-white/90 rounded-lg hover:text-blue-600 shadow-sm"><Brush size={14} /></button>
+                          <button onClick={handleDownloadMapImage} className="p-2 bg-white/90 rounded-lg hover:text-green-600 shadow-sm"><Download size={14} /></button>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 break-words mb-4">
+                      {finalPrompt}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button onClick={handleOpenGemini} className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl flex items-center justify-center hover:opacity-90">
+                        <Sparkles size={16} className="mr-2" /> AI로 보내기
+                      </button>
+                      <button onClick={handleSaveToSupabase} className="flex-1 py-3 bg-orange-100 text-orange-700 font-bold rounded-xl flex items-center justify-center hover:bg-orange-200">
+                        <Save size={16} className="mr-2" /> 저장
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              ) : null}
-            </DragOverlay>
+              </div>
+            )}
 
-          </DndContext>
-        </main>
+          </div>
 
-        <Toast message={toastMsg} show={showToast} />
+          {/* Drag Overlay (Ghost) */}
+          <DragOverlay dropAnimation={null}>
+            {activeDragItem ? (
+              <div className="w-24 h-24 bg-white rounded-xl shadow-2xl border-2 border-orange-500 flex flex-col items-center justify-center rotate-3 cursor-grabbing opacity-90 z-50 transition-transform">
+                <div className="w-10 h-10 mb-1 rounded-lg bg-orange-50 flex items-center justify-center">
+                  <PixelArtIcon type={activeDragItem.type} name={activeDragItem.item.id} className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-bold text-gray-800 truncate px-2">{activeDragItem.item.label}</span>
+              </div>
+            ) : null}
+          </DragOverlay>
 
-        {showGallery && (
-          <Gallery
-            onClose={() => setShowGallery(false)}
-            onLoad={handleLoadPrompt}
-          />
-        )}
+        </DndContext>
+      </main>
 
-        <style>{`
+      <Toast message={toastMsg} show={showToast} />
+
+      {showGallery && (
+        <Gallery
+          onClose={() => setShowGallery(false)}
+          onLoad={handleLoadPrompt}
+        />
+      )}
+
+      <style>{`
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
@@ -1276,6 +1276,6 @@ export default function App() {
             animation: fade-in-up 0.3s ease-out forwards;
         }
       `}</style>
-      </div>
-    );
-  }
+    </div>
+  );
+}
