@@ -34,8 +34,8 @@ export default function LandingPage() {
                         <Zap size={16} className="mr-2" />
                         AI 이미지 생성이 이보다 쉬울 수는 없습니다
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black tracking-tight text-gray-900 mb-8 leading-tight">
-                        상상을 현실로 만드는 <br />
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-gray-900 mb-8 leading-tight break-keep">
+                        상상을 현실로 만드는 <br className="hidden md:block" />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-600">가장 게으른 방법</span>
                     </h1>
 
@@ -50,9 +50,9 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    <p className="text-xl text-gray-500 mb-12 max-w-2xl mx-auto leading-relaxed">
-                        복잡한 프롬프트 공부는 그만. <br />
-                        직관적인 카드 덱 시스템과 드래그 앤 드롭으로 <br className="md:hidden" />
+                    <p className="text-base sm:text-lg md:text-xl text-gray-500 mb-12 max-w-2xl mx-auto leading-relaxed break-keep">
+                        복잡한 프롬프트 공부는 그만.<br className="hidden md:block" />
+                        직관적인 카드 덱 시스템과 드래그 앤 드롭으로
                         누구나 전문가급 이미지를 생성하세요.
                     </p>
 
