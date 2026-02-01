@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import html2canvas from 'html2canvas'; // Ensure this is installed
-
-import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare, User, Box } from 'lucide-react';
+import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare } from 'lucide-react';
 
 // Imported Data & Components
 import {
   STAMPS, FACING_DIRECTIONS, ANGLES, SHOT_TYPES, COMPOSITIONS, STYLES, RESOLUTIONS, LIGHTING,
-  PALETTE_COLORS as INITIAL_PALETTE_COLORS, INITIAL_PALETTE, EXTRA_COLORS, CONFLICTS, MEME_TEMPLATES
+  PALETTE_COLORS as INITIAL_PALETTE_COLORS, INITIAL_PALETTE, EXTRA_COLORS
 } from './data/constants';
 
 import PixelArtIcon from './components/PixelArtIcon';
@@ -18,7 +16,7 @@ import { supabase } from './lib/supabaseClient'; // Import Supabase client
 import Gallery from './components/Gallery'; // Import Gallery
 
 // DnD Kit Imports
-import { DndContext, DragOverlay, useSensor, useSensors, PointerSensor, MouseSensor, TouchSensor } from '@dnd-kit/core';
+import { DndContext, DragOverlay, useSensor, useSensors, PointerSensor, defaultDropAnimationSideEffects } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import AssetDeck from './components/AssetDeck';
 import Workspace from './components/Workspace';
@@ -35,57 +33,7 @@ export default function App() {
     style: STYLES[0],
     resolution: RESOLUTIONS[0],
     lighting: LIGHTING[0],
-    meme: MEME_TEMPLATES[0],
   });
-
-  // Apply Meme Presets Effect
-  useEffect(() => {
-    const meme = selections.meme;
-    if (meme.id !== 'none' && meme.presets) {
-      setSelections(prev => {
-        // Find the full objects for the IDs in presets
-        const newShot = SHOT_TYPES.find(s => s.id === meme.presets.shot) || prev.shot;
-        const newAngle = ANGLES.find(a => a.id === meme.presets.angle) || prev.angle;
-        const newComp = COMPOSITIONS.find(c => c.id === meme.presets.composition) || prev.composition;
-        const newFacing = FACING_DIRECTIONS.find(f => f.id === meme.presets.facing) || prev.facing;
-
-        return {
-          ...prev,
-          shot: newShot,
-          angle: newAngle,
-          composition: newComp,
-          facing: newFacing
-        };
-      });
-    }
-  }, [selections.meme]); // Only trigger when meme selection changes
-
-  const [subjectType, setSubjectType] = useState('character'); // 'character' or 'object'
-
-  // Calculate Disabled Options and Locked Categories
-  const { disabledOptions, lockedCategories } = React.useMemo(() => {
-    const disabled = new Set();
-    const locked = new Set();
-
-    // 1. Conflict Logic
-    Object.values(selections).forEach(selection => {
-      const conflicts = CONFLICTS[selection.id];
-      if (conflicts) {
-        conflicts.forEach(c => disabled.add(c));
-      }
-    });
-
-    // 2. Meme Template Locking Logic
-    if (selections.meme.id !== 'none') {
-      // Lock these 4 categories when a meme is active
-      ['shot', 'angle', 'composition', 'facing'].forEach(cat => locked.add(cat));
-    }
-
-    return {
-      disabledOptions: Array.from(disabled),
-      lockedCategories: Array.from(locked)
-    };
-  }, [selections]);
 
   const [subjectText, setSubjectText] = useState("");
   const [contextText, setContextText] = useState("");
@@ -95,8 +43,6 @@ export default function App() {
   const [finalPrompt, setFinalPrompt] = useState("");
   const [generatedImage, setGeneratedImage] = useState(null);
 
-
-
   const [paletteColors, setPaletteColors] = useState(INITIAL_PALETTE);
   const [selectedColor, setSelectedColor] = useState(INITIAL_PALETTE[0]);
 
@@ -104,6 +50,7 @@ export default function App() {
   const [brushSize, setBrushSize] = useState(20);
   const [selectedStamp, setSelectedStamp] = useState(STAMPS[0].id); // Default to first stamp
 
+  const [showGrid, setShowGrid] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("복사되었습니다!");
 
@@ -111,8 +58,7 @@ export default function App() {
 
   // Deck Builder State
   const [workspaceItems, setWorkspaceItems] = useState([]);
-
-
+  const [showFeedback, setShowFeedback] = useState(false);
   const [activeDragItem, setActiveDragItem] = useState(null);
 
 
@@ -121,17 +67,35 @@ export default function App() {
   const [cursorPos, setCursorPos] = useState(null); // Track cursor position for preview
 
 
+  // Dynamic Option Disabling Logic
+  const getDisabledOptions = () => {
+    const disabled = [];
+
+    // Rule 1: Selfie -> No Back View (Physical Paradox)
+    if (selections.shot.id === 'selfie') {
+      disabled.push('facing_back', 'facing_back_3_4_left', 'facing_back_3_4_right');
+    }
+
+    // Rule 2: Bird's Eye -> No Close Ups (Scale Paradox)
+    if (selections.angle.id === 'birds_eye') {
+      disabled.push('extreme_close_up', 'close_up');
+    }
+
+    // Rule 3: Top Down -> No Front Facing (Flatness Paradox)
+    if (selections.angle.id === 'top_down') {
+      disabled.push('facing_front', 'facing_front_3_4_left', 'facing_front_3_4_right');
+    }
+
+    return disabled;
+  };
+
+  const disabledOptions = getDisabledOptions();
+
   // DnD Sensors
   const sensors = useSensors(
-    useSensor(MouseSensor, {
+    useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 200, // Wait 200ms before starting drag (allows scrolling)
-        tolerance: 5, // Allow 5px movement during delay
+        distance: 8, // Require movement to start drag (prevents accidental clicks)
       },
     })
   );
@@ -161,7 +125,6 @@ export default function App() {
     });
 
     setSelections(newSelections);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceItems]);
 
   // DnD Handlers
@@ -211,51 +174,6 @@ export default function App() {
     }
   };
 
-  // Handle Click Selection (Alternative to Drag & Drop) with Toggle
-  const handleAssetClick = (item, type) => {
-    // Check if currently selected
-    const isCurrentlySelected = selections[type]?.id === item.id;
-
-    if (isCurrentlySelected) {
-      // DESELECT Logic
-      // 1. Reset Global Selection
-      setSelections(prev => ({
-        ...prev,
-        [type]: { id: 'none', label: 'None', prompt: '' } // Reset to "None" state
-      }));
-
-      // 2. Remove from Workspace
-      setWorkspaceItems(prev => prev.filter(i => i.type !== type));
-
-    } else {
-      // SELECT Logic
-      // 1. Update Global Selections
-      setSelections(prev => ({
-        ...prev,
-        [type]: item
-      }));
-
-      // 2. Add/Update in Workspace
-      setWorkspaceItems((items) => {
-        const newItem = {
-          ...item,
-          type: type,
-          uid: `workspace-item-${Date.now()}-${Math.random()}`
-        };
-
-        const existingIndex = items.findIndex(i => i.type === newItem.type);
-        if (existingIndex !== -1) {
-          // Replace
-          const newItems = [...items];
-          newItems[existingIndex] = newItem;
-          return newItems;
-        }
-        // Append
-        return [...items, newItem];
-      });
-    }
-  };
-
   const handleRemoveItem = (uid) => {
     setWorkspaceItems(prev => prev.filter(i => i.uid !== uid));
   };
@@ -273,23 +191,12 @@ export default function App() {
     if (!canvas) return;
 
     // Set internal resolution based on Aspect Ratio
-    // Set internal resolution based on Aspect Ratio
-    let baseWidth = 800;
-    // Safety check: Ensure resolution exists
-    if (!selections.resolution || !selections.resolution.width || !selections.resolution.height) {
-      console.warn("Resolution invalid, using default");
-      baseWidth = 800;
-      // force aspect 1:1 if missing
-    }
-
-    const resW = selections.resolution?.width || 1;
-    const resH = selections.resolution?.height || 1;
-    const aspect = resW / resH;
+    const baseWidth = 800;
+    const aspect = selections.resolution.width / selections.resolution.height;
     const baseHeight = Math.round(baseWidth / aspect);
 
-    // Verify dimensions are valid positive integers
-    canvas.width = Math.max(1, baseWidth);
-    canvas.height = Math.max(1, baseHeight);
+    canvas.width = baseWidth;
+    canvas.height = baseHeight;
 
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -311,7 +218,10 @@ export default function App() {
     return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
   }, []);
 
-
+  const updateSelection = (key, value) => {
+    setSelections(prev => ({ ...prev, [key]: value }));
+    if (showResult) setShowResult(false);
+  };
 
   const handleAddObject = () => {
     const currentExtraCount = paletteColors.length - INITIAL_PALETTE.length;
@@ -427,8 +337,6 @@ export default function App() {
   };
 
   const handleCanvasMouseMove = (e) => {
-    if (isGenerating) return; // Prevent updates during generation to avoid DOM conflicts
-
     // 1. Calculate CSS pixels for Visual Cursor (UI Overlay)
     if (!canvasRef.current) return;
     const rect = canvasRef.current.getBoundingClientRect();
@@ -452,7 +360,11 @@ export default function App() {
     }
   };
 
-
+  const handleCanvasMouseLeave = () => {
+    setIsDragging(false);
+    lastPos.current = null;
+    setCursorPos(null); // Hide preview
+  };
 
   // --- UPDATED ANALYSIS LOGIC FOR CANVAS ---
   const getGridDescription = () => {
@@ -461,11 +373,6 @@ export default function App() {
 
     const ctx = canvas.getContext('2d');
     const { width, height } = canvas;
-
-    // Safety check for 0 dimensions
-    if (width === 0 || height === 0) return "Visual map empty.";
-
-
 
     // 1. 샘플링 설정 (모든 픽셀을 다 보면 느리므로 일정 간격으로 확인)
     const sampleStep = 10;
@@ -615,26 +522,12 @@ export default function App() {
             relationStr = `in front of ${mainLabel}`;
           }
         } else {
-          // No significant overlap -> Calculate Distance & Spatial relation
+          // No significant overlap -> Spatial relation
           const objCenterX = obj.stats.sumX / obj.stats.count;
-          const objCenterY = obj.stats.sumY / obj.stats.count;
           const mainCenterX = mainSubject.stats.sumX / mainSubject.stats.count;
-          const mainCenterY = mainSubject.stats.sumY / mainSubject.stats.count;
 
-          const distX = objCenterX - mainCenterX;
-          const distY = objCenterY - mainCenterY;
-          const distance = Math.sqrt(distX * distX + distY * distY);
-          const normalizedDist = distance / width; // Normalize by canvas width
-
-          if (normalizedDist < 0.15) {
-            relationStr = `standing right next to ${mainLabel}`;
-          } else if (normalizedDist > 0.6) {
-            relationStr = `positioned far away from ${mainLabel}`;
-          } else {
-            // Intermediate distance -> Directional
-            if (objCenterX < mainCenterX) relationStr = `to the left of ${mainLabel}`;
-            else relationStr = `to the right of ${mainLabel}`;
-          }
+          if (objCenterX < mainCenterX) relationStr = `to the left of ${mainLabel}`;
+          else relationStr = `to the right of ${mainLabel}`;
         }
 
         objectDescriptions.push(`${label} ${relationStr}`);
@@ -722,8 +615,6 @@ export default function App() {
 
   const generatePrompt = () => {
     setIsGenerating(true);
-    setCursorPos(null); // Force clear cursor to stabilize DOM
-
     // Use async callback for await
     setTimeout(async () => {
       try {
@@ -759,10 +650,7 @@ export default function App() {
 
         // 2. Facing Direction (Subject Modifier)
         // This usually describes the subject ("looking at camera", "side profile")
-        // 2. Facing Direction (Subject Modifier)
-        // This usually describes the subject ("looking at camera", "side profile")
-        // In Object Mode, we skip this to avoid "eye contact" with furniture
-        const facingModifier = (subjectType === 'character' && selections.facing.id !== 'none') ? selections.facing.prompt : "";
+        const facingModifier = selections.facing.id !== 'none' ? selections.facing.prompt : "";
 
         // 3. Composition (Scene Modifier)
         const compModifier = selections.composition.id !== 'none' ? selections.composition.prompt : "";
@@ -778,91 +666,36 @@ export default function App() {
         const isDynamicComp = ['diagonal', 'leading_lines'].includes(selections.composition.id);
 
         // If dynamic settings are chosen, append action keywords to subject description (if not already present)
-        // If dynamic settings are chosen, append action keywords to subject description (if not already present)
-        // Only valid for characters. Objects shouldn't have "action shots" usually.
-        if (subjectType === 'character' && (isDynamicAngle || isDynamicComp) && !mainSegment.toLowerCase().includes('dynamic') && !mainSegment.toLowerCase().includes('action')) {
+        if ((isDynamicAngle || isDynamicComp) && !mainSegment.toLowerCase().includes('dynamic') && !mainSegment.toLowerCase().includes('action')) {
           mainSegment += `, dynamic pose, action shot`;
         }
 
-        const sections = [
-          {
-            label: '1. MAIN SUBJECT & VIEW',
-            content: [mainSegment, facingModifier].filter(Boolean).join(', ')
-          },
-          {
-            label: '2. COMPOSITION',
-            content: compModifier
-          },
-          {
-            label: '3. LIGHTING',
-            content: selections.lighting?.prompt
-          },
-          {
-            label: '4. VISUAL STYLE',
-            content: selections.style.prompt
-          },
-          {
-            label: '5. MEME SCENARIO (CRITICAL)',
-            content: selections.meme.id !== 'none'
-              ? `Recreate the '${selections.meme.label}' meme composition. \n**IMPORTANT: The Main Character described in Section 1 MUST replace the primary figure in this meme.**\nMeme Description: ${selections.meme.prompt}`
-              : ''
-          },
-          {
-            label: '6. TECHNICAL',
-            content: [selections.resolution?.prompt, baseGridDesc, selections.style.neg].filter(Boolean).join(', ')
-          }
+        // Append Facing modifier immediately after subject for coherence
+        if (facingModifier) {
+          mainSegment += `, ${facingModifier}`;
+        }
+
+        const parts = [
+          mainSegment,
+          compModifier,
+          selections.lighting?.prompt, // Add lighting prompt
+          selections.style.prompt,
+          baseGridDesc,
+          selections.resolution?.prompt,
+          selections.style.neg
         ];
 
-        const generatedText = sections
-          .filter(section => section.content && section.content.trim() !== '')
-          .map(section => `**${section.label}**\n${section.content}`)
-          .join('\n\n');
+        // Filter empty strings and join
+        const generatedText = parts.filter(p => p && p.trim() !== '').join(', ');
 
-        const instructionPrefix = `**System Instruction:**\nCreate a detailed image prompt based on the following structured keywords. Prioritize 'View' and 'Main Subject' for consistency.\n\n`;
-        setFinalPrompt(instructionPrefix + generatedText);
+        setFinalPrompt(generatedText);
 
         // Capture Canvas for Preview
-        // Capture Canvas for Preview (Robust Clone Strategy)
         if (gridRef.current) {
-          try {
-            // 1. Clone the node to detach from React's live DOM
-            const originalNode = gridRef.current;
-            const cloneNode = originalNode.cloneNode(true);
-
-            // 2. Manually copy canvas content (cloneNode doesn't copy canvas pixels)
-            const originalCanvases = originalNode.querySelectorAll('canvas');
-            const clonedCanvases = cloneNode.querySelectorAll('canvas');
-
-            originalCanvases.forEach((orig, i) => {
-              const dest = clonedCanvases[i];
-              if (dest) {
-                const ctx = dest.getContext('2d');
-                ctx.drawImage(orig, 0, 0);
-              }
-            });
-
-            // 3. Mount clone off-screen (required for html2canvas to render)
-            cloneNode.style.position = 'absolute';
-            cloneNode.style.left = '-9999px';
-            cloneNode.style.top = '0';
-            document.body.appendChild(cloneNode);
-
-            // 4. Capture
-            const canvas = await html2canvas(cloneNode, {
-              scale: 1,
-              backgroundColor: null,
-              logging: false,
-              useCORS: true
-            });
-
-            setGeneratedImage(canvas.toDataURL());
-
-            // 5. Cleanup
-            document.body.removeChild(cloneNode);
-          } catch (e) {
-            console.error("Capture failed:", e);
-            // Fallback: Continue without image
-          }
+          const canvas = await html2canvas(gridRef.current, {
+            scale: 1, backgroundColor: null, logging: false
+          });
+          setGeneratedImage(canvas.toDataURL());
         }
 
         setShowResult(true);
@@ -877,7 +710,23 @@ export default function App() {
     }, 1000);
   };
 
-
+  const handleCopy = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      setToastMsg("복사되었습니다!");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2000);
+    } catch (err) {
+      console.error('Copy failed', err);
+    }
+    document.body.removeChild(textArea);
+  };
 
   const handleCopyMapImage = async () => {
     if (!generatedImage) return;
@@ -919,7 +768,7 @@ export default function App() {
       setToastMsg("갤러리에 저장 중...");
       setShowToast(true);
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('prompts')
         .insert([
           {
@@ -984,19 +833,28 @@ export default function App() {
       setToastMsg("처리 중...");
       setShowToast(true);
 
+      const canvas = await html2canvas(gridRef.current, {
+        scale: 2, backgroundColor: null, logging: false
+      });
+
       // 1. Copy Text to Clipboard (Prioritize Text)
       await navigator.clipboard.writeText(finalPrompt);
 
-      // 2. Notify and Open
-      setToastMsg("텍스트가 복사되었습니다! AI로 이동합니다.");
+      // 2. Download Image (Reliable Fallback)
+      const link = document.createElement('a');
+      link.download = 'lazytiger_prompt_map.png';
+      link.href = canvas.toDataURL();
+      link.click();
+
+      // 3. Notify and Open
+      setToastMsg("텍스트 복사 & 이미지 다운로드 완료!");
       setShowToast(true);
 
       // Delay slightly to let user see message
       setTimeout(() => {
         const win = window.open('https://gemini.google.com/app', '_blank');
         if (win) win.focus();
-        // Close toast after opening window
-        setTimeout(() => setShowToast(false), 3000);
+        alert("💡 사용 팁:\n1. 채팅창에 텍스트를 붙여넣기(Ctrl+V) 하세요.\n2. 방금 다운로드된 이미지를 채팅창으로 드래그하세요.");
       }, 1000);
 
     } catch (err) {
@@ -1006,8 +864,6 @@ export default function App() {
     }
   };
 
-
-
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -1016,7 +872,26 @@ export default function App() {
     }
   };
 
+  const handleDeckItemClick = (item, type) => {
+    // Re-use logic from handleDragEnd for adding new items
+    const newItem = {
+      ...item,
+      type: type,
+      uid: `workspace-item-${Date.now()}-${Math.random()}`
+    };
 
+    setWorkspaceItems((items) => {
+      // Check if item of this type already exists
+      const existingIndex = items.findIndex(i => i.type === newItem.type);
+      if (existingIndex !== -1) {
+        // Replace existing
+        const newItems = [...items];
+        newItems[existingIndex] = newItem;
+        return newItems;
+      }
+      return [...items, newItem];
+    });
+  };
 
 
 
@@ -1043,7 +918,13 @@ export default function App() {
               <Info size={16} className="mr-1.5" />
               사용법
             </button>
-
+            <button
+              onClick={() => setShowFeedback(true)}
+              className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors mr-1"
+              title="개발자에게 피드백 보내기"
+            >
+              <MessageSquare size={18} />
+            </button>
             <button
               onClick={() => setShowGallery(true)}
               className="px-3 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 rounded-lg text-sm font-bold transition-colors flex items-center"
@@ -1064,8 +945,7 @@ export default function App() {
 
 
       {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
-      {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
-      <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-visible md:overflow-hidden h-auto min-h-[calc(100vh-64px)] md:h-[calc(100vh-64px)]">
+      <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden h-[calc(100vh-64px)]">
 
         <DndContext
           sensors={sensors}
@@ -1073,201 +953,144 @@ export default function App() {
           onDragEnd={handleDragEnd}
         >
           {/* Left Panel: Asset Deck */}
-          <AssetDeck disabledIds={disabledOptions} lockedCategories={lockedCategories} onAssetClick={handleAssetClick} />
+          <AssetDeck disabledIds={disabledOptions} onItemClick={handleDeckItemClick} />
 
           {/* Right Panel: Canvas & Workspace */}
-          <div className="flex-1 flex flex-col h-auto md:h-full overflow-visible md:overflow-y-auto bg-gray-50 relative pb-20 md:pb-0">
+          <div className="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 relative">
 
-            {/* Top Area: Montage Inputs */}
+            {/* Top Area: Inputs */}
             <div className="p-6 pb-4 shrink-0 border-b border-gray-200 bg-white z-20 shadow-sm">
-              <div className="mb-3 flex items-center">
-                <div className="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center mr-2 shadow-md">
-                  <span className="font-black text-xs">M</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 leading-none">Montage</h3>
-                  <p className="text-[10px] text-gray-400 font-medium">피사체와 배경을 구체적으로 묘사하세요</p>
-                </div>
-              </div>
-
               <div className="flex flex-col space-y-3">
                 <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1 ml-1">
-                    <label className="block text-xs font-bold text-gray-500">
-                      {subjectType === 'character' ? 'MAIN CHARACTER (메인 캐릭터)' : 'MAIN SUBJECT (메인 피사체)'}
-                    </label>
-
-                    {/* Subject Type Toggle */}
-                    <div className="flex bg-gray-100 p-0.5 rounded-lg border border-gray-200">
-                      <button
-                        onClick={() => setSubjectType('character')}
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center transition-all ${subjectType === 'character' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-                        title="Character Mode"
-                      >
-                        <User size={12} className="mr-1" /> 인물
-                      </button>
-                      <button
-                        onClick={() => setSubjectType('object')}
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center transition-all ${subjectType === 'object' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-                        title="Object Mode"
-                      >
-                        <Box size={12} className="mr-1" /> 사물
-                      </button>
-                    </div>
-                  </div>
-
-                  <p className={`text-[10px] mb-2 ml-1 font-medium ${subjectType === 'character' ? 'text-orange-500' : 'text-blue-500'}`}>
-                    {subjectType === 'character'
-                      ? '*모든 프롬프트는 메인 캐릭터를 중심으로 구성됩니다'
-                      : '*시선/포즈 관련 키워드가 자동으로 제외됩니다 (가구/사물용)'}
-                  </p>
                   <input
                     type="text"
                     value={subjectText}
                     onChange={(e) => setSubjectText(e.target.value)}
-                    placeholder={subjectType === 'character' ? "누구를 그리실 건가요? (예: 썬글라스를 쓴 힙한 호랑이)" : "무엇을 그리실 건가요? (예: 앤티크한 목재 의자)"}
-                    className={`w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 transition-all font-medium ${subjectType === 'character' ? 'focus:ring-orange-200 focus:border-orange-400' : 'focus:ring-blue-200 focus:border-blue-400'}`}
+                    placeholder="무엇을 그리실 건가요? (예: 귀여운 호랑이)"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-xs font-bold text-gray-500 mb-1 ml-1">CONTEXT (배경/상황)</label>
                   <input
                     type="text"
                     value={contextText}
                     onChange={(e) => setContextText(e.target.value)}
-                    placeholder="어떤 상황인가요? (예: 네온 사인이 빛나는 서울의 밤거에서)"
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium"
+                    placeholder="배경이나 상황 (예: 카페에서)"
+                    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Middle Area: Workspace (Restored to Middle) */}
-            <div className="shrink-0 relative flex flex-col p-4 pt-2">
-              <p className="text-xs text-center text-gray-400 mb-2 font-medium">
-                Drag Asset Deck items here
-              </p>
+            {/* Middle Area: Workspace (Scaled to ~80% visually via padding/flex) */}
+            <div className="flex-1 overflow-hidden relative flex flex-col p-4">
               {/* Wrapper to control size if needed, but flex-1 with padding works well to isolate it */}
-              <div className="border-2 border-dashed border-gray-200 rounded-3xl bg-gray-100/50 min-h-[120px]">
+              <div className="flex-1 border-2 border-dashed border-gray-200 rounded-3xl overflow-hidden bg-gray-100/50">
                 <Workspace items={workspaceItems} onRemove={handleRemoveItem} />
               </div>
             </div>
 
-            {/* Bottom Area: Visual Mapping (Moved Down) */}
-            <div className="p-4 pt-0 shrink-0 bg-white/50 backdrop-blur-sm flex flex-col items-center pb-32 md:pb-6">
-
-              {/* Visual Mapping Header */}
-              <div className="w-full max-w-5xl mb-3 flex items-center">
-                <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center mr-2 shadow-sm border border-orange-200">
-                  <Grid size={18} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900 leading-none">Visual Mapping</h3>
-                  <p className="text-[10px] text-gray-400 font-medium">선택한 요소들이 시각적으로 배치되는 공간입니다</p>
-                </div>
-              </div>
+            {/* Bottom Area: Visual Feedback */}
+            <div className="p-4 pt-0 shrink-0 border-t border-gray-200 bg-white/50 backdrop-blur-sm flex flex-col items-center pb-6">
 
               {/* Toolbar */}
-              <div className="w-full max-w-5xl mb-4 bg-white p-2 rounded-2xl shadow-sm border border-orange-100 flex flex-col">
-                <div className="w-full flex items-center justify-between">
-                  {/* Left: Tools */}
-                  <div className="flex items-center space-x-2">
-                    <div className="flex bg-gray-100 rounded-lg p-1">
-                      <button
-                        onClick={() => setToolMode('brush')}
-                        className={`p-2 rounded-md transition-all ${toolMode === 'brush' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
-                        title="브러시"
-                      >
-                        <Brush size={16} />
-                      </button>
-                      <button
-                        onClick={() => setToolMode('stamp')}
-                        className={`p-2 rounded-md transition-all ${toolMode === 'stamp' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
-                        title="스탬프"
-                      >
-                        <Stamp size={16} />
-                      </button>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="w-px h-6 bg-gray-200 mx-2"></div>
-
-                    {/* Size Slider */}
-                    <div className="flex items-center px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 space-x-3">
-                      <span className="text-xs font-bold text-gray-400">SIZE</span>
-                      <input
-                        type="range"
-                        min="5"
-                        max="200" // Increased to 200
-                        value={brushSize}
-                        onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                        className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
-                      />
-                      <span className="text-xs font-bold text-gray-400 w-6 text-center">{brushSize}</span>
-                    </div>
-
+              <div className="w-full max-w-2xl flex items-center justify-between mb-4 bg-white p-2 rounded-2xl shadow-sm border border-orange-100">
+                {/* Left: Tools */}
+                <div className="flex items-center space-x-2">
+                  <div className="flex bg-gray-100 rounded-lg p-1">
                     <button
-                      onClick={clearCanvas}
-                      className="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-colors"
-                      title="모두 지우기"
+                      onClick={() => setToolMode('brush')}
+                      className={`p-2 rounded-md transition-all ${toolMode === 'brush' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
+                      title="브러시"
                     >
-                      <Trash2 size={18} />
+                      <Brush size={16} />
+                    </button>
+                    <button
+                      onClick={() => setToolMode('stamp')}
+                      className={`p-2 rounded-md transition-all ${toolMode === 'stamp' ? 'bg-white shadow text-orange-600' : 'text-gray-400 hover:text-gray-600'}`}
+                      title="스탬프"
+                    >
+                      <Stamp size={16} />
                     </button>
                   </div>
 
-                  {/* Right: Palette */}
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-                      {paletteColors.map((p) => (
+                  {/* Stamp Selector (Visible only in Stamp Mode) */}
+                  {toolMode === 'stamp' && (
+                    <div className="flex items-center space-x-1 pl-2 border-l border-gray-200 ml-2">
+                      {STAMPS.map(stamp => (
                         <button
-                          key={p.id}
-                          onClick={() => setSelectedColor(p)}
-                          className={`
-                                w-8 h-8 rounded-full flex items-center justify-center transition-all relative
-                                ${selectedColor.id === p.id ? 'ring-2 ring-orange-400 scale-110 z-10' : 'hover:scale-105 opacity-80 hover:opacity-100'}
-                              `}
-                          style={{ backgroundColor: p.color || '#eee' }}
-                          title={p.label}
+                          key={stamp.id}
+                          onClick={() => setSelectedStamp(stamp.id)}
+                          className={`p-1.5 rounded-lg transition-all ${selectedStamp === stamp.id ? 'bg-orange-100 text-orange-600 ring-2 ring-orange-200' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}`}
+                          title={stamp.label}
                         >
-                          {p.icon && <p.icon size={14} className="text-gray-500" />}
-                          {selectedColor.id === p.id && !p.icon && <Check size={14} className="text-white drop-shadow-md" />}
+                          <stamp.icon size={18} />
                         </button>
                       ))}
                     </div>
+                  )}
 
-                    {/* Add Object Button */}
-                    {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
-                      <button
-                        onClick={handleAddObject}
-                        className="w-8 h-8 rounded-full border border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-300 transition-colors bg-white"
-                        title="새로운 개체 추가"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    )}
+                  {/* Divider */}
+                  <div className="w-px h-6 bg-gray-200 mx-2"></div>
+
+                  {/* Size Slider */}
+                  <div className="flex items-center px-4 py-2 bg-gray-50 rounded-xl border border-gray-100 space-x-3">
+                    <span className="text-xs font-bold text-gray-400">SIZE</span>
+                    <input
+                      type="range"
+                      min="5"
+                      max="100" // Expanded range
+                      value={brushSize}
+                      onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                      className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                    />
+                    <span className="text-xs font-bold text-gray-400 w-4 text-center">{brushSize}</span>
                   </div>
+
+                  <button
+                    onClick={clearCanvas}
+                    className="p-2 text-red-400 hover:bg-red-50 rounded-xl transition-colors"
+                    title="모두 지우기"
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </div>
 
-                {/* Stamp Selector (Visible only in Stamp Mode, Moved to bottom row) */}
-                {toolMode === 'stamp' && (
-                  <div className="w-full mt-2 pt-2 border-t border-gray-100 flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-hide">
-                    <span className="text-[10px] font-bold text-gray-400 shrink-0">STAMPS</span>
-                    {STAMPS.map(stamp => (
+                {/* Right: Palette */}
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+                    {paletteColors.map((p) => (
                       <button
-                        key={stamp.id}
-                        onClick={() => setSelectedStamp(stamp.id)}
-                        className={`p-1.5 rounded-lg shrink-0 transition-all ${selectedStamp === stamp.id ? 'bg-orange-100 text-orange-600 ring-2 ring-orange-200' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}`}
-                        title={stamp.label}
+                        key={p.id}
+                        onClick={() => setSelectedColor(p)}
+                        className={`
+                                w-8 h-8 rounded-full flex items-center justify-center transition-all relative
+                                ${selectedColor.id === p.id ? 'ring-2 ring-orange-400 scale-110 z-10' : 'hover:scale-105 opacity-80 hover:opacity-100'}
+                              `}
+                        style={{ backgroundColor: p.color || '#eee' }}
+                        title={p.label}
                       >
-                        <stamp.icon size={18} />
+                        {p.icon && <p.icon size={14} className="text-gray-500" />}
+                        {selectedColor.id === p.id && !p.icon && <Check size={14} className="text-white drop-shadow-md" />}
                       </button>
                     ))}
                   </div>
-                )}
+
+                  {/* Add Object Button */}
+                  {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
+                    <button
+                      onClick={handleAddObject}
+                      className="w-8 h-8 rounded-full border border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-300 transition-colors bg-white"
+                      title="새로운 개체 추가"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Grid Visual Preview */}
-              <div className="bg-white p-4 rounded-3xl shadow-sm border border-orange-100 flex flex-col items-center relative group-preview overflow-x-auto w-full">
+              <div className="bg-white p-4 rounded-3xl shadow-sm border border-orange-100 flex flex-col items-center relative group-preview">
 
                 {/* Grid Container */}
                 <div
@@ -1275,16 +1098,11 @@ export default function App() {
                   className={`
                             relative rounded-xl overflow-hidden p-0 select-none
                             ${toolMode === 'brush' ? 'cursor-crosshair' : 'cursor-pointer'}
-                            ${['16:9', '1:1'].includes(selections.resolution.id) ? 'w-[90%]' : 'w-[75%]'} h-auto md:w-[var(--desktop-width)] md:h-[var(--desktop-height)]
                         `}
                   style={{
-                    '--desktop-width': selections.resolution.id === '16:9' ? '800px' :
-                      selections.resolution.id === '1:1' ? '560px' :
-                        selections.resolution.id === '9:16' ? '360px' : 'auto',
-                    '--desktop-height': selections.resolution.id === '16:9' ? '450px' :
-                      selections.resolution.id === '1:1' ? '560px' :
-                        selections.resolution.id === '9:16' ? '640px' : '480px',
                     aspectRatio: `${selections.resolution.width} / ${selections.resolution.height}`,
+                    height: '240px',
+                    width: 'auto',
                     backgroundColor: '#ffffff',
                     borderColor: '#e5e7eb',
                     borderWidth: '1px',
@@ -1293,11 +1111,6 @@ export default function App() {
                   }}
                   onMouseDown={handleCanvasMouseDown}
                   onMouseMove={handleCanvasMouseMove}
-                  onMouseLeave={() => {
-                    setIsDragging(false);
-                    lastPos.current = null;
-                    setCursorPos(null);
-                  }}
                 >
                   {/* 1. Background Grid (Reference for Position) */}
                   <div
@@ -1320,7 +1133,7 @@ export default function App() {
                   {/* Visual Cursor Overlay */}
                   {cursorPos && (
                     <div
-                      className="pointer-events-none absolute border rounded-full flex items-center justify-center transition-transform duration-75 z-50"
+                      className="pointer-events-none absolute border border-gray-400 rounded-full flex items-center justify-center transition-transform duration-75 z-50"
                       style={{
                         left: 0,
                         top: 0,
@@ -1328,23 +1141,22 @@ export default function App() {
                         width: (toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1),
                         height: (toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1),
                         // Position: Use CSS pixel coordinates directly
-                        transform: `translate(${cursorPos.x}px, ${cursorPos.y}px) translate(-50%, -50%)`,
-                        backgroundColor: toolMode === 'stamp' ? 'transparent' : (selectedColor.id === 'erase' ? 'rgba(0,0,0,0.1)' : selectedColor.color),
-                        marginTop: 0,
-                        marginLeft: 0,
-                        borderColor: '#9ca3af', // Hardcoded Hex to avoid oklch error in html2canvas
-                        opacity: toolMode === 'stamp' ? 1 : 0.5
+                        // Center offset: Half of the DISPLAY size
+                        transform: `translate(${cursorPos.x - ((toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1)) / 2}px, 
+                                            ${cursorPos.y - ((toolMode === 'stamp' ? ((60 + (brushSize - 20)) * 2) : brushSize) / (cursorPos.scale || 1)) / 2}px)`,
+                        backgroundColor: toolMode === 'brush' ? selectedColor.color : 'transparent',
+                        borderColor: toolMode === 'brush' ? 'rgba(0,0,0,0.2)' : 'rgba(251, 146, 60, 0.5)',
+                        opacity: 0.8
                       }}
                     >
-                      {/* Show Stamp Preview in Cursor */}
-                      {toolMode === 'stamp' && selectedStamp && (() => {
-                        const stamp = STAMPS.find(s => s.id === selectedStamp);
-                        return stamp ? (
-                          <div className="w-full h-full flex items-center justify-center opacity-50" style={{ color: '#f97316' }}>
-                            <stamp.icon size="80%" />
-                          </div>
-                        ) : null;
-                      })()}
+                      {toolMode === 'stamp' && selectedStamp && (
+                        <PixelArtIcon
+                          type="stamp"
+                          name={selectedStamp}
+                          className="w-full h-full opacity-50"
+                          style={{ fill: selectedColor.color }}
+                        />
+                      )}
                     </div>
                   )}
 
@@ -1354,39 +1166,33 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Canvas Actions below */}
-                <div className="mt-3 flex space-x-2">
-                  <button
-                    onClick={generatePrompt}
-                    disabled={isGenerating}
-                    className={`
+                {/* Generate Button (Floating) */}
+                <button
+                  onClick={generatePrompt}
+                  disabled={isGenerating}
+                  className={`
+                          absolute -bottom-5 left-1/2 transform -translate-x-1/2 
                           px-6 py-2 rounded-full font-black text-white shadow-lg 
                           flex items-center space-x-2 z-40 transition-all text-sm whitespace-nowrap
                           ${isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-red-500 hover:scale-105 hover:shadow-orange-200'}
                         `}
-                  >
-                    {isGenerating ? (
-                      <RefreshCw className="animate-spin w-4 h-4 mr-1" />
-                    ) : (
-                      <Wand2 className="w-4 h-4 mr-1" />
-                    )}
-                    {isGenerating ? '생성 중...' : '프롬프트 생성'}
-                  </button>
-                </div>
+                >
+                  {isGenerating ? (
+                    <RefreshCw className="animate-spin w-4 h-4 mr-1" />
+                  ) : (
+                    <Wand2 className="w-4 h-4 mr-1" />
+                  )}
+                  {isGenerating ? '생성 중...' : '프롬프트 생성'}
+                </button>
               </div>
             </div>
 
 
-            {/* Result Overlay (If shown) - Rendered via Portal to avoid DOM conflicts */}
-            {showResult && createPortal(
-              <div
-                className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-end justify-center sm:items-center p-4"
-                onClick={() => setShowResult(false)} // Close on background click
-              >
-                <div
-                  className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up"
-                  onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside content
-                >
+
+            {/* Result Overlay (If shown) */}
+            {showResult && (
+              <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end justify-center sm:items-center p-4">
+                <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up">
                   <div className="bg-gray-900 p-4 flex justify-between items-center text-white">
                     <h3 className="font-bold flex items-center"><Check className="mr-2 text-green-400" /> 생성 완료</h3>
                     <button onClick={() => setShowResult(false)} className="p-1 hover:bg-gray-800 rounded-full"><X size={20} /></button>
@@ -1413,15 +1219,12 @@ export default function App() {
                         <Sparkles size={16} className="mr-2" /> AI로 보내기
                       </button>
                       <button onClick={handleSaveToSupabase} className="flex-1 py-3 bg-orange-100 text-orange-700 font-bold rounded-xl flex items-center justify-center hover:bg-orange-200">
-                        <Save size={16} className="mr-2" /> 갤러리에 저장
+                        <Save size={16} className="mr-2" /> 저장
                       </button>
                     </div>
-
-
                   </div>
                 </div>
-              </div>,
-              document.body
+              </div>
             )}
 
           </div>
@@ -1443,14 +1246,12 @@ export default function App() {
 
       <Toast message={toastMsg} show={showToast} />
 
-      {
-        showGallery && (
-          <Gallery
-            onClose={() => setShowGallery(false)}
-            onLoad={handleLoadPrompt}
-          />
-        )
-      }
+      {showGallery && (
+        <Gallery
+          onClose={() => setShowGallery(false)}
+          onLoad={handleLoadPrompt}
+        />
+      )}
 
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {
@@ -1475,6 +1276,6 @@ export default function App() {
             animation: fade-in-up 0.3s ease-out forwards;
         }
       `}</style>
-    </div >
+    </div>
   );
 }

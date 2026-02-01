@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import { ChevronDown, ChevronRight, ChevronLeft, Grid, Layout, Camera, Video, Palette, User, Monitor, Zap } from 'lucide-react';
+import { CSS } from '@dnd-kit/utilities'; // Import CSS for transform utility
+import { ChevronDown, ChevronRight, ChevronLeft, ChevronUp, Grid, Layout, Camera, Video, Palette, User, Monitor, Zap, Lock, Smile } from 'lucide-react';
 import PixelArtIcon from './PixelArtIcon';
 import {
     SHOT_TYPES,
@@ -9,36 +10,37 @@ import {
     COMPOSITIONS,
     FACING_DIRECTIONS,
     RESOLUTIONS,
-    LIGHTING
+    LIGHTING,
+    MEME_TEMPLATES
 } from '../data/constants';
+
+// --- Sub-components ---
 
 // Draggable Icon Card (Updated for Dial/Card Look)
 const DraggableAsset = ({ item, type, disabled, onClick }) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
-        id: `asset-${type}-${item.id}`,
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+        id: item.uid || item.id,
         data: { item, type, source: 'deck' },
-        disabled: disabled // Disable drag if disabled
+        disabled: disabled,
+        // Disable drag sensor if only click is desired, but keeping enabled for now as "alternative"
     });
 
     const style = transform ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        transform: CSS.Translate.toString(transform),
     } : undefined;
 
     return (
         <div
             ref={setNodeRef}
-            style={{
-                ...style,
-                aspectRatio: '8.6 / 5.4'
-            }}
+            style={style}
             {...listeners}
             {...attributes}
-            onClick={() => !disabled && onClick && onClick(item, type)} // Add Click Handler
+            onClick={() => !disabled && onClick && onClick()}
             // Increased size to w-60 (240px) to show ~1 card at a time
             className={`flex-shrink-0 w-60 flex flex-col items-center justify-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-all select-none relative overflow-hidden
                 ${disabled
                     ? 'opacity-40 grayscale cursor-not-allowed border-gray-100'
-                    : 'hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group snap-center active:scale-95'
+                    : 'hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group snap-center active:scale-95 cursor-pointer'
                 }`}
         >
             <div className="w-16 h-16 mb-2 rounded-md flex items-center justify-center transition-colors z-10">
@@ -54,21 +56,37 @@ const DraggableAsset = ({ item, type, disabled, onClick }) => {
 
             {/* Background decoration for 'Card' feel */}
             <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50 -z-0"></div>
+
+            {/* Lock Icon Overlay */}
+            {disabled && <div className="absolute top-2 right-2 z-20"><Lock size={14} className="text-gray-400" /></div>}
         </div>
     );
 };
 
-const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onItemClick }) => {
+const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onAssetClick, locked }) => {
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
         if (scrollRef.current) {
             const { current } = scrollRef;
             const scrollAmount = 252; // Card width (240) + Gap (12)
-            current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
+
+            if (direction === 'left') {
+                // If at the start (or very close), wrap to the end
+                if (current.scrollLeft <= 10) {
+                    current.scrollTo({ left: current.scrollWidth, behavior: 'smooth' });
+                } else {
+                    current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                }
+            } else {
+                // If at the end (or very close), wrap to the start
+                // Tolerance of 10px to account for fractional pixels
+                if (current.scrollLeft + current.clientWidth >= current.scrollWidth - 10) {
+                    current.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                }
+            }
         }
     };
 
@@ -82,10 +100,10 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                     <div className="flex items-center text-gray-700 font-bold text-xs uppercase tracking-wider">
                         <Icon size={14} className="mr-2 text-orange-500" />
                         {title}
+                        {locked && <Lock size={12} className="ml-2 text-red-400" />}
                     </div>
                     {/* Brief Description */}
                     <span className="text-[10px] text-gray-400 font-medium ml-6 mt-0.5 truncate max-w-[200px] group-hover:text-gray-500 transition-colors">
-                        {/* If description is passed, use it. Otherwise rely on a mapping or default */}
                         {description}
                     </span>
                 </div>
@@ -115,8 +133,8 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                                 key={item.id}
                                 item={item}
                                 type={type}
-                                disabled={disabledIds?.includes(item.id)}
-                                onClick={onItemClick}
+                                disabled={locked || disabledIds?.includes(item.id)}
+                                onClick={() => onAssetClick && onAssetClick(item, type)}
                             />
                         ))}
                         {/* Padding spacer for end */}
@@ -137,7 +155,9 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
     );
 };
 
-export default function AssetDeck({ disabledIds = [], onItemClick }) {
+export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [] }) {
+    const [isMobileOpen, setIsMobileOpen] = useState(false); // Default collapsed on mobile
+
     const [openSections, setOpenSections] = useState({
         shot: true,
         angle: true,
@@ -145,116 +165,196 @@ export default function AssetDeck({ disabledIds = [], onItemClick }) {
         style: false,
         facing: false,
         resolution: false,
-        lighting: false
+        lighting: false,
+        meme: false
     });
 
     const toggleSection = (section) => {
-        setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+        setOpenSections(prev => {
+            // Close all others, toggle current (Accordion)
+            const newState = {
+                shot: false, angle: false, composition: false,
+                style: false, facing: false, resolution: false, lighting: false, meme: false
+            };
+            if (!prev[section]) {
+                newState[section] = true;
+            }
+            return newState;
+        });
+    };
+
+    const handleAssetClickWrapper = (item, type) => {
+        if (onAssetClick) onAssetClick(item, type);
+        // setIsMobileOpen(false); // Removed auto-close per user request
     };
 
     return (
-        <div className="w-full md:w-80 h-[35vh] md:h-full bg-white md:border-r border-t md:border-t-0 border-gray-200 flex flex-col shadow-lg z-10 selection-section order-first md:order-none">
-            <style>{`
-                .mask-linear-fade {
-                    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-                    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-                }
-                /* Hide Scrollbar */
-                .no-scrollbar::-webkit-scrollbar {
-                    display: none;
-                }
-                .no-scrollbar {
-                    -ms-overflow-style: none;  /* IE and Edge */
-                    scrollbar-width: none;  /* Firefox */
-                }
-            `}</style>
-            <div className="p-4 border-b border-gray-200 bg-orange-50/50">
-                <h2 className="font-black text-lg text-gray-800 flex items-center">
-                    <Grid size={20} className="mr-2 text-orange-600" />
-                    Asset Deck
-                </h2>
-                <p className="text-xs text-gray-500 mt-1">Drag items to the workspace</p>
-            </div>
+        <>
+            {/* Mobile Overlay Backdrop */}
+            {isMobileOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setIsMobileOpen(false)}
+                />
+            )}
 
-            <div className="flex-1 overflow-y-auto no-scrollbar">
-                <CategorySection
-                    title="Resolution"
-                    icon={Monitor}
-                    items={RESOLUTIONS.filter(i => i.id !== 'none')}
-                    type="resolution"
-                    isOpen={openSections.resolution}
-                    onToggle={() => toggleSection('resolution')}
-                    description="이미지 크기와 비율 설정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
-                <CategorySection
-                    title="Facing Direction"
-                    icon={User}
-                    items={FACING_DIRECTIONS.filter(i => i.id !== 'none')}
-                    type="facing"
-                    isOpen={openSections.facing}
-                    onToggle={() => toggleSection('facing')}
-                    description="인물이 바라보는 방향 결정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
-                <CategorySection
-                    title="Art Style"
-                    icon={Palette}
-                    items={STYLES.filter(i => i.id !== 'none')}
-                    type="style"
-                    isOpen={openSections.style}
-                    onToggle={() => toggleSection('style')}
-                    description="전체적인 화풍과 톤 결정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
-                <CategorySection
-                    title="Lighting"
-                    icon={Zap}
-                    items={LIGHTING.filter(i => i.id !== 'none')}
-                    type="lighting"
-                    isOpen={openSections.lighting}
-                    onToggle={() => toggleSection('lighting')}
-                    description="빛의 종류와 분위기 설정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
-                <CategorySection
-                    title="Shot Type"
-                    icon={Camera}
-                    items={SHOT_TYPES.filter(i => i.id !== 'none')}
-                    type="shot"
-                    isOpen={openSections.shot}
-                    onToggle={() => toggleSection('shot')}
-                    description="피사체와의 거리 설정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
-                <CategorySection
-                    title="Angle"
-                    icon={Video}
-                    items={ANGLES.filter(i => i.id !== 'none')}
-                    type="angle"
-                    isOpen={openSections.angle}
-                    onToggle={() => toggleSection('angle')}
-                    description="카메라의 높낮이와 각도 설정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
-                <CategorySection
-                    title="Composition"
-                    icon={Layout}
-                    items={COMPOSITIONS.filter(i => i.id !== 'none')}
-                    type="composition"
-                    isOpen={openSections.composition}
-                    onToggle={() => toggleSection('composition')}
-                    description="화면 내 피사체의 배치 결정"
-                    disabledIds={disabledIds}
-                    onItemClick={onItemClick}
-                />
+            <div
+                className={`
+                    fixed bottom-0 left-0 right-0 z-50 
+                    md:relative md:top-auto md:left-auto md:right-auto md:order-none md:z-10
+                    w-full md:w-80 bg-white md:border-r border-t md:border-t-0 border-gray-200 
+                    shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-lg selection-section 
+                    transition-all duration-300 ease-in-out
+                    md:transform-none flex flex-col
+                    md:h-full
+                    ${isMobileOpen ? 'h-[70vh]' : 'h-14'}
+                `}
+            >
+                <style>{`
+                    .mask-linear-fade {
+                        mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+                        -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+                    }
+                    /* Hide Scrollbar */
+                    .no-scrollbar::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .no-scrollbar {
+                        -ms-overflow-style: none;  /* IE and Edge */
+                        scrollbar-width: none;  /* Firefox */
+                    }
+                `}</style>
+
+                {/* Header (Always Visible) */}
+                <div
+                    onClick={() => setIsMobileOpen(!isMobileOpen)}
+                    className="p-4 border-b border-gray-200 bg-orange-50/50 flex items-center justify-between cursor-pointer md:cursor-default h-14 shrink-0"
+                >
+                    <div>
+                        <h2 className="font-black text-lg text-gray-800 flex items-center">
+                            <Grid size={20} className="mr-2 text-orange-600" />
+                            Asset Deck
+                        </h2>
+                        <p className={`text-xs text-gray-500 mt-1 ${!isMobileOpen ? 'hidden md:block' : ''}`}>
+                            Drag items to the workspace
+                        </p>
+                    </div>
+                    <div className="md:hidden bg-white p-1 rounded-full shadow-sm">
+                        {isMobileOpen ? <ChevronDown size={20} className="text-gray-500" /> : <ChevronUp size={20} className="text-orange-500" />}
+                    </div>
+                </div>
+
+                {/* Content (Scrollable) */}
+                <div className="flex-1 overflow-y-auto no-scrollbar bg-white">
+
+                    <CategorySection
+                        title="MEME TEMPLATES"
+                        icon={Smile}
+                        items={MEME_TEMPLATES}
+                        type="meme"
+                        description="유행하는 밈 템플릿 적용"
+                        isOpen={openSections.meme}
+                        onToggle={() => toggleSection('meme')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={false} // Memes themselves are never locked
+                    />
+
+                    <CategorySection
+                        title="RESOLUTION"
+                        icon={Monitor}
+                        items={RESOLUTIONS}
+                        type="resolution"
+                        description="화면 비율"
+                        isOpen={openSections.resolution}
+                        onToggle={() => toggleSection('resolution')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('resolution')}
+                    />
+
+                    <CategorySection
+                        title="ART STYLE"
+                        icon={Palette}
+                        items={STYLES}
+                        type="style"
+                        description="전체적인 화풍과 스타일"
+                        isOpen={openSections.style}
+                        onToggle={() => toggleSection('style')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('style')}
+                    />
+
+                    <CategorySection
+                        title="SHOT SIZE"
+                        icon={Camera}
+                        items={SHOT_TYPES}
+                        type="shot"
+                        description="피사체와의 거리와 크기"
+                        isOpen={openSections.shot}
+                        onToggle={() => toggleSection('shot')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('shot')}
+                    />
+
+                    <CategorySection
+                        title="CAMERA ANGLE"
+                        icon={Video}
+                        items={ANGLES}
+                        type="angle"
+                        description="카메라의 높이와 시선"
+                        isOpen={openSections.angle}
+                        onToggle={() => toggleSection('angle')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('angle')}
+                    />
+
+                    <CategorySection
+                        title="SUBJECT FACING"
+                        icon={User}
+                        items={FACING_DIRECTIONS}
+                        type="facing"
+                        description="피사체가 바라보는 방향"
+                        isOpen={openSections.facing}
+                        onToggle={() => toggleSection('facing')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('facing')}
+                    />
+
+                    <CategorySection
+                        title="COMPOSITION"
+                        icon={Grid}
+                        items={COMPOSITIONS}
+                        type="composition"
+                        description="화면의 구도와 배치"
+                        isOpen={openSections.composition}
+                        onToggle={() => toggleSection('composition')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('composition')}
+                    />
+
+                    <CategorySection
+                        title="LIGHTING"
+                        icon={Zap}
+                        items={LIGHTING}
+                        type="lighting"
+                        description="빛의 연출과 분위기"
+                        isOpen={openSections.lighting}
+                        onToggle={() => toggleSection('lighting')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('lighting')}
+                    />
+
+                    {/* Padding at bottom for safe area */}
+                    <div className="h-20 md:h-10"></div>
+                </div>
             </div>
-        </div>
+        </>
     );
 }

@@ -50,10 +50,9 @@ export default function DraggableCard({ item, id, onRemove }) {
                     e.stopPropagation(); // Prevent drag start
                     onRemove(id);
                 }}
-                className="absolute -top-2 -right-2 p-1.5 bg-white border border-gray-200 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 shadow-sm transition-all z-20"
-                title="Remove Item"
+                className="absolute -top-2 -right-2 p-1 bg-white border border-gray-200 rounded-full text-gray-400 hover:text-red-500 hover:border-red-200 shadow-sm opacity-0 group-hover:opacity-100 transition-all z-20"
             >
-                <X size={14} strokeWidth={3} />
+                <X size={14} />
             </button>
 
             {/* Category Badge */}

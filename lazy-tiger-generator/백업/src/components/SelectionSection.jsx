@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, BoxSelect, Check, Info } from 'lucide-react';
 import PixelArtIcon from './PixelArtIcon';
 
-const SelectionSection = ({ title, description, items, selectedId, onSelect, type = 'card', disabledItems = [] }) => {
+const SelectionSection = ({ title, description, items, selectedId, onSelect, type = 'card' }) => {
     const scrollRef = useRef(null);
 
     // Scroll selected item into view when it changes
@@ -58,7 +58,6 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                 >
                     {items.map((item) => {
                         const isSelected = selectedId === item.id;
-                        const isDisabled = disabledItems.includes(item.id);
                         const Icon = item.icon || BoxSelect;
 
                         return (
@@ -68,16 +67,13 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                             >
                                 <button
                                     data-id={item.id}
-                                    onClick={() => !isDisabled && onSelect(item)}
-                                    disabled={isDisabled}
+                                    onClick={() => onSelect(item)}
                                     className={`
                     transition-all duration-300 border-2 rounded-2xl relative overflow-hidden group/item text-left mx-auto
                     w-full max-w-[320px] aspect-[8.56/5.4] block
-                    ${isDisabled
-                                            ? 'border-gray-100 bg-gray-50 opacity-30 grayscale cursor-not-allowed'
-                                            : isSelected
-                                                ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200 ring-offset-2 z-10 shadow-lg opacity-100'
-                                                : 'border-gray-200 bg-white hover:border-orange-300 hover:shadow-md opacity-60 hover:opacity-90 scale-95 hover:scale-100'}
+                    ${isSelected
+                                            ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200 ring-offset-2 z-10 shadow-lg opacity-100'
+                                            : 'border-gray-200 bg-white hover:border-orange-300 hover:shadow-md opacity-60 hover:opacity-90 scale-95 hover:scale-100'}
                   `}
                                 >
                                     {type === 'resolution' ? (
