@@ -17,7 +17,7 @@ import {
 // --- Sub-components ---
 
 // Draggable Icon Card (Updated for Dial/Card Look)
-const DraggableAsset = ({ item, type, disabled, onClick }) => {
+const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: item.uid || item.id,
         data: { item, type, source: 'deck' },
@@ -37,10 +37,12 @@ const DraggableAsset = ({ item, type, disabled, onClick }) => {
             {...attributes}
             onClick={() => !disabled && onClick && onClick()}
             // Increased size to w-60 (240px) to show ~1 card at a time
-            className={`flex-shrink-0 w-60 flex flex-col items-center justify-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm transition-all select-none relative overflow-hidden
+            className={`flex-shrink-0 w-60 flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm transition-all select-none relative overflow-hidden
                 ${disabled
-                    ? 'opacity-40 grayscale cursor-not-allowed border-gray-100'
-                    : 'hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group snap-center active:scale-95 cursor-pointer'
+                    ? 'bg-white opacity-40 grayscale cursor-not-allowed border-gray-100'
+                    : isSelected
+                        ? 'bg-orange-100 border-orange-500 ring-4 ring-orange-200/50 shadow-lg scale-[1.02] z-10'
+                        : 'bg-white border-gray-200 hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group active:scale-95 cursor-pointer'
                 }`}
         >
             <div className="w-16 h-16 mb-2 rounded-md flex items-center justify-center transition-colors z-10">
@@ -63,7 +65,7 @@ const DraggableAsset = ({ item, type, disabled, onClick }) => {
     );
 };
 
-const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onAssetClick, locked }) => {
+const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onAssetClick, locked, currentSelections }) => {
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
@@ -124,7 +126,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                     {/* Horizontal Scroll Container */}
                     <div
                         ref={scrollRef}
-                        className="flex overflow-x-auto gap-3 p-3 pt-0 pb-2 no-scrollbar snap-x snap-mandatory mask-linear-fade scroll-smooth"
+                        className="flex overflow-x-auto gap-3 p-3 pt-0 pb-2 no-scrollbar snap-x mask-linear-fade scroll-smooth"
                     >
                         {/* Padding spacer for start */}
                         <div className="w-1 shrink-0"></div>
@@ -134,6 +136,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                                 item={item}
                                 type={type}
                                 disabled={locked || disabledIds?.includes(item.id)}
+                                isSelected={currentSelections?.[type]?.id === item.id}
                                 onClick={() => onAssetClick && onAssetClick(item, type)}
                             />
                         ))}
@@ -149,13 +152,49 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                     >
                         <ChevronRight size={16} />
                     </button>
+                    {/* Sub-Selection (Variants) */}
+                    {(() => {
+                        const selectedItem = items.find(i => i.id === currentSelections?.[type]?.id);
+                        if (selectedItem && selectedItem.variants && selectedItem.variants.length > 0) {
+                            const currentVariantId = currentSelections?.[type]?.variantId;
+
+                            return (
+                                <div className="mx-4 mb-2 mt-0 flex flex-wrap gap-1.5 animate-in fade-in slide-in-from-top-1 justify-center">
+                                    {selectedItem.variants.map((variant) => {
+                                        const isVarSelected = currentVariantId === variant.id || (!currentVariantId && variant.id === 'standard');
+                                        return (
+                                            <button
+                                                key={variant.id}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (onAssetClick) onAssetClick(selectedItem, type, variant.id);
+                                                }}
+                                                className={`
+                                                px-2.5 py-1 text-[11px] font-medium rounded-full transition-all border
+                                                ${isVarSelected
+                                                        ? 'bg-orange-100 text-orange-700 border-orange-200'
+                                                        : 'bg-gray-50 text-gray-500 border-gray-100 hover:bg-white hover:border-gray-200'}
+                                            `}
+                                            >
+                                                {variant.label}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        }
+                        return null;
+                    })()}
                 </div>
             )}
         </div>
     );
 };
 
-export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [] }) {
+// Update CategorySection to accept currentSelections (it is passed but not explicitly destructured in the previous call, it is passed a `isSelected` logic in the map. Wait, I need to make sure CategorySection receives `currentSelections`? No, I injected the logic directly into the map in the previous tool call.
+// BUT, I need to update the AssetDeck component signature to accept `currentSelections`.
+
+export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [], currentSelections = {} }) {
     const [isMobileOpen, setIsMobileOpen] = useState(false); // Default collapsed on mobile
 
     const [openSections, setOpenSections] = useState({
@@ -183,8 +222,8 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
         });
     };
 
-    const handleAssetClickWrapper = (item, type) => {
-        if (onAssetClick) onAssetClick(item, type);
+    const handleAssetClickWrapper = (item, type, variantId) => {
+        if (onAssetClick) onAssetClick(item, type, variantId);
         // setIsMobileOpen(false); // Removed auto-close per user request
     };
 
@@ -233,10 +272,10 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     <div>
                         <h2 className="font-black text-lg text-gray-800 flex items-center">
                             <Grid size={20} className="mr-2 text-orange-600" />
-                            Asset Deck
+                            소품 상자 (Props)
                         </h2>
                         <p className={`text-xs text-gray-500 mt-1 ${!isMobileOpen ? 'hidden md:block' : ''}`}>
-                            Drag items to the workspace
+                            스튜디오로 아이템을 드래그하세요
                         </p>
                     </div>
                     <div className="md:hidden bg-white p-1 rounded-full shadow-sm">
@@ -247,18 +286,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                 {/* Content (Scrollable) */}
                 <div className="flex-1 overflow-y-auto no-scrollbar bg-white">
 
-                    <CategorySection
-                        title="MEME TEMPLATES"
-                        icon={Smile}
-                        items={MEME_TEMPLATES}
-                        type="meme"
-                        description="유행하는 밈 템플릿 적용"
-                        isOpen={openSections.meme}
-                        onToggle={() => toggleSection('meme')}
-                        disabledIds={disabledIds}
-                        onAssetClick={handleAssetClickWrapper}
-                        locked={false} // Memes themselves are never locked
-                    />
+
 
                     <CategorySection
                         title="RESOLUTION"
@@ -271,6 +299,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('resolution')}
+                        currentSelections={currentSelections}
                     />
 
                     <CategorySection
@@ -284,6 +313,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('style')}
+                        currentSelections={currentSelections}
                     />
 
                     <CategorySection
@@ -297,6 +327,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('shot')}
+                        currentSelections={currentSelections}
                     />
 
                     <CategorySection
@@ -310,6 +341,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('angle')}
+                        currentSelections={currentSelections}
                     />
 
                     <CategorySection
@@ -323,6 +355,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('facing')}
+                        currentSelections={currentSelections}
                     />
 
                     <CategorySection
@@ -336,6 +369,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('composition')}
+                        currentSelections={currentSelections}
                     />
 
                     <CategorySection
@@ -349,6 +383,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('lighting')}
+                        currentSelections={currentSelections}
                     />
 
                     {/* Padding at bottom for safe area */}

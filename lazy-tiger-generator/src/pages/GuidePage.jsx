@@ -51,7 +51,7 @@ export default function GuidePage() {
                                 <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01</span>
                                 <h3 className="text-xl font-bold mb-3">원하는 스타일과 구도 선택</h3>
                                 <p className="text-gray-600 leading-relaxed">
-                                    왼쪽 <strong>'Asset Deck'</strong>에서 원하는 카드를 고르세요.
+                                    왼쪽 <strong>'소품 상자 (Props)'</strong>에서 원하는 카드를 고르세요.
                                     <br />
                                     모바일에서는 <strong>카드를 터치</strong>만 하면 바로 추가되고,
                                     PC에서는 <strong>드래그 앤 드롭</strong>으로 자유롭게 배치할 수 있습니다.
@@ -66,9 +66,9 @@ export default function GuidePage() {
                             </div>
                             <div className="relative z-10">
                                 <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02</span>
-                                <h3 className="text-xl font-bold mb-3">비주얼 매핑 (Visual Mapping)</h3>
+                                <h3 className="text-xl font-bold mb-3">AI의 시선 (AI Vision)</h3>
                                 <p className="text-gray-600 leading-relaxed">
-                                    오른쪽 <strong>캔버스(Workspace)</strong>에 카드가 놓입니다.
+                                    오른쪽 <strong>스튜디오 (Studio)</strong>에 카드가 놓입니다.
                                     브러시 도구를 사용해 대략적인 위치를 그리거나,
                                     <strong>스탬프</strong>로 오브젝트를 배치해보세요.
                                     AI가 이 구도를 분석해서 프롬프트에 반영합니다.
@@ -104,7 +104,7 @@ export default function GuidePage() {
                         <div className="flex items-start">
                             <CheckCircle2 className="text-green-400 mr-3 mt-1 shrink-0" size={20} />
                             <div>
-                                <h4 className="font-bold mb-1">직관적인 덱 시스템</h4>
+                                <h4 className="font-bold mb-1">직관적인 소품 상자</h4>
                                 <p className="text-gray-400 text-sm">복잡한 용어 대신 아이콘 카드로 쉽게 선택하세요.</p>
                             </div>
                         </div>

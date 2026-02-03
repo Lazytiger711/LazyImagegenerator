@@ -62,6 +62,7 @@ export const STAMPS = [
 
 export const FACING_DIRECTIONS = [
 
+
     { id: 'facing_front', label: '정면', sub: 'Front', description: '카메라를 정면으로 응시', prompt: 'looking at camera, facing viewer, eye contact, front view', icon: Eye },
     { id: 'facing_front_3_4_left', label: '정면 반측면 (좌)', sub: 'Front 3/4 L', description: '살짝 왼쪽을 보는 각도', prompt: 'three-quarter view facing left, looking slightly left, partial side profile', icon: Eye },
     { id: 'facing_front_3_4_right', label: '정면 반측면 (우)', sub: 'Front 3/4 R', description: '살짝 오른쪽을 보는 각도', prompt: 'three-quarter view facing right, looking slightly right, partial side profile', icon: Eye },
@@ -74,25 +75,67 @@ export const FACING_DIRECTIONS = [
 
 export const ANGLES = [
 
-    { id: 'eye_level', label: '아이 레벨', sub: 'Eye Level', description: '가장 자연스러운 눈높이', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: MoveVertical },
-    { id: 'low_angle', label: '로우 앵글', sub: 'Low Angle', description: '아래에서 위로, 웅장함', prompt: 'low angle shot, looking up from below, worm\'s eye view, imposing presence, dramatic perspective, majestic, powerful stance', icon: MoveVertical },
-    { id: 'high_angle', label: '하이 앵글', sub: 'High Angle', description: '위에서 아래로, 귀여움/왜소함', prompt: 'high angle shot, looking down from above, diminishing perspective, subject appears smaller, cute animation angle', icon: MoveVertical },
-    { id: 'top_down', label: '탑다운 뷰', sub: 'Top Down', description: '90도 수직, 제품/음식 (Flat Lay)', prompt: 'top-down view, 90 degree angle, flat lay, map view, satellite view, directly from above, graphic composition', icon: MoveVertical },
-    { id: 'birds_eye', label: '버드 아이', sub: 'Bird\'s Eye', description: '하늘에서 본 광활한 시점 (Aerial)', prompt: 'bird\'s eye view, aerial photography, drone shot, wide overview from sky, vast scale, map-like perspective, city looking down', icon: MoveVertical },
-    { id: 'dutch_angle', label: '더치 앵글', sub: 'Dutch Angle', description: '기울어진 화면, 긴박감/불안', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: MoveVertical },
+
+    {
+        id: 'eye_level', label: '아이 레벨', sub: 'Eye Level', description: '가장 자연스러운 눈높이', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: MoveVertical
+    },
+    {
+        id: 'low_angle', label: '로우 앵글', sub: 'Low Angle', description: '아래에서 위로, 웅장함', prompt: 'low angle shot, looking up from below, imposing presence, dramatic perspective, majestic, powerful stance', icon: MoveVertical,
+        variants: [
+            { id: 'standard', label: '기본 (Standard)', prompt: '' },
+            { id: 'extreme_low', label: '극단적 (Extreme)', prompt: 'extreme low angle, worm\'s eye view, ground level shot' },
+            { id: 'slight_low', label: '약간 (Slight)', prompt: 'slightly low angle, subtle upward tilt' }
+        ]
+    },
+    {
+        id: 'high_angle', label: '하이 앵글', sub: 'High Angle', description: '위에서 아래로, 귀여움/왜소함', prompt: 'high angle shot, looking down from above, diminishing perspective, subject appears smaller, cute animation angle', icon: MoveVertical,
+        variants: [
+            { id: 'standard', label: '기본 (Standard)', prompt: '' },
+            { id: 'birds_eye', label: '버드 아이 (Bird\'s Eye)', prompt: 'bird\'s eye view, aerial photography, drone shot, wide overview from sky, vast scale' },
+            { id: 'extreme_high', label: '극단적 (Extreme)', prompt: 'extreme high angle, directly looking down, 90 degree angle' }
+        ]
+    },
+    {
+        id: 'top_down', label: '탑다운 뷰', sub: 'Top Down', description: '90도 수직, 제품/음식 (Flat Lay)', prompt: 'top-down view, 90 degree angle, flat lay, map view, satellite view, directly from above, graphic composition', icon: MoveVertical
+    },
+    {
+        id: 'dutch_angle', label: '더치 앵글', sub: 'Dutch Angle', description: '기울어진 화면, 긴박감/불안', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: MoveVertical
+    }
 ];
 
 export const SHOT_TYPES = [
 
-    { id: 'extreme_close_up', label: '익스트림 클로즈업', sub: 'Extreme CU', description: '눈, 입술 등 초근접', prompt: 'extreme close-up shot, macro photography, highly detailed texture, focus on specific details, intense focus', icon: Camera },
-    { id: 'close_up', label: '클로즈업', sub: 'Close Up', description: '얼굴이나 사물 집중', prompt: 'close-up shot, focus on face, detailed eyes, intense expression, portrait photography, clear facial features', icon: Camera },
-    { id: 'bust_shot', label: '바스트 샷', sub: 'Bust Shot', description: '가슴 윗부분, 인물 표준', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: Camera },
-    { id: 'medium_shot', label: '미디엄 샷', sub: 'Medium Shot', description: '상반신과 동작', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: Camera },
-    { id: 'full_shot', label: '풀 샷', sub: 'Full Shot', description: '전신과 배경 약간', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: Camera },
-    { id: 'long_shot', label: '롱 샷', sub: 'Long Shot', description: '배경 속 작은 피사체', prompt: 'wide angle long shot, full body visible, small figure in distance, vast background, environmental shot', icon: Camera },
-    { id: 'selfie', label: '셀피', sub: 'Selfie', description: '직접 찍은 듯한 구도', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: Camera },
-    { id: 'over_the_shoulder', label: '오버 더 숄더', sub: 'OTS', description: '어깨 너머 시점', prompt: 'over-the-shoulder shot, view from behind subject, cinematic dialogue angle, foreground shoulder blurred', icon: Camera },
-    { id: 'first_person', label: '1인칭 시점', sub: 'POV', description: '주인공의 눈으로 본 세상', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: Eye },
+    {
+        id: 'close_up', label: '클로즈업', sub: 'Close Up', description: '얼굴이나 사물 집중', prompt: 'close-up shot, focus on face, detailed eyes, intense expression, portrait photography, clear facial features', icon: Camera,
+        variants: [
+            { id: 'standard', label: '기본 (Standard)', prompt: '' },
+            { id: 'extreme_cu', label: '익스트림 (Extreme CU)', prompt: 'extreme close-up shot, macro photography, highly detailed texture, focus on specific details' },
+            { id: 'tight_cu', label: '타이트 (Tight)', prompt: 'tight close-up, face filling the frame' }
+        ]
+    },
+    {
+        id: 'bust_shot', label: '바스트 샷', sub: 'Bust Shot', description: '가슴 윗부분, 인물 표준', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: Camera
+    },
+    {
+        id: 'medium_shot', label: '미디엄 샷', sub: 'Medium Shot', description: '상반신과 동작', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: Camera
+    },
+    {
+        id: 'full_shot', label: '풀 샷', sub: 'Full Shot', description: '전신과 배경 약간', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: Camera,
+        variants: [
+            { id: 'standard', label: '기본 (Standard)', prompt: '' },
+            { id: 'wide', label: '와이드 (Wide)', prompt: 'wide angle full shot, broad view, environmental context' },
+            { id: 'long_shot', label: '롱 샷 (Long Shot)', prompt: 'long shot, subject small in frame, vast background, distance' }
+        ]
+    },
+    {
+        id: 'selfie', label: '셀피', sub: 'Selfie', description: '직접 찍은 듯한 구도', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: Camera
+    },
+    {
+        id: 'over_the_shoulder', label: '오버 더 숄더', sub: 'OTS', description: '어깨 너머 시점', prompt: 'over-the-shoulder shot, view from behind subject, cinematic dialogue angle, foreground shoulder blurred', icon: Camera
+    },
+    {
+        id: 'first_person', label: '1인칭 시점', sub: 'POV', description: '주인공의 눈으로 본 세상', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: Eye
+    },
 ];
 
 export const COMPOSITIONS = [
@@ -108,15 +151,17 @@ export const COMPOSITIONS = [
 
 export const STYLES = [
 
-    { id: 'realistic', label: '실사/사진', sub: 'Photorealistic', prompt: 'photorealistic, raw photo, 8k uhd, dslr, soft lighting, high quality, fujifilm, grainy texture, masterpiece', neg: '--no pixel art, illustration, cartoon, drawing, painting', icon: Camera },
+
+    { id: 'realistic', label: '실사/사진', sub: 'Photorealistic', prompt: 'photorealistic, raw photo, 8k uhd, dslr, high quality, fujifilm, grainy texture, masterpiece', neg: '--no pixel art, illustration, cartoon, drawing, painting', icon: Camera },
     { id: 'anime', label: '애니메이션', sub: 'Anime', prompt: 'anime style, key visual, vibrant colors, studio ghibli inspired, high definition, detailed line art, 2d animation', neg: '--no photorealistic, 3d render, live action', icon: Film },
-    { id: '3d_render', label: '3D 렌더링', sub: '3D 렌더링', prompt: '3d render, octane render, unreal engine 5, ray tracing, clay material, soft shading, high fidelity, 8k, blender style', neg: '--no 2d, sketch, flat, cartoon, low poly', icon: Box },
+    { id: '3d_render', label: '3D 렌더링', sub: '3D 렌더링', prompt: '3d render, octane render, unreal engine 5, ray tracing, clay material, high fidelity, 8k, blender style', neg: '--no 2d, sketch, flat, cartoon, low poly', icon: Box },
     { id: 'oil_painting', label: '유화', sub: 'Oil Painting', prompt: 'oil painting, impasto, textured canvas, palette knife strokes, classical art style, van gogh style, thick paint', neg: '--no photo, digital art, pixel art, smooth', icon: Paintbrush },
-    { id: 'concept_art', label: '컨셉 아트', sub: 'Concept Art', description: '디지털 페인팅, 게임/영화 컨셉', prompt: 'digital concept art, speed painting, fantasy atmosphere, cinematic lighting, matte painting, highly detailed, sharp focus', neg: '--no photo, low quality, sketch', icon: Pencil },
-    { id: 'cyberpunk', label: '사이버펑크', sub: 'Cyberpunk', description: '네온, 미래지향적, 하이테크', prompt: 'cyberpunk style, neon lights, futuristic city, chromatic aberration, synthwave aesthetic, night time, glowing details', neg: '--no vintage, rustic, natural', icon: Zap },
+    { id: 'concept_art', label: '컨셉 아트', sub: 'Concept Art', description: '디지털 페인팅, 게임/영화 컨셉', prompt: 'digital concept art, speed painting, fantasy atmosphere, matte painting, highly detailed, sharp focus', neg: '--no photo, low quality, sketch', icon: Pencil },
+    { id: 'cyberpunk', label: '사이버펑크', sub: 'Cyberpunk', description: '네온, 미래지향적, 하이테크', prompt: 'cyberpunk style, futuristic city, chromatic aberration, synthwave aesthetic, night time, glowing details', neg: '--no vintage, rustic, natural', icon: Zap },
 ];
 
 export const LIGHTING = [
+
     { id: 'natural', label: '자연광', sub: 'Natural', description: '부드러운 햇살', prompt: 'natural lighting, sunlight, soft shadows, golden hour, warm tone, outdoor lighting', icon: Zap },
     { id: 'studio', label: '스튜디오', sub: 'Studio', description: '전문적인 조명', prompt: 'studio lighting, softbox, rim light, professional lighting, clean background, sharp details', icon: Zap },
     { id: 'neon', label: '네온', sub: 'Neon', description: '화려한 네온 사인', prompt: 'neon lighting, cyberpunk lighting, vibrant colors, glowing lights, night atmosphere, synthwave', icon: Zap },
@@ -167,126 +212,126 @@ export const EXTRA_COLORS = [
 ];
 
 export const MEME_TEMPLATES = [
-    { id: 'none', label: '없음', sub: 'None', description: '일반 모드', prompt: '', icon: Ban },
+
     {
-        id: 'distracted_boyfriend', label: '딴청 피우는 남친', sub: 'Distracted BF', description: '지나가던 여자 보는 남자와 화난 여친', prompt: 'distracted boyfriend meme composition, man looking at another woman while girlfriend looks at him in disgust, street background, 3 people scene, betrayal theme', icon: Smile,
+        id: 'distracted_boyfriend', label: '딴청 피우는 남친', sub: 'Distracted BF', description: '지나가던 여자 보는 남자와 화난 여친', prompt: 'distracted boyfriend meme, stock photo aesthetic, man walking with girlfriend looking back at another woman in red dress, girlfriend looking at him with disgusted expression, 3 people scene, high quality, realistic photography', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'rule_of_thirds', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'woman_yelling_cat', label: '고양이에게 소리치는 여자', sub: 'Yelling Woman', description: '우는 여자와 식탁 위 고양이', prompt: 'woman yelling at cat meme composition, split screen composition, left side woman screaming and pointing finger being held back by friend, right side confused white cat sitting at dinner table', icon: Smile,
+        id: 'woman_yelling_cat', label: '고양이에게 소리치는 여자', sub: 'Yelling Woman', description: '우는 여자와 식탁 위 고양이', prompt: 'woman yelling at cat meme, split screen composition, left side: crying woman pointing finger being held back by friend, right side: confused white cat sitting at dinner table with salad, realistic TV show screencap style', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_left' }
     },
     {
-        id: 'disaster_girl', label: '재앙의 소녀', sub: 'Disaster Girl', description: '불타는 집 앞에서 미소 짓는 소녀', prompt: 'disaster girl meme composition, little girl smiling creepily at camera in foreground, house fire with firefighters in background, focus on girl\'s face, chaotic background', icon: Smile,
+        id: 'disaster_girl', label: '재앙의 소녀', sub: 'Disaster Girl', description: '불타는 집 앞에서 미소 짓는 소녀', prompt: 'disaster girl meme, little girl with devilish smile looking at camera in foreground, house fire with firefighters blurred in background, high contrast, focus on girl\'s face, chaotic background, realistic photography', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'rule_of_thirds', facing: 'facing_front' }
     },
     {
-        id: 'this_is_fine', label: '이건 괜찮아 (강아지)', sub: 'This is Fine', description: '불타는 방 안에 앉은 강아지', prompt: 'this is fine dog meme composition, cartoon deg sitting at table with coffee mug, room engulfed in flames, calm expression, "this is fine" atmosphere', icon: Smile,
+        id: 'this_is_fine', label: '이건 괜찮아 (강아지)', sub: 'This is Fine', description: '불타는 방 안에 앉은 강아지', prompt: 'this is fine meme, 2 panel comic strip style, cartoon dog in hat sitting at table with coffee mug, room engulfed in flames, "this is fine" text bubble vibe, flat illustration style', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'success_kid', label: '성공한 아기', sub: 'Success Kid', description: '주먹을 꽉 쥔 결의에 찬 아기', prompt: 'success kid meme composition, baby clenching fist with determined expression, sand background, victory pose, funny cute baby', icon: Smile,
+        id: 'success_kid', label: '성공한 아기', sub: 'Success Kid', description: '주먹을 꽉 쥔 결의에 찬 아기', prompt: 'success kid meme, toddler boy in green and white shirt clenching fist with determined expression, sandy beach background, victory pose, high quality photo, famous internet baby', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'drake_hotline', label: '드레이크 (좋아/싫어)', sub: 'Drake', description: '거절하는 모습과 좋아하는 모습', prompt: 'drake hotline bling meme composition, split panel, top panel showing refusal/disgust hand gesture, bottom panel showing approval/pointing finger, orange background', icon: Smile,
+        id: 'drake_hotline', label: '드레이크 (좋아/싫어)', sub: 'Drake', description: '거절하는 모습과 좋아하는 모습', prompt: 'drake hotline bling meme, 2 panel split screen, top panel: drake looking disgusted and turning away with hand up, bottom panel: drake smiling and pointing finger, orange background, music video screencap style', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_left' }
     },
     {
-        id: 'two_buttons', label: '두 개의 버튼', sub: 'Two Buttons', description: '땀 흘리며 고민하는 우주비행사/사람', prompt: 'two buttons meme composition, superhero sweating nervously looking at two red buttons, difficult choice, dilemma, cartoon style', icon: Smile,
+        id: 'two_buttons', label: '두 개의 버튼', sub: 'Two Buttons', description: '땀 흘리며 고민하는 우주비행사/사람', prompt: 'daily struggle meme, two buttons meme, nervous spaceman/superhero sweating heavily looking at two red buttons, difficult choice dilemma, comic book style illustration, close up on face and buttons', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'high_angle', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'change_my_mind', label: '내 마음을 바꿔봐', sub: 'Change My Mind', description: '테이블에 앉아 커피 마시는 남자', prompt: 'change my mind meme composition, man sitting at table with sign, holding coffee mug, outdoor park background, "change my mind" banner style, debate atmosphere', icon: Smile,
+        id: 'change_my_mind', label: '내 마음을 바꿔봐', sub: 'Change My Mind', description: '테이블에 앉아 커피 마시는 남자', prompt: 'change my mind meme, man sitting at folding table in outdoor park, white sign with text space, holding coffee mug, "change my mind" banner style, sunlight, realistic photography', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'rule_of_thirds', facing: 'facing_right' }
     },
     {
-        id: 'grumpy_cat', label: '심술난 고양이', sub: 'Grumpy Cat', description: '언짢은 표정의 고양이', prompt: 'grumpy cat meme composition, cat with extremely annoyed facial expression, close up portrait, cynical vibe', icon: Smile,
+        id: 'grumpy_cat', label: '심술난 고양이', sub: 'Grumpy Cat', description: '언짢은 표정의 고양이', prompt: 'grumpy cat meme, snowshoe cat with extremely annoyed facial expression, close up portrait, cynical vibe, realistic photography, internet famous cat', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'doge', label: '도지 (시바견)', sub: 'Doge', description: '곁눈질하는 시바견', prompt: 'doge meme composition, shiba inu dog looking at camera with raised eyebrows, internal monologue text style background, funny dog face', icon: Smile,
+        id: 'doge', label: '도지 (시바견)', sub: 'Doge', description: '곁눈질하는 시바견', prompt: 'doge meme, shiba inu dog looking at camera with side eye and raised eyebrows, funny dog face, soft lighting, photography style, famous internet dog', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'roll_safe', label: '머리를 쓰는 흑인', sub: 'Roll Safe', description: '관자놀이를 검지로 가리키는 남자', prompt: 'roll safe meme composition, man tapping his temple with index finger, knowing smile, smart idea gesture, "think about it" vibe', icon: Smile,
+        id: 'roll_safe', label: '머리를 쓰는 흑인', sub: 'Roll Safe', description: '관자놀이를 검지로 가리키는 남자', prompt: 'roll safe meme, man in leather jacket tapping his temple with index finger, knowing smile, smart idea gesture, dark blue background, documentary screencap style', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'mocking_spongebob', label: '놀리는 스폰지밥', sub: 'Mocking Sponge', description: '이상한 자세의 스폰지밥', prompt: 'mocking spongebob meme composition, spongebob acting like a chicken, distorted pose, mocking gesture, rainbow background effect', icon: Smile,
+        id: 'mocking_spongebob', label: '놀리는 스폰지밥', sub: 'Mocking Sponge', description: '이상한 자세의 스폰지밥', prompt: 'mocking spongebob meme, spongebob squarepants acting like a chicken, distorted pose, mocking gesture, rainbow background blur, cartoon screenshot', icon: Smile,
         presets: { shot: 'full_shot', angle: 'eye_level', composition: 'center', facing: 'facing_left' }
     },
     {
-        id: 'futurama_fry', label: '의심하는 프라이', sub: 'Suspicious Fry', description: '눈을 가늘게 뜨고 의심하는 표정', prompt: 'futurama fry meme composition, man squinting eyes in suspicion, close up face, "not sure if" expression, cartoon style', icon: Smile,
+        id: 'futurama_fry', label: '의심하는 프라이', sub: 'Suspicious Fry', description: '눈을 가늘게 뜨고 의심하는 표정', prompt: 'futurama fry meme, fry character squinting eyes in suspicion, close up face, "not sure if" expression, cartoon style, flat colors', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_left' }
     },
     {
-        id: 'one_does_not_simply', label: '그렇게 쉽게 되는 게 아냐', sub: 'Boromir', description: '손가락으로 원을 만드는 보로미르', prompt: 'one does not simply walk into mordor meme composition, man making zero gesture with hand, serious lecture expression, fantasy background', icon: Smile,
+        id: 'one_does_not_simply', label: '그렇게 쉽게 되는 게 아냐', sub: 'Boromir', description: '손가락으로 원을 만드는 보로미르', prompt: 'one does not simply walk into mordor meme, boromir from lord of the rings making zero gesture with hand, serious lecture expression, fantasy movie screencap', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'ancient_aliens', label: '외계인 전문가', sub: 'Aliens Guy', description: '양손을 벌리고 열변을 토하는 남자', prompt: 'ancient aliens guy meme composition, man with crazy hair holding hands up explaining something, "aliens" gesture, history channel vibe', icon: Smile,
+        id: 'ancient_aliens', label: '외계인 전문가', sub: 'Aliens Guy', description: '양손을 벌리고 열변을 토하는 남자', prompt: 'ancient aliens guy meme, giorgio tsoukalos with messy hair holding hands up explaining, history channel interview style, blue background', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'batman_slapping', label: '배트맨 따귀', sub: 'Batman Slaps', description: '로빈의 뺨을 때리는 배트맨', prompt: 'batman slapping robin meme composition, comic book style, batman slapping robin in the face, speech bubble space, action sound effect visual', icon: Smile,
+        id: 'batman_slapping', label: '배트맨 따귀', sub: 'Batman Slaps', description: '로빈의 뺨을 때리는 배트맨', prompt: 'batman slapping robin meme, comic book panel style, batman slapping robin in the face, speech bubble space, action lines, "SLAP" sound effect visual, retro comic style', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'center', facing: 'facing_right' }
     },
     {
-        id: 'hide_the_pain', label: '고통을 숨기는 해롤드', sub: 'Harold', description: '억지 미소를 짓는 할아버지', prompt: 'hide the pain harold meme composition, old man smiling while looking in pain, holding coffee cup, laptop in front, stock photo vibe', icon: Smile,
+        id: 'hide_the_pain', label: '고통을 숨기는 해롤드', sub: 'Harold', description: '억지 미소를 짓는 할아버지', prompt: 'hide the pain harold meme, gray haired old man smiling while looking in pain, holding coffee cup, laptop in front, bright office lighting, stock photo style', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'is_this_a_pigeon', label: '이게 비둘기인가?', sub: 'Is This Pigeon', description: '나비를 가리키는 남자', prompt: 'is this a pigeon meme composition, anime man pointing at a butterfly, confusing butterfly with bird, yellow book in hand, meadow background', icon: Smile,
+        id: 'is_this_a_pigeon', label: '이게 비둘기인가?', sub: 'Is This Pigeon', description: '나비를 가리키는 남자', prompt: 'is this a pigeon meme, anime character pointing at a yellow butterfly, holding open book, meadow background, 90s anime style screencap', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'rule_of_thirds', facing: 'facing_right' }
     },
     {
-        id: 'surprised_pikachu', label: '놀란 피카츄', sub: 'Surprised Pika', description: '입을 벌리고 멍하니 있는 피카츄', prompt: 'surprised pikachu meme composition, pikachu with open mouth jaw drop, pixelated or blurred background, shocked expression', icon: Smile,
+        id: 'surprised_pikachu', label: '놀란 피카츄', sub: 'Surprised Pika', description: '입을 벌리고 멍하니 있는 피카츄', prompt: 'surprised pikachu meme, pikachu with open mouth jaw drop, pixelated or blurred background, shocked expression, pokemon anime screencap', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_left' }
     },
     {
-        id: 'spider_man_pointing', label: '서로 가리키는 스파이더맨', sub: 'Spideys Pointing', description: '서로를 가리키는 스파이더맨들', prompt: 'spider-man pointing at spider-man meme composition, two or three spidermen pointing fingers at each other, standoff, identical costumes, cartoon background', icon: Smile,
+        id: 'spider_man_pointing', label: '서로 가리키는 스파이더맨', sub: 'Spideys Pointing', description: '서로를 가리키는 스파이더맨들', prompt: 'spider-man pointing at spider-man meme, two spidermen pointing fingers at each other, standoff, identical costumes, police truck in background, 60s cartoon style', icon: Smile,
         presets: { shot: 'full_shot', angle: 'eye_level', composition: 'center', facing: 'facing_left' }
     },
     {
-        id: 'tuxedo_pooh', label: '턱시도 푸', sub: 'Fancy Pooh', description: '격식 있는 곰돌이 푸', prompt: 'tuxedo winnie the pooh meme composition, bear wearing fancy tuxedo and monocle, looking sophisticated, "a man of culture" vibe', icon: Smile,
+        id: 'tuxedo_pooh', label: '턱시도 푸', sub: 'Fancy Pooh', description: '격식 있는 곰돌이 푸', prompt: 'tuxedo winnie the pooh meme, bear wearing fancy tuxedo and monocle, looking sophisticated, "a man of culture" expression, cartoon style', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'galaxy_brain', label: '우주 뇌 (4단계)', sub: 'Galaxy Brain', description: '점점 진화하는 뇌 이미지', prompt: 'expanding brain meme composition, 4 panel sequence, brain glowing more in each step, final step galaxy brain, enlightenment concept', icon: Smile,
+        id: 'galaxy_brain', label: '우주 뇌', sub: 'Galaxy Brain', description: '빛나는 우주 뇌', prompt: 'galaxy brain meme, human head silhouette with glowing galaxy inside, enlightenment, cosmic awareness, digital art style, blue and purple glow', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_left' }
     },
     {
-        id: 'waiting_skeleton', label: '기다리는 해골', sub: 'Waiting Skeleton', description: '벤치에 앉아 기다리다 해골이 됨', prompt: 'waiting skeleton meme composition, skeleton sitting on park bench, waiting for a long time, overgrown grass, cobwebs, funny sad vibe', icon: Smile,
+        id: 'waiting_skeleton', label: '기다리는 해골', sub: 'Waiting Skeleton', description: '벤치에 앉아 기다리다 해골이 됨', prompt: 'waiting skeleton meme, skeleton sitting on park bench, waiting for a long time, overgrown grass, cobwebs, funny sad vibe, realistic photography style', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'rule_of_thirds', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'sad_keanu', label: '슬픈 키아누', sub: 'Sad Keanu', description: '벤치에 혼자 앉아 샌드위치 먹는 남자', prompt: 'sad keanu reeves meme composition, man sitting alone on park bench eating sandwich, looking down, depressed vibe, pigeon nearby', icon: Smile,
+        id: 'sad_keanu', label: '슬픈 키아누', sub: 'Sad Keanu', description: '벤치에 혼자 앉아 샌드위치 먹는 남자', prompt: 'sad keanu reeves meme, keanu reeves sitting alone on park bench eating sandwich, looking down, depressed vibe, pigeon nearby, paparazzi photo style', icon: Smile,
         presets: { shot: 'full_shot', angle: 'high_angle', composition: 'center', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'confused_math_lady', label: '혼란스러운 수학 여자', sub: 'Math Lady', description: '수학 공식이 떠다니며 고민하는 여자', prompt: 'confused math lady meme composition, woman looking confused with geometry formulas overlay, calculating faces, complex thinking', icon: Smile,
+        id: 'confused_math_lady', label: '혼란스러운 수학 여자', sub: 'Math Lady', description: '수학 공식이 떠다니며 고민하는 여자', prompt: 'confused math lady meme, blonde woman looking confused with geometry formulas and numbers overlay, calculating faces, complex thinking, brazilian soap opera screencap', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'pepe_frog', label: '슬픈 개구리 (페페)', sub: 'Sad Frog', description: '슬픈 표정의 개구리', prompt: 'sad frog pepe meme composition, green anthropomorphic frog with sad expression, looking down, feels bad man vibe, cartoon style', icon: Smile,
+        id: 'pepe_frog', label: '슬픈 개구리 (페페)', sub: 'Sad Frog', description: '슬픈 표정의 개구리', prompt: 'sad frog pepe meme, green anthropomorphic frog with sad expression, looking down, feels bad man vibe, rough drawing style, internet meme', icon: Smile,
         presets: { shot: 'close_up', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'leonardo_toast', label: '레오의 건배', sub: 'Leo Toast', description: '잔을 들어올리며 웃는 디카프리오', prompt: 'leonardo dicaprio laughing meme composition, man in suit holding wine glass, smug face, great gatsby party background, fireworks', icon: Smile,
+        id: 'leonardo_toast', label: '레오의 건배', sub: 'Leo Toast', description: '잔을 들어올리며 웃는 디카프리오', prompt: 'leonardo dicaprio laughing meme, great gatsby movie scene, man in tuxedo holding wine glass, smug smiling face, fireworks in background, party atmosphere', icon: Smile,
         presets: { shot: 'bust_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front' }
     },
     {
-        id: 'bernie_mittens', label: '버니의 장갑', sub: 'Bernie Mittens', description: '패딩 입고 의자에 앉은 버니 샌더스', prompt: 'bernie sanders mittens meme composition, old man wearing parka and patterned mittens sitting on folding chair, crossed arms and legs, cold weather vibe', icon: Smile,
+        id: 'bernie_mittens', label: '버니의 장갑', sub: 'Bernie Mittens', description: '패딩 입고 의자에 앉은 버니 샌더스', prompt: 'bernie sanders mittens meme, old man wearing parka and patterned mittens sitting on folding chair, crossed arms and legs, face mask, inauguration day vibe, press photo style', icon: Smile,
         presets: { shot: 'full_shot', angle: 'eye_level', composition: 'center', facing: 'facing_front_3_4_right' }
     },
     {
-        id: 'spongebob_imma_head_out', label: '전 나갈게요 (스폰지밥)', sub: 'Imma Head Out', description: '의자에서 일어나는 스폰지밥', prompt: 'spongebob imma head out meme composition, spongebob getting up from armchair, holding remote, tired expression, tv room background', icon: Smile,
+        id: 'spongebob_imma_head_out', label: '전 나갈게요 (스폰지밥)', sub: 'Imma Head Out', description: '의자에서 일어나는 스폰지밥', prompt: 'spongebob imma head out meme, spongebob getting up from red armchair, holding remote, tired expression, motion blur, cartoon screencap', icon: Smile,
         presets: { shot: 'medium_shot', angle: 'eye_level', composition: 'center', facing: 'facing_left' }
     },
     {
-        id: 'gta_wasted', label: 'WASTED (GTA)', sub: 'Wasted', description: '흑백 화면에 WASTED 자막', prompt: 'gta wasted screen meme composition, grayscale overlay, "WASTED" text in center style, camera on ground perspective, game over vibe', icon: Smile,
-        presets: { shot: 'birds_eye', angle: 'top_down', composition: 'center', facing: 'facing_front' }
+        id: 'gta_wasted', label: 'WASTED (GTA)', sub: 'Wasted', description: '흑백 화면에 WASTED 자막', prompt: 'gta wasted screen meme, grayscale overlay, "WASTED" text in center style, camera on ground perspective, game over vibe, fisheye lens slant', icon: Smile,
+        presets: { shot: 'none', angle: 'top_down', composition: 'center', facing: 'facing_front' } // Removed birds_eye shot, as it's now an angle variant or just top_down angle is enough
     },
 ];
 
@@ -297,12 +342,13 @@ export const MEME_TEMPLATES = [
 // Value: Array of option IDs that should be disabled when Key is selected
 export const CONFLICTS = {
     // Shot Selection Conflicts
-    'extreme_close_up': ['birds_eye', 'top_down', 'full_body', 'long_shot', 'negative_space'],
-    'close_up': ['birds_eye', 'top_down', 'long_shot'],
-    'selfie': ['back_view', 'facing_back_3_4_left', 'facing_back_3_4_right', 'birds_eye', 'top_down'],
+    // Shot Selection Conflicts
+    'close_up': ['long_shot'], // Simplify: Close up conflicts with Long Shot
+    'selfie': ['back_view', 'facing_back', 'facing_back_3_4_left', 'facing_back_3_4_right'],
 
     // Angle Selection Conflicts
-    'birds_eye': ['extreme_close_up', 'close_up', 'bust_shot', 'selfie'],
+    // High Angle (includes birds_eye) conflicts with Close Up generally? Maybe not.
+    // Let's keep it simple.
     'top_down': ['extreme_close_up', 'close_up', 'bust_shot', 'selfie'],
 
     // Composition Conflicts

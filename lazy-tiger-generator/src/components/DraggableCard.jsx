@@ -1,40 +1,18 @@
 import React from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import PixelArtIcon from './PixelArtIcon';
 import { X } from 'lucide-react';
 
-export default function DraggableCard({ item, id, onRemove }) {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging
-    } = useSortable({
-        id: id,
-        data: { item, type: item.type, source: 'workspace' }
-    });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        opacity: isDragging ? 0.5 : 1,
-    };
+export default function DraggableCard({ item, id, onRemove, onClick }) {
+    // No more useSortable hooks
 
     return (
         <div
-            ref={setNodeRef}
-            style={style}
-            {...attributes}
-            {...listeners}
+            onClick={onClick}
             className={`
-        relative flex flex-col items-center justify-center p-4 
+        relative flex flex-col items-center justify-center pt-7 px-2 pb-2 
         bg-white rounded-2xl border-2 shadow-sm 
-        w-32 h-32 m-2 cursor-move hover:shadow-md transition-all
-        group animate-pop-in
-        ${isDragging ? 'border-orange-400 z-50' : 'border-gray-100 hover:border-orange-200'}
+        w-32 h-32 m-2 hover:shadow-md transition-all
+        group animate-pop-in border-gray-100 hover:border-orange-200 cursor-pointer
       `}
         >
             <div className="w-12 h-12 mb-3 rounded-xl bg-orange-50 flex items-center justify-center">
@@ -43,21 +21,26 @@ export default function DraggableCard({ item, id, onRemove }) {
             <span className="text-xs font-bold text-gray-700 text-center line-clamp-2 leading-tight px-1">
                 {item.label}
             </span>
+            {item.variantId && item.variantId !== 'standard' && (
+                <span className="text-[10px] text-orange-500 font-medium mt-1 bg-orange-50 px-1.5 py-0.5 rounded-full">
+                    {item.variants?.find(v => v.id === item.variantId)?.label || 'Variant'}
+                </span>
+            )}
 
             {/* Remove Button */}
             <button
-                onPointerDown={(e) => {
-                    e.stopPropagation(); // Prevent drag start
+                onClick={(e) => {
+                    e.stopPropagation();
                     onRemove(id);
                 }}
-                className="absolute -top-2 -right-2 p-1.5 bg-white border border-gray-200 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 shadow-sm transition-all z-20"
+                className="absolute -top-2 -right-2 p-1.5 bg-white border border-gray-200 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 shadow-sm transition-all z-20 opacity-0 group-hover:opacity-100"
                 title="Remove Item"
             >
                 <X size={14} strokeWidth={3} />
             </button>
 
             {/* Category Badge */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-gray-100 rounded-full">
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-gray-100 rounded-full">
                 <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">{item.type}</span>
             </div>
         </div>

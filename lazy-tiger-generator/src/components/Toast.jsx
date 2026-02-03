@@ -4,9 +4,11 @@ import { Check } from 'lucide-react';
 const Toast = ({ message, show }) => {
     if (!show) return null;
     return (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center animate-fade-in-up">
-            <Check size={18} className="text-green-400 mr-2" />
-            <span className="font-bold text-sm">{message}</span>
+        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-950 text-white px-6 py-3 rounded-full shadow-2xl z-[10000] flex items-center border border-orange-500/30 animate-in slide-in-from-bottom-4 fade-in duration-300">
+            <div className="bg-orange-500 rounded-full p-1 mr-3 text-black">
+                <Check size={14} strokeWidth={3} />
+            </div>
+            <span className="font-bold text-sm text-orange-50">{message}</span>
         </div>
     );
 };
