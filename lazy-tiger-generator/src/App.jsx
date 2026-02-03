@@ -23,6 +23,7 @@ import { arrayMove } from '@dnd-kit/sortable';
 import AssetDeck from './components/AssetDeck';
 import Workspace from './components/Workspace';
 import FeedbackModal from './components/FeedbackModal'; // Import Feedback Modal
+import StepIndicator from './components/StepIndicator'; // Import Step Indicator
 
 
 // --- Main Component ---
@@ -96,6 +97,39 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState("복사되었습니다!");
 
   const [showGallery, setShowGallery] = useState(false);
+
+  // Step Indicator Configuration
+  const STEPS = [
+    { id: 'type', label: 'type', icon: '/icons/type-icon.png' },
+    { id: 'pick', label: 'pick', icon: '/icons/pick-icon.png' },
+    { id: 'draw', label: 'draw', icon: '/icons/draw-icon.png' },
+    { id: 'generate', label: 'generate', icon: '/icons/generate-icon.png' },
+  ];
+
+  // Calculate current step based on user progress
+  const getCurrentStep = () => {
+    if (showResult) return 3; // Step 4: generate (completed)
+
+    // Check if canvas has any drawings
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const hasDrawing = imageData.data.some((value, index) => index % 4 === 3 && value > 0);
+      if (hasDrawing) return 2; // Step 3: draw
+    }
+
+    // Check if any cards are selected
+    const hasSelections = Object.values(selections).some(
+      sel => sel && sel.id && sel.id !== 'none'
+    );
+    if (hasSelections) return 1; // Step 2: pick
+
+    // Check if text is typed
+    if (subjectText.trim() || contextText.trim()) return 0; // Step 1: type
+
+    return 0; // Default: Step 1
+  };
 
   // Deck Builder State
   // Deck Builder State (Removed - Computed from Selections)
@@ -1150,6 +1184,9 @@ export default function App() {
         </div>
       </header>
 
+      {/* Step Indicator */}
+      <StepIndicator currentStep={getCurrentStep()} steps={STEPS} />
+
 
       {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
       {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
@@ -1424,6 +1461,7 @@ export default function App() {
                 <canvas
                   ref={canvasRef}
                   className="absolute inset-0 z-10 w-full h-full cursor-none"
+                  style={{ touchAction: 'none' }}
                 />
 
                 {/* Visual Cursor Overlay */}
