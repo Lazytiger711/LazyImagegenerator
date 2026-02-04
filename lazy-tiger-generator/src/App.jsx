@@ -20,12 +20,62 @@ import Gallery from './components/Gallery'; // Import Gallery
 
 // DnD Kit Imports
 import { DndContext, DragOverlay, useSensor, useSensors, PointerSensor, MouseSensor, TouchSensor } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+import { arrayMove, SortableContext, useSortable, horizontalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import AssetDeck from './components/AssetDeck';
 import Workspace from './components/Workspace';
 import FeedbackModal from './components/FeedbackModal'; // Import Feedback Modal
 import StepIndicator from './components/StepIndicator'; // Import Step Indicator
 
+
+// --- Sortable Color Button Component ---
+function SortableColorButton({ colorItem, isSelected, onClick }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: colorItem.id,
+    // Add activation constraint to prevent conflict with onClick
+    // User must drag at least 5px to activate sorting
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    backgroundColor: colorItem.color || '#eee',
+  };
+
+  // Handle click separately from drag
+  const handleClick = (e) => {
+    // Only trigger onClick if not dragging
+    if (!isDragging) {
+      onClick(e);
+    }
+  };
+
+  return (
+    <button
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      onClick={handleClick}
+      className={`
+        w-8 h-8 rounded-full flex items-center justify-center transition-all relative cursor-grab active:cursor-grabbing
+        ${isSelected ? 'ring-2 ring-orange-400 scale-110 z-10' : 'hover:scale-105 opacity-80 hover:opacity-100'}
+      `}
+      title={colorItem.label}
+    >
+      {colorItem.icon && <colorItem.icon size={14} className="text-gray-500" />}
+      {isSelected && !colorItem.icon && <Check size={14} className="text-white drop-shadow-md" />}
+    </button>
+  );
+}
 
 // --- Main Component ---
 export default function App() {
@@ -275,6 +325,21 @@ export default function App() {
     }));
   };
 
+  // Handle palette color reordering via drag-and-drop
+  const handlePaletteDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setPaletteColors((colors) => {
+        const oldIndex = colors.findIndex((c) => c.id === active.id);
+        const newIndex = colors.findIndex((c) => c.id === over.id);
+
+        // Use arrayMove to reorder
+        return arrayMove(colors, oldIndex, newIndex);
+      });
+    }
+  };
+
   // Ref to store last mouse position for drawing smooth lines
   const lastPos = useRef(null);
 
@@ -478,9 +543,8 @@ export default function App() {
     // Ghost Click protection: If keyboard just closed (blur), ignore taps for 500ms
     if (Date.now() - lastBlurTime.current < 500) return;
 
-    // Prevent default to stop scrolling/pull-to-refresh on some devices
-    // e.preventDefault(); // Note: e.preventDefault() on pointerdown might block focus or other things, 
-    // but touch-action: none in CSS is the preferred way.
+    // Prevent default to stop scrolling on first click
+    e.preventDefault();
 
     // Capture pointer to track outside canvas if needed (standard for drawing)
     e.target.setPointerCapture(e.pointerId);
@@ -686,7 +750,11 @@ export default function App() {
         return false;
       }
       return true;
-    }).map(item => ({ ...item, stats: colorStats[item.color] }));
+    }).map(item => {
+      // Add layer priority based on palette index (lower = foreground, higher = background)
+      const layerPriority = paletteColors.findIndex(p => p.color === item.color);
+      return { ...item, stats: colorStats[item.color], layerPriority };
+    });
 
     // Find Main Subject (Priority: 'subject' id > First object)
     const mainSubject = activeObjects.find(obj => obj.id === 'subject') || activeObjects[0];
@@ -711,13 +779,25 @@ export default function App() {
         let relationStr = "";
 
         if (isOverlapping) {
-          // Depth Sort using Y-axis (maxY)
-          // Lower maxY (higher on screen) = Behind
-          // Higher maxY (lower on screen) = Front
-          if (obj.stats.maxY < mainSubject.stats.maxY) {
-            relationStr = `standing behind ${mainLabel}`;
+          // NEW: Use palette order as primary depth indicator
+          // Lower layerPriority (earlier in palette) = Foreground
+          // Higher layerPriority (later in palette) = Background
+
+          if (obj.layerPriority < mainSubject.layerPriority) {
+            // Object is earlier in palette -> in front
+            relationStr = `in the foreground, in front of ${mainLabel}`;
+          } else if (obj.layerPriority > mainSubject.layerPriority) {
+            // Object is later in palette -> behind
+            relationStr = `in the background, standing behind ${mainLabel}`;
           } else {
-            relationStr = `in front of ${mainLabel}`;
+            // Same palette priority - fallback to Y-axis depth
+            // Lower maxY (higher on screen) = Behind
+            // Higher maxY (lower on screen) = Front
+            if (obj.stats.maxY < mainSubject.stats.maxY) {
+              relationStr = `standing behind ${mainLabel}`;
+            } else {
+              relationStr = `in front of ${mainLabel}`;
+            }
           }
         } else {
           // No significant overlap -> Calculate Distance & Spatial relation
@@ -789,8 +869,24 @@ export default function App() {
       if (activeObjects.length === 1) {
         objectDescriptions.push(`${sizeStr}, ${getLabel(mainSubject)} positioned ${positionStr}`);
       } else {
-        // E.g. "Main Subject in the center" (Visual anchor)
-        objectDescriptions.push(`${getLabel(mainSubject)} (${coveragePercent}% of frame) positioned ${positionStr}`);
+        // Multiple objects - add layer context if applicable
+        let layerContext = "";
+
+        // Determine if mainSubject is in foreground, middle, or background
+        const totalLayers = activeObjects.length;
+        if (totalLayers >= 3 && mainSubject.layerPriority === 1) {
+          // Middle layer in 3+ layer system
+          layerContext = " in the middle ground,";
+        } else if (mainSubject.layerPriority === 0) {
+          // First layer (foreground)
+          layerContext = " in the foreground,";
+        } else if (mainSubject.layerPriority >= 2) {
+          // Background layers
+          layerContext = " in the background,";
+        }
+
+        // E.g. "Main Subject in the foreground, positioned in the center (50% of frame)"
+        objectDescriptions.push(`${getLabel(mainSubject)}${layerContext} positioned ${positionStr} (${coveragePercent}% of frame)`);
       }
     }
 
@@ -841,6 +937,16 @@ export default function App() {
     }, 500);
     return () => clearTimeout(timer);
   }, [canvasTrigger, workspaceItems, paletteColors, subjectText]);
+
+  // Prevent auto-scroll on first interaction
+  useEffect(() => {
+    // Fix: Reset scroll position on mount to prevent browser auto-scroll
+    const scrollContainer = document.querySelector('.overflow-y-auto');
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, []); // Run once on mount
+
 
   const generatePrompt = (e) => {
     if (e) {
@@ -914,34 +1020,22 @@ export default function App() {
           const angleStr = getPromptWithVariant(effectiveAngle);
           const shotStr = getPromptWithVariant(effectiveShot);
 
+          // Build separate Camera Angle section
+          let cameraAngleSection = "";
           if (effectiveShot.id === 'selfie') {
-            cameraPart = "Selfie shot of";
+            cameraAngleSection = "Selfie shot, point of view (POV)";
           } else {
-            const parts = [angleStr, shotStr].filter(Boolean);
-            if (parts.length > 0) {
-              // Join them (e.g., "low angle full body")
-              const combined = parts.join(" ");
-              // Add suffix contextually
-              if (shotStr) {
-                cameraPart = `${combined} shot of`;
-              } else {
-                cameraPart = `${combined} view of`;
-              }
+            const cameraParts = [angleStr, shotStr].filter(Boolean);
+            if (cameraParts.length > 0) {
+              cameraAngleSection = cameraParts.join(", ");
             }
           }
 
           // 3. Facing Modifier (e.g. "Looking at camera")
           const facingModifier = (subjectType === 'character' && effectiveFacing.id !== 'none') ? effectiveFacing.prompt : "";
 
-          // 4. Construct Main Subject Segment
-          // If cameraPart exists: "Low angle shot of [Tiger], [facing modifier]"
-          // If no cameraPart: "[Tiger], [facing modifier]"
-          let mainSegment = "";
-          if (cameraPart) {
-            mainSegment = `${cameraPart} ${fullSubject}`;
-          } else {
-            mainSegment = fullSubject;
-          }
+          // 4. Construct Main Subject Segment (without camera angle)
+          let mainSegment = fullSubject;
 
           // Append Facing Direction if exists
           if (facingModifier) {
@@ -956,40 +1050,44 @@ export default function App() {
             mainSegment += `, dynamic pose, action shot`;
           }
 
-          // 5. Build Final Structured Prompt
+          // 5. Build Final Structured Prompt with Style-First Hybrid approach
           const sections = [
             {
-              label: '1. MAIN SUBJECT & VIEW',
-              content: mainSegment
-            },
-            {
-              label: '2. COMPOSITION',
-              content: effectiveComp.id !== 'none' ? effectiveComp.prompt : ""
-            },
-            {
-              label: '3. LIGHTING',
-              content: selections.lighting?.id !== 'none' ? selections.lighting?.prompt : ""
-            },
-            {
-              label: '4. VISUAL STYLE',
+              label: '1. VISUAL STYLE',
               content: selections.style.id !== 'none' ? selections.style.prompt : ""
             },
             {
-              label: '5. TECHNICAL',
+              label: cameraAngleSection ? '2. CAMERA ANGLE' : null,
+              content: cameraAngleSection
+            },
+            {
+              label: '3. MAIN SUBJECT',
+              content: mainSegment
+            },
+            {
+              label: '4. COMPOSITION',
+              content: effectiveComp.id !== 'none' ? effectiveComp.prompt : ""
+            },
+            {
+              label: '5. LIGHTING',
+              content: selections.lighting?.id !== 'none' ? selections.lighting?.prompt : ""
+            },
+            {
+              label: '6. TECHNICAL',
               content: [selections.resolution?.prompt, selections.style.neg].filter(Boolean).join(', ')
             },
             {
-              label: '6. LAYOUT GUIDE',
+              label: '7. LAYOUT GUIDE',
               content: baseGridDesc ? `The generated image should follow this layout - ${baseGridDesc}` : ""
             }
           ];
 
           generatedText = sections
-            .filter(section => section.content && section.content.trim() !== '')
+            .filter(section => section.label && section.content && section.content.trim() !== '')
             .map(section => `**${section.label}**\n${section.content}`)
             .join('\n\n');
 
-          instructionPrefix = `**System Instruction:**\nCreate a detailed image prompt based on the following structured keywords. Prioritize 'View' and 'Main Subject' for consistency.\n\n`;
+          instructionPrefix = `**System Instruction:**\nCreate a detailed image prompt based on the following structured keywords. Prioritize visual style first to establish the medium, then strictly follow the camera angle specification.\n\n`;
           setFinalPrompt(instructionPrefix + generatedText);
         }
 
@@ -1463,23 +1561,33 @@ export default function App() {
 
                 {/* Right Side: Colors */}
                 <div className="flex items-center space-x-2">
-                  <div className="flex space-x-1 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-                    {paletteColors.map((p) => (
-                      <button
-                        key={p.id}
-                        onClick={() => setSelectedColor(p)}
-                        className={`
-                                w-8 h-8 rounded-full flex items-center justify-center transition-all relative
-                                ${selectedColor.id === p.id ? 'ring-2 ring-orange-400 scale-110 z-10' : 'hover:scale-105 opacity-80 hover:opacity-100'}
-                              `}
-                        style={{ backgroundColor: p.color || '#eee' }}
-                        title={p.label}
-                      >
-                        {p.icon && <p.icon size={14} className="text-gray-500" />}
-                        {selectedColor.id === p.id && !p.icon && <Check size={14} className="text-white drop-shadow-md" />}
-                      </button>
-                    ))}
-                  </div>
+                  {/* Drag-and-Drop Sortable Palette */}
+                  <DndContext
+                    onDragEnd={handlePaletteDragEnd}
+                    sensors={useSensors(
+                      useSensor(PointerSensor, {
+                        activationConstraint: {
+                          distance: 5, // Require 5px movement to activate drag
+                        },
+                      })
+                    )}
+                  >
+                    <SortableContext
+                      items={paletteColors.map((p) => p.id)}
+                      strategy={horizontalListSortingStrategy}
+                    >
+                      <div className="flex space-x-1 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+                        {paletteColors.map((p) => (
+                          <SortableColorButton
+                            key={p.id}
+                            colorItem={p}
+                            isSelected={selectedColor.id === p.id}
+                            onClick={() => setSelectedColor(p)}
+                          />
+                        ))}
+                      </div>
+                    </SortableContext>
+                  </DndContext>
 
                   {/* Add Object Button */}
                   {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
@@ -1623,8 +1731,13 @@ export default function App() {
               <div className="mt-1 flex space-x-2">
                 <button
                   type="button"
-                  onClick={generatePrompt}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    generatePrompt(e);
+                  }}
                   onPointerDown={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
                   disabled={isGenerating}
                   className={`
                           px-6 py-2 rounded-full font-black text-white shadow-lg 
@@ -1651,15 +1764,15 @@ export default function App() {
               onClick={() => setShowResult(false)} // Close on background click
             >
               <div
-                className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up"
+                className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col animate-slide-up"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside content
               >
-                <div className="bg-gray-900 p-4 flex justify-between items-center text-white">
+                <div className="bg-gray-900 p-4 flex justify-between items-center text-white shrink-0">
                   <h3 className="font-bold flex items-center"><Check className="mr-2 text-green-400" /> 생성 완료</h3>
                   <button onClick={() => setShowResult(false)} className="p-1 hover:bg-gray-800 rounded-full"><X size={20} /></button>
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 overflow-y-auto flex-1">
                   {/* Generated Image Preview */}
                   {generatedImage && (
                     <div className="mb-4 rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 flex justify-center relative group">
