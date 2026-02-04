@@ -99,6 +99,9 @@ export const ANGLES = [
         id: 'top_down', label: '탑다운 뷰', sub: 'Top Down', description: '90도 수직, 제품/음식 (Flat Lay)', prompt: 'top-down view, 90 degree angle, flat lay, map view, satellite view, directly from above, graphic composition', icon: MoveVertical
     },
     {
+        id: 'isometric', label: '아이소메트릭', sub: 'Isometric', description: '게임/인포그래픽 스타일 (45도)', prompt: 'isometric view, 45 degree angle, axonometric perspective, game art style, technical illustration, no perspective distortion, even proportions', icon: MoveVertical
+    },
+    {
         id: 'dutch_angle', label: '더치 앵글', sub: 'Dutch Angle', description: '기울어진 화면, 긴박감/불안', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: MoveVertical
     }
 ];
@@ -155,7 +158,7 @@ export const STYLES = [
     { id: 'realistic', label: '실사/사진', sub: 'Photorealistic', prompt: 'photorealistic, raw photo, 8k uhd, dslr, high quality, fujifilm, grainy texture, masterpiece', neg: '--no pixel art, illustration, cartoon, drawing, painting', icon: Camera },
     { id: 'anime', label: '애니메이션', sub: 'Anime', prompt: 'anime style, key visual, vibrant colors, studio ghibli inspired, high definition, detailed line art, 2d animation', neg: '--no photorealistic, 3d render, live action', icon: Film },
     { id: '3d_render', label: '3D 렌더링', sub: '3D 렌더링', prompt: '3d render, octane render, unreal engine 5, ray tracing, clay material, high fidelity, 8k, blender style', neg: '--no 2d, sketch, flat, cartoon, low poly', icon: Box },
-    { id: 'oil_painting', label: '유화', sub: 'Oil Painting', prompt: 'oil painting, impasto, textured canvas, palette knife strokes, classical art style, van gogh style, thick paint', neg: '--no photo, digital art, pixel art, smooth', icon: Paintbrush },
+    { id: 'oil_painting', label: '반 고흐', sub: 'Van Gogh', prompt: 'vincent van gogh style, post-impressionist, swirling brushstrokes, impasto texture, vibrant colors, starry night inspired, thick oil paint, emotional expression', neg: '--no photo, digital art, pixel art, smooth', icon: Paintbrush },
     { id: 'concept_art', label: '컨셉 아트', sub: 'Concept Art', description: '디지털 페인팅, 게임/영화 컨셉', prompt: 'digital concept art, speed painting, fantasy atmosphere, matte painting, highly detailed, sharp focus', neg: '--no photo, low quality, sketch', icon: Pencil },
     { id: 'cyberpunk', label: '사이버펑크', sub: 'Cyberpunk', description: '네온, 미래지향적, 하이테크', prompt: 'cyberpunk style, futuristic city, chromatic aberration, synthwave aesthetic, night time, glowing details', neg: '--no vintage, rustic, natural', icon: Zap },
 ];

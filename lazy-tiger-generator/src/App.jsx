@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import html2canvas from 'html2canvas'; // Ensure this is installed
 
-import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare, User, Box, Zap, Copy } from 'lucide-react';
+import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare, User, Box, Zap, Copy, Share2 } from 'lucide-react';
 
 // Imported Data & Components
 import {
@@ -97,6 +97,7 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState("복사되었습니다!");
 
   const [showGallery, setShowGallery] = useState(false);
+  const [isPublic, setIsPublic] = useState(false); // Public share toggle
 
   // Step Indicator Configuration
   const STEPS = [
@@ -105,6 +106,41 @@ export default function App() {
     { id: 'draw', label: 'draw', icon: '/icons/draw-icon.png' },
     { id: 'generate', label: 'generate', icon: '/icons/generate-icon.png' },
   ];
+
+  // Load prompt from URL parameter (for sharing)
+  useEffect(() => {
+    const loadFromUrl = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const promptId = params.get('prompt');
+
+      if (promptId) {
+        try {
+          const { data, error } = await supabase
+            .from('prompts')
+            .select('*')
+            .eq('id', promptId)
+            .single();
+
+          if (error) throw error;
+
+          if (data) {
+            // Load the prompt settings
+            handleLoadPrompt(data.settings);
+
+            // Increment view count
+            await supabase
+              .from('prompts')
+              .update({ view_count: (data.view_count || 0) + 1 })
+              .eq('id', promptId);
+          }
+        } catch (error) {
+          console.error('Error loading prompt from URL:', error);
+        }
+      }
+    };
+
+    loadFromUrl();
+  }, []);
 
   // Calculate current step based on user progress
   const getCurrentStep = () => {
@@ -727,19 +763,31 @@ export default function App() {
       else if (hPos === "center") positionStr = `at the ${vPos}`;
       else positionStr = `at the ${vPos}-${hPos}`;
 
-      // Add size descriptor
+      // Calculate size coverage with explicit percentage
       const coverageRatio = stats.count / totalSamples;
+      const coveragePercent = Math.round(coverageRatio * 100);
+
+      // Build size description with explicit frame percentage
       let sizeStr = "";
-      if (coverageRatio > 0.5) sizeStr = "huge";
-      else if (coverageRatio < 0.1) sizeStr = "small";
+      if (coverageRatio > 0.6) {
+        sizeStr = `large subject filling most of frame (occupies ${coveragePercent}% of image)`;
+      } else if (coverageRatio > 0.35) {
+        sizeStr = `medium-sized subject occupying ${coveragePercent}% of frame`;
+      } else if (coverageRatio > 0.15) {
+        sizeStr = `subject occupying ${coveragePercent}% of canvas`;
+      } else if (coverageRatio > 0.05) {
+        sizeStr = `small subject (${coveragePercent}% of frame)`;
+      } else {
+        sizeStr = `tiny distant subject, ${coveragePercent}% of image`;
+      }
 
       // If there are other objects described relative to Main, simple Main desc is enough.
-      // If Main is alone, describe it fully.
+      // If Main is alone, describe it fully with size.
       if (activeObjects.length === 1) {
-        objectDescriptions.push(`${sizeStr} ${getLabel(mainSubject)} positioned ${positionStr}`);
+        objectDescriptions.push(`${sizeStr}, ${getLabel(mainSubject)} positioned ${positionStr}`);
       } else {
         // E.g. "Main Subject in the center" (Visual anchor)
-        objectDescriptions.push(`${getLabel(mainSubject)} positioned ${positionStr}`);
+        objectDescriptions.push(`${getLabel(mainSubject)} (${coveragePercent}% of frame) positioned ${positionStr}`);
       }
     }
 
@@ -1045,6 +1093,7 @@ export default function App() {
         .insert([
           {
             prompt_text: finalPrompt, // Use finalPrompt
+            is_public: isPublic, // Add public flag
             settings: {
               shot: selections.shot,
               angle: selections.angle,
@@ -1059,12 +1108,58 @@ export default function App() {
 
       if (error) throw error;
 
-      setToastMsg("갤러리에 저장되었습니다!");
+      setToastMsg(isPublic ? "갤러리에 공개되었습니다!" : "갤러리에 저장되었습니다!");
       setTimeout(() => setShowToast(false), 2000);
+      setIsPublic(false); // Reset toggle
 
     } catch (error) {
       console.error('Error saving to Supabase:', error);
       setToastMsg("저장에 실패했습니다.");
+      setTimeout(() => setShowToast(false), 2000);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!finalPrompt) return;
+
+    try {
+      setToastMsg("공유 링크 생성 중...");
+      setShowToast(true);
+
+      // Save with is_public = true
+      const { data, error } = await supabase
+        .from('prompts')
+        .insert([
+          {
+            prompt_text: finalPrompt,
+            is_public: true,
+            settings: {
+              shot: selections.shot,
+              angle: selections.angle,
+              style: selections.style,
+              composition: selections.composition,
+              resolution: selections.resolution,
+              subject: subjectText,
+              context: contextText
+            }
+          }
+        ])
+        .select();
+
+      if (error) throw error;
+
+      // Generate shareable URL
+      const shareUrl = `${window.location.origin}?prompt=${data[0].id}`;
+
+      // Copy to clipboard
+      await navigator.clipboard.writeText(shareUrl);
+
+      setToastMsg("🔗 공유 링크가 복사되었습니다!");
+      setTimeout(() => setShowToast(false), 3000);
+
+    } catch (error) {
+      console.error('Error sharing:', error);
+      setToastMsg("공유 링크 생성에 실패했습니다.");
       setTimeout(() => setShowToast(false), 2000);
     }
   };
@@ -1582,12 +1677,28 @@ export default function App() {
                     </button>
                   </div>
 
+                  {/* Public Toggle */}
+                  <div className="mb-3 flex items-center justify-center">
+                    <label className="flex items-center cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={isPublic}
+                        onChange={(e) => setIsPublic(e.target.checked)}
+                        className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2 cursor-pointer"
+                      />
+                      <span className="ml-2 text-sm text-gray-600 group-hover:text-gray-800">다른 사람과 공유하기 (공개)</span>
+                    </label>
+                  </div>
+
                   <div className="flex gap-2">
+                    <button onClick={handleShare} className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl flex items-center justify-center hover:opacity-90">
+                      <Share2 size={16} className="mr-2" /> 공유하기
+                    </button>
                     <button onClick={handleOpenGemini} className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl flex items-center justify-center hover:opacity-90">
                       <Sparkles size={16} className="mr-2" /> AI로 보내기
                     </button>
                     <button onClick={handleSaveToSupabase} className="flex-1 py-3 bg-orange-100 text-orange-700 font-bold rounded-xl flex items-center justify-center hover:bg-orange-200">
-                      <Save size={16} className="mr-2" /> 갤러리에 저장
+                      <Save size={16} className="mr-2" /> 저장
                     </button>
                   </div>
 
