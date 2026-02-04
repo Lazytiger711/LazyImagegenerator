@@ -74,158 +74,157 @@ export default function DiscoverPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 page-transition">
-            {/* Header */}
-            <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-20 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shadow-md overflow-hidden">
-                            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
-                        </div>
-                        <span className="text-xl font-bold">
-                            Lazy <span className="text-orange-500">Image Generator</span>
-                        </span>
-                    </div>
-                    <button
-                        onClick={() => navigate('/create')}
-                        className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform flex items-center"
-                    >
-                        시작하기
-                        <ArrowRight size={18} className="ml-2" />
-                    </button>
-                </div>
-            </header>
+        <div className="min-h-screen bg-gray-100 page-transition relative">
+            {/* Background Image with Overlay */}
+            <div
+                className="fixed inset-0 z-0 opacity-50"
+                style={{
+                    backgroundImage: 'url(/community-bg.jpg)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            />
+            <div className="fixed inset-0 z-0 bg-gradient-to-b from-white/90 via-white/80 to-white/90" />
 
-            {/* Hero Section */}
-            <section className="max-w-7xl mx-auto px-4 py-16 text-center">
-                <div className="inline-flex items-center bg-orange-100 px-4 py-2 rounded-full text-orange-600 font-bold text-sm mb-6">
-                    <Globe size={16} className="mr-2" />
-                    커뮤니티 쇼케이스
-                </div>
-                <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
-                    다른 사람들의<br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
-                        멋진 프롬프트
-                    </span>를 탐색하세요
-                </h1>
-                <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-                    AI 이미지 생성을 위한 창의적인 프롬프트들을 둘러보고 영감을 얻으세요
-                </p>
-
-                {/* Sort Options */}
-                <div className="flex justify-center items-center space-x-4 mb-12">
-                    <span className="text-sm font-medium text-gray-500">정렬:</span>
-                    <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
-                        <button
-                            onClick={() => setSortBy('popular')}
-                            className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${sortBy === 'popular'
-                                ? 'bg-orange-500 text-white shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700'
-                                }`}
-                        >
-                            <TrendingUp size={16} className="mr-1.5" />
-                            인기순
-                        </button>
-                        <button
-                            onClick={() => setSortBy('recent')}
-                            className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${sortBy === 'recent'
-                                ? 'bg-blue-500 text-white shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700'
-                                }`}
-                        >
-                            <Clock size={16} className="mr-1.5" />
-                            최신순
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            {/* Prompts Grid */}
-            <section className="max-w-7xl mx-auto px-4 pb-20">
-                {loading ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                        <Loader2 size={48} className="animate-spin mb-4 text-orange-500" />
-                        <p className="text-lg">프롬프트를 불러오는 중...</p>
-                    </div>
-                ) : prompts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-gray-400 border-2 border-dashed border-gray-200 rounded-3xl bg-white">
-                        <Globe size={64} className="mb-4 opacity-20" />
-                        <p className="text-xl font-medium mb-2">아직 공개된 프롬프트가 없습니다</p>
-                        <p className="text-sm mb-6">첫 번째로 멋진 프롬프트를 공유해보세요!</p>
-                        <button
-                            onClick={() => navigate('/create')}
-                            className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors"
-                        >
-                            프롬프트 만들기
-                        </button>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {prompts.map((prompt) => (
-                            <div
-                                key={prompt.id}
-                                onClick={() => setSelectedPrompt(prompt)}
-                                className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden border border-gray-100"
-                            >
-                                {/* Image - Larger, more prominent */}
-                                {prompt.image_url ? (
-                                    <div className="relative overflow-hidden bg-gray-100 aspect-square">
-                                        <img
-                                            src={prompt.image_url}
-                                            alt={prompt.settings?.subject || 'Generated image'}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    </div>
-                                ) : (
-                                    <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                        <span className="text-gray-400">No Image</span>
-                                    </div>
-                                )}
-
-                                {/* Simple Info */}
-                                <div className="p-4">
-                                    <h3 className="font-bold text-gray-800 mb-1 line-clamp-2 text-sm">
-                                        {prompt.settings?.subject || '제목 없음'}
-                                    </h3>
-                                    <p className="text-xs text-gray-500 flex items-center">
-                                        <User size={12} className="mr-1" />
-                                        {prompt.username || prompt.user_id || 'Anonymous'}
-                                    </p>
-                                </div>
+            {/* Content */}
+            <div className="relative z-10">
+                {/* Header */}
+                <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+                    <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                        <div className="flex items-center space-x-2">
+                            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shadow-md overflow-hidden">
+                                <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
                             </div>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            {/* CTA Section */}
-            {!loading && prompts.length > 0 && (
-                <section className="bg-gradient-to-r from-orange-500 to-red-500 py-16">
-                    <div className="max-w-4xl mx-auto px-4 text-center text-white">
-                        <h2 className="text-4xl font-black mb-4">
-                            당신만의 프롬프트를 만들어보세요
-                        </h2>
-                        <p className="text-xl mb-8 opacity-90">
-                            간단한 드래그 앤 드롭으로 멋진 AI 이미지 프롬프트를 생성하세요
-                        </p>
+                            <span className="text-xl font-bold">
+                                Lazy <span className="text-orange-500">Image Generator</span>
+                            </span>
+                        </div>
                         <button
                             onClick={() => navigate('/create')}
-                            className="px-8 py-4 bg-white text-orange-600 font-black rounded-full shadow-xl hover:scale-105 transition-transform text-lg"
+                            className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform flex items-center"
                         >
-                            무료로 시작하기 →
+                            시작하기
+                            <ArrowRight size={18} className="ml-2" />
                         </button>
+                    </div>
+                </header>
+
+                {/* Sort Options - Minimal */}
+                <section className="max-w-7xl mx-auto px-4 py-6">
+                    <div className="flex justify-center items-center space-x-4">
+                        <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
+                            <button
+                                onClick={() => setSortBy('popular')}
+                                className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${sortBy === 'popular'
+                                    ? 'bg-orange-500 text-white shadow-sm'
+                                    : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                <TrendingUp size={16} className="mr-1.5" />
+                                인기순
+                            </button>
+                            <button
+                                onClick={() => setSortBy('recent')}
+                                className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${sortBy === 'recent'
+                                    ? 'bg-blue-500 text-white shadow-sm'
+                                    : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                <Clock size={16} className="mr-1.5" />
+                                최신순
+                            </button>
+                        </div>
                     </div>
                 </section>
-            )}
 
-            {/* Prompt Detail Modal */}
-            {selectedPrompt && (
-                <PromptDetailModal
-                    prompt={selectedPrompt}
-                    onClose={() => setSelectedPrompt(null)}
-                />
-            )}
+                {/* Prompts Grid */}
+                <section className="max-w-7xl mx-auto px-4 pb-20">
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+                            <Loader2 size={48} className="animate-spin mb-4 text-orange-500" />
+                            <p className="text-lg">프롬프트를 불러오는 중...</p>
+                        </div>
+                    ) : prompts.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-64 text-gray-400 border-2 border-dashed border-gray-200 rounded-3xl bg-white">
+                            <Globe size={64} className="mb-4 opacity-20" />
+                            <p className="text-xl font-medium mb-2">아직 공개된 프롬프트가 없습니다</p>
+                            <p className="text-sm mb-6">첫 번째로 멋진 프롬프트를 공유해보세요!</p>
+                            <button
+                                onClick={() => navigate('/create')}
+                                className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                            >
+                                프롬프트 만들기
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {prompts.map((prompt) => (
+                                <div
+                                    key={prompt.id}
+                                    onClick={() => setSelectedPrompt(prompt)}
+                                    className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden border border-gray-100"
+                                >
+                                    {/* Image - Larger, more prominent */}
+                                    {prompt.image_url ? (
+                                        <div className="relative overflow-hidden bg-gray-100 aspect-square">
+                                            <img
+                                                src={prompt.image_url}
+                                                alt={prompt.settings?.subject || 'Generated image'}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                        </div>
+                                    ) : (
+                                        <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                            <span className="text-gray-400">No Image</span>
+                                        </div>
+                                    )}
+
+                                    {/* Simple Info */}
+                                    <div className="p-4">
+                                        <h3 className="font-bold text-gray-800 mb-1 line-clamp-2 text-sm">
+                                            {prompt.settings?.subject || '제목 없음'}
+                                        </h3>
+                                        <p className="text-xs text-gray-500 flex items-center">
+                                            <User size={12} className="mr-1" />
+                                            {prompt.username || prompt.user_id || 'Anonymous'}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                {/* CTA Section */}
+                {!loading && prompts.length > 0 && (
+                    <section className="bg-gradient-to-r from-orange-500 to-red-500 py-16">
+                        <div className="max-w-4xl mx-auto px-4 text-center text-white">
+                            <h2 className="text-4xl font-black mb-4">
+                                당신만의 프롬프트를 만들어보세요
+                            </h2>
+                            <p className="text-xl mb-8 opacity-90">
+                                간단한 드래그 앤 드롭으로 멋진 AI 이미지 프롬프트를 생성하세요
+                            </p>
+                            <button
+                                onClick={() => navigate('/create')}
+                                className="px-8 py-4 bg-white text-orange-600 font-black rounded-full shadow-xl hover:scale-105 transition-transform text-lg"
+                            >
+                                무료로 시작하기 →
+                            </button>
+                        </div>
+                    </section>
+                )}
+
+                {/* Prompt Detail Modal */}
+                {selectedPrompt && (
+                    <PromptDetailModal
+                        prompt={selectedPrompt}
+                        onClose={() => setSelectedPrompt(null)}
+                    />
+                )}
+            </div>
         </div>
     );
 }

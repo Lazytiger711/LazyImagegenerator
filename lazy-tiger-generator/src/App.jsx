@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import html2canvas from 'html2canvas'; // Ensure this is installed
+import { useNavigate } from 'react-router-dom';
 
-import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare, User, Box, Zap, Copy, Share2 } from 'lucide-react';
+import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare, User, Box, Zap, Copy, Share2, Compass } from 'lucide-react';
 
 // Imported Data & Components
 import {
@@ -28,6 +29,8 @@ import StepIndicator from './components/StepIndicator'; // Import Step Indicator
 
 // --- Main Component ---
 export default function App() {
+  const navigate = useNavigate();
+
   const [selections, setSelections] = useState({
     shot: { id: 'none', label: '선택 안 함' },
     angle: { id: 'none', label: '선택 안 함' },
@@ -1253,6 +1256,15 @@ export default function App() {
           </div>
           <div className="flex items-center space-x-2">
             <button
+              onClick={() => navigate('/')}
+              className="px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-sm font-bold transition-colors flex items-center"
+              title="탐색하기"
+            >
+              <Compass size={16} className="mr-1.5" />
+              <span className="hidden sm:inline">탐색하기</span>
+            </button>
+
+            <button
               onClick={() => window.open('/guide', '_blank')}
               className="hidden md:flex px-3 py-1.5 text-gray-500 hover:text-orange-600 font-bold transition-colors items-center mr-1 text-sm"
               title="사용법 보기"
@@ -1266,7 +1278,7 @@ export default function App() {
               className="px-3 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 rounded-lg text-sm font-bold transition-colors flex items-center"
             >
               <ImageIcon size={16} className="mr-1.5" />
-              내 갤러리
+              <span className="hidden sm:inline">내 갤러리</span>
             </button>
             <button
               onClick={() => window.location.reload()}

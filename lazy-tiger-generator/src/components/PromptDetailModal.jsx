@@ -114,19 +114,11 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                 </div>
                             )}
 
-                            {/* CTA Button */}
-                            <button
-                                onClick={handleUsePrompt}
-                                className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center"
-                            >
-                                <Sparkles size={20} className="mr-2" />
-                                이 설정으로 시작하기
-                            </button>
                         </div>
                     </div>
 
                     {/* Bottom Section: Full Prompt */}
-                    <div className="p-6 bg-gray-50">
+                    <div className="p-6 bg-gray-50 border-b border-gray-200">
                         <h4 className="text-sm font-bold text-gray-700 mb-3">생성된 프롬프트</h4>
                         <div className="bg-gray-900 rounded-xl overflow-hidden">
                             <div className="p-4 max-h-60 overflow-y-auto">
@@ -135,6 +127,17 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                 </pre>
                             </div>
                         </div>
+                    </div>
+
+                    {/* CTA Button Section */}
+                    <div className="p-6 bg-white">
+                        <button
+                            onClick={handleUsePrompt}
+                            className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center"
+                        >
+                            <Sparkles size={20} className="mr-2" />
+                            이 설정으로 시작하기
+                        </button>
                     </div>
                 </div>
             </div>
