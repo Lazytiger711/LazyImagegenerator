@@ -29,6 +29,9 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
         transform: CSS.Translate.toString(transform),
     } : undefined;
 
+    // Check if icon is an image path (string) or a React component
+    const isImageIcon = typeof item.icon === 'string';
+
     return (
         <div
             ref={setNodeRef}
@@ -46,11 +49,19 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
                 }`}
         >
             <div className="w-16 h-16 mb-2 rounded-md flex items-center justify-center transition-colors z-10">
-                <PixelArtIcon
-                    type={type}
-                    name={item.id}
-                    className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
-                />
+                {isImageIcon ? (
+                    <img
+                        src={item.icon}
+                        alt={item.label}
+                        className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+                    />
+                ) : (
+                    <PixelArtIcon
+                        type={type}
+                        name={item.id}
+                        className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
+                    />
+                )}
             </div>
             <span className="text-sm font-bold text-gray-700 text-center leading-tight line-clamp-1 z-10 w-full px-1">
                 {item.label}

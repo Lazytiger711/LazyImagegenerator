@@ -62,14 +62,13 @@ export const STAMPS = [
 
 export const FACING_DIRECTIONS = [
 
-
     {
         id: 'facing_front',
         label: '정면',
         sub: 'Front',
         description: '카메라를 정면으로 응시',
         prompt: 'body facing camera straight on, head facing forward directly at viewer, frontal full-body stance, symmetrical shoulders squared to camera, direct eye contact, centered composition, forward-facing posture',
-        icon: Eye
+        icon: '/icons/facing/front.png'
     },
     {
         id: 'facing_front_3_4_left',
@@ -77,7 +76,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Front 3/4 L',
         description: '살짝 왼쪽을 보는 각도',
         prompt: 'body angled 45 degrees left, head and face turned slightly towards left, three-quarter frontal view, left shoulder slightly forward, partial left side visible, gazing left of camera, subtle left rotation',
-        icon: Eye
+        icon: '/icons/facing/front-3-4-left.png'
     },
     {
         id: 'facing_front_3_4_right',
@@ -85,7 +84,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Front 3/4 R',
         description: '살짝 오른쪽을 보는 각도',
         prompt: 'body angled 45 degrees right, head and face turned slightly towards right, three-quarter frontal view, right shoulder slightly forward, partial right side visible, gazing right of camera, subtle right rotation',
-        icon: Eye
+        icon: '/icons/facing/front-3-4-right.png'
     },
     {
         id: 'facing_left',
@@ -93,7 +92,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Profile L',
         description: '완전히 왼쪽을 보는 옆모습',
         prompt: 'full body profile facing left, head turned 90 degrees left showing left side of face only, complete side view, left shoulder forward, right side of body hidden, pure profile stance, perpendicular to camera, side silhouette',
-        icon: Eye
+        icon: '/icons/facing/profile-left.png'
     },
     {
         id: 'facing_right',
@@ -101,7 +100,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Profile R',
         description: '완전히 오른쪽을 보는 옆모습',
         prompt: 'full body profile facing right, head turned 90 degrees right showing right side of face only, complete side view, right shoulder forward, left side of body hidden, pure profile stance, perpendicular to camera, side silhouette',
-        icon: Eye
+        icon: '/icons/facing/profile-right.png'
     },
     {
         id: 'facing_back_3_4_left',
@@ -109,7 +108,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Back 3/4 L',
         description: '등을 지고 왼쪽으로 고개 돌림',
         prompt: 'body facing away from camera, back visible, head turned left looking over left shoulder, three-quarter rear view, left side of face partially visible, glancing back towards left, back shoulder stance, rear angle with left head turn',
-        icon: Eye
+        icon: '/icons/facing/back-3-4-left.png'
     },
     {
         id: 'facing_back_3_4_right',
@@ -117,7 +116,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Back 3/4 R',
         description: '등을 지고 오른쪽으로 고개 돌림',
         prompt: 'body facing away from camera, back visible, head turned right looking over right shoulder, three-quarter rear view, right side of face partially visible, glancing back towards right, back shoulder stance, rear angle with right head turn',
-        icon: Eye
+        icon: '/icons/facing/back-3-4-right.png'
     },
     {
         id: 'facing_back',
@@ -125,7 +124,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Back',
         description: '완전히 등을 돌린 모습',
         prompt: 'full body facing away from camera completely, back of head and body visible, no face visible, rear view, looking away, back turned to viewer, posterior stance, complete rear angle, from behind',
-        icon: Eye
+        icon: '/icons/facing/back.png'
     },
 ];
 
