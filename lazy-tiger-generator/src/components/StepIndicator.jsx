@@ -1,6 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function StepIndicator({ currentStep = 0, steps }) {
+    const { t } = useTranslation();
+
     return (
         <div className="w-full bg-white border-b border-gray-200 py-5 px-4 md:py-6 md:px-8">
             <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 md:gap-6">
@@ -28,7 +31,7 @@ export default function StepIndicator({ currentStep = 0, steps }) {
                             >
                                 <img
                                     src={step.icon}
-                                    alt={step.label}
+                                    alt={t(step.label)}
                                     className={`
                     w-12 h-12 md:w-16 md:h-16 object-contain transition-all
                     ${isActive ? 'scale-110' : isCompleted ? 'opacity-70' : 'opacity-40 grayscale'}
@@ -55,7 +58,7 @@ export default function StepIndicator({ currentStep = 0, steps }) {
                                     }
                 `}
                             >
-                                {step.label}
+                                {t(step.label)}
                             </span>
 
                             {/* Connector Line (except for last item) */}

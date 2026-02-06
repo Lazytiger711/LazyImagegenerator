@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, BoxSelect, Check, Info } from 'lucide-react';
 import PixelArtIcon from './PixelArtIcon';
+import { useTranslation } from 'react-i18next';
 
 const SelectionSection = ({ title, description, items, selectedId, onSelect, type = 'card', disabledItems = [] }) => {
+    const { t } = useTranslation();
     const scrollRef = useRef(null);
 
     // Scroll selected item into view when it changes
@@ -31,7 +33,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
         <div className="mb-8 last:mb-0">
             <div className="flex justify-between items-center mb-3 px-1">
                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider flex items-center">
-                    <ChevronRight className="w-4 h-4 mr-1 text-orange-500" /> {title}
+                    <ChevronRight className="w-4 h-4 mr-1 text-orange-500" /> {t(title) || title}
                 </h3>
                 <div className="flex items-center space-x-1 sm:hidden">
                     <button onClick={handlePrev} className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-600">
@@ -47,7 +49,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                 <button
                     onClick={handlePrev}
                     className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-30 w-8 h-8 bg-white/90 border border-gray-200 shadow-lg rounded-full flex items-center justify-center text-gray-600 hover:text-orange-600 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 sm:opacity-100 hidden sm:flex"
-                    title="이전 (Previous)"
+                    title={t("common.back")}
                 >
                     <ChevronLeft size={20} />
                 </button>
@@ -86,7 +88,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                                 <Icon className={`w-12 h-12 ${isSelected ? 'text-orange-500' : 'text-gray-400'}`} />
                                             </div>
                                             <div className="text-center w-full">
-                                                <span className={`block font-bold text-lg ${isSelected ? 'text-orange-700' : 'text-gray-700'}`}>{item.label}</span>
+                                                <span className={`block font-bold text-lg ${isSelected ? 'text-orange-700' : 'text-gray-700'}`}>{t(item.label)}</span>
                                                 <span className="text-sm text-gray-400 mt-1 block">{item.sub}</span>
                                             </div>
                                         </div>
@@ -115,7 +117,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                             </div>
 
                                             <div className="mt-auto relative z-10 w-full text-center sm:text-left shrink-0">
-                                                <span className={`block font-bold text-sm sm:text-base truncate ${isSelected ? 'text-orange-800' : 'text-gray-700'}`}>{item.label}</span>
+                                                <span className={`block font-bold text-sm sm:text-base truncate ${isSelected ? 'text-orange-800' : 'text-gray-700'}`}>{t(item.label)}</span>
                                                 <span className={`text-[10px] sm:text-xs truncate block ${isSelected ? 'text-orange-600/80' : 'text-gray-400'}`}>{item.sub}</span>
                                             </div>
                                         </div>
@@ -129,7 +131,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                 <button
                     onClick={handleNext}
                     className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-30 w-8 h-8 bg-white/90 border border-gray-200 shadow-lg rounded-full flex items-center justify-center text-gray-600 hover:text-orange-600 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 sm:opacity-100 hidden sm:flex"
-                    title="다음 (Next)"
+                    title={t("common.next")}
                 >
                     <ChevronRight size={20} />
                 </button>

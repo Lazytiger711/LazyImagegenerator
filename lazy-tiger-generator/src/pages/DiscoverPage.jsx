@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
 import { Globe, TrendingUp, Clock, ArrowRight, Loader2, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +11,7 @@ export default function DiscoverPage() {
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState('popular'); // 'popular' | 'recent'
     const [selectedPrompt, setSelectedPrompt] = useState(null);
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     // Sample prompts to show when DB is empty
@@ -105,7 +107,7 @@ export default function DiscoverPage() {
                             onClick={() => navigate('/create')}
                             className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform flex items-center"
                         >
-                            시작하기
+                            {t('discover.start')}
                             <ArrowRight size={18} className="ml-2" />
                         </button>
                     </div>
@@ -123,7 +125,7 @@ export default function DiscoverPage() {
                                     }`}
                             >
                                 <TrendingUp size={16} className="mr-1.5" />
-                                인기순
+                                {t('discover.sort_popular')}
                             </button>
                             <button
                                 onClick={() => setSortBy('recent')}
@@ -133,7 +135,7 @@ export default function DiscoverPage() {
                                     }`}
                             >
                                 <Clock size={16} className="mr-1.5" />
-                                최신순
+                                {t('discover.sort_recent')}
                             </button>
                         </div>
                     </div>
@@ -144,18 +146,18 @@ export default function DiscoverPage() {
                     {loading ? (
                         <div className="flex flex-col items-center justify-center h-64 text-gray-400">
                             <Loader2 size={48} className="animate-spin mb-4 text-orange-500" />
-                            <p className="text-lg">프롬프트를 불러오는 중...</p>
+                            <p className="text-lg">{t('discover.loading')}</p>
                         </div>
                     ) : prompts.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-64 text-gray-400 border-2 border-dashed border-gray-200 rounded-3xl bg-white">
                             <Globe size={64} className="mb-4 opacity-20" />
-                            <p className="text-xl font-medium mb-2">아직 공개된 프롬프트가 없습니다</p>
-                            <p className="text-sm mb-6">첫 번째로 멋진 프롬프트를 공유해보세요!</p>
+                            <p className="text-xl font-medium mb-2">{t('discover.no_prompts_title')}</p>
+                            <p className="text-sm mb-6">{t('discover.no_prompts_desc')}</p>
                             <button
                                 onClick={() => navigate('/create')}
                                 className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors"
                             >
-                                프롬프트 만들기
+                                {t('discover.create_prompt')}
                             </button>
                         </div>
                     ) : (
@@ -185,11 +187,11 @@ export default function DiscoverPage() {
                                     {/* Simple Info */}
                                     <div className="p-4">
                                         <h3 className="font-bold text-gray-800 mb-1 line-clamp-2 text-sm">
-                                            {prompt.settings?.subject || '제목 없음'}
+                                            {prompt.settings?.subject || t('discover.no_title')}
                                         </h3>
                                         <p className="text-xs text-gray-500 flex items-center">
                                             <User size={12} className="mr-1" />
-                                            {prompt.username || prompt.user_id || 'Anonymous'}
+                                            {prompt.username || prompt.user_id || t('discover.anonymous')}
                                         </p>
                                     </div>
                                 </div>

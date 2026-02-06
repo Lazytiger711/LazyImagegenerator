@@ -1,0 +1,478 @@
+{
+    "common": {
+        "none": "None",
+        "reset": "Reset",
+        "generate": "Generate",
+        "generating": "Generating...",
+        "step_type": "Type",
+        "step_pick": "Pick",
+        "step_draw": "Draw",
+        "step_generate": "Generate",
+        "copy": "Copy",
+        "share": "Share",
+        "download": "Download",
+        "feedback": "Feedback",
+        "close": "Close",
+        "submit": "Submit",
+        "back": "Back",
+        "next": "Next",
+        "copied_toast": "Copied!",
+        "share_public": "Share with others (Public)",
+        "send_ai": "Send to AI",
+        "save": "Save",
+        "character": "Character",
+        "object": "Object",
+        "explore": "Explore",
+        "guide": "Guide",
+        "my_gallery": "My Gallery"
+    },
+    "discover": {
+        "start": "Get Started",
+        "sort_popular": "Popular",
+        "sort_recent": "Recent",
+        "loading": "Loading prompts...",
+        "no_prompts_title": "No public prompts yet",
+        "no_prompts_desc": "Be the first to share an amazing prompt!",
+        "create_prompt": "Create Prompt",
+        "no_title": "Untitled",
+        "anonymous": "Anonymous",
+        "nav_discover": "Discover",
+        "nav_create": "Create",
+        "nav_guide": "Guide"
+    },
+    "modal": {
+        "title": "Prompt Details",
+        "no_image": "No Image",
+        "card_combo": "Card Combination Used",
+        "generated_prompt": "Generated Prompt",
+        "use_this": "Start with this setup",
+        "close": "Close"
+    },
+    "guide": {
+        "title": "Lazy Guide",
+        "back": "Back",
+        "intro_title": "The Laziest Way to Turn Imagination into Reality",
+        "intro_desc": "Stop studying complex prompts. Anyone can generate expert-level AI images with our intuitive card deck system.",
+        "how_to_use": "How to use",
+        "step1_title": "Enter Subject & Context",
+        "step1_desc": "First, type what you want to draw.",
+        "step2_title": "Select Style & Composition",
+        "step2_desc": "Choose cards from the prop box on the left.",
+        "step3_title": "AI Vision (Optional)",
+        "step3_desc": "Draw roughly on the canvas with a brush or place objects with stamps.",
+        "step4_title": "Generate & Copy Prompt",
+        "step4_desc": "Click the 'Generate Prompt' button at the bottom. Copy the finished prompt and use it!",
+        "features_title": "Key Features at a Glance",
+        "feature1_title": "Intuitive Prop Box",
+        "feature1_desc": "Select easily with icon cards instead of complex terms.",
+        "feature2_title": "Visual Guide Generation",
+        "feature2_desc": "Creates sophisticated prompts that even describe object positions.",
+        "feature3_title": "Mobile Optimized",
+        "feature3_desc": "Materialize your ideas with a single touch, anywhere.",
+        "feature4_title": "My Gallery",
+        "feature4_desc": "Save your created prompts and recall them anytime.",
+        "start_button": "Start Now"
+    },
+    "placeholders": {
+        "character": "Who do you want to draw? (e.g. A hip tiger with sunglasses)",
+        "object": "What do you want to draw? (e.g. Antique wooden chair)",
+        "context": "What is the situation? (e.g. Seoul night street with neon signs)",
+        "ai_vision": "Draw on the canvas or place items, and AI will analyze them here in real-time..."
+    },
+    "tools": {
+        "brush": "Brush",
+        "stamp": "Stamp",
+        "clear": "Clear Canvas",
+        "guide_lines": "Guide Lines (Rule of Thirds)",
+        "add_object": "Add New Object",
+        "stamps_label": "STAMPS",
+        "copy_text": "Copy Text"
+    },
+    "status": {
+        "generate_prompt": "Generate Prompt",
+        "generating": "Generating...",
+        "complete": "Generation Complete",
+        "copied": "Prompt copied!"
+    },
+    "workspace": {
+        "hint": "Drag items from the prop box here"
+    },
+    "sections": {
+        "scene": "Scene Setup",
+        "scene_desc": "Configure the subject and background to set the scene",
+        "main_character": "MAIN CHARACTER",
+        "main_subject": "MAIN SUBJECT",
+        "character_hint": "*All prompts are centered around the main character",
+        "object_hint": "*Pose/Gaze keywords are automatically excluded (for objects)",
+        "context": "CONTEXT (Background/Situation)",
+        "ai_vision": "AI Vision",
+        "ai_vision_desc": "See how AI interprets your layout",
+        "shot": "Shot",
+        "angle": "Angle",
+        "composition": "Composition",
+        "style": "Style",
+        "lighting": "Lighting",
+        "facing": "Facing",
+        "meme": "Meme",
+        "resolution": "Resolution"
+    },
+    "stamps": {
+        "face": {
+            "label": "Face"
+        },
+        "bust": {
+            "label": "Bust"
+        },
+        "upper_body": {
+            "label": "Upper Body"
+        },
+        "full_body": {
+            "label": "Full Body"
+        },
+        "tree": {
+            "label": "Tree"
+        },
+        "car": {
+            "label": "Car"
+        },
+        "person_full_simple": {
+            "label": "Person (Full)"
+        },
+        "person_half_simple": {
+            "label": "Person (Half)"
+        },
+        "house_simple": {
+            "label": "House"
+        }
+    },
+    "facing": {
+        "facing_front": {
+            "label": "Front",
+            "desc": "Facing straight at the camera"
+        },
+        "facing_front_3_4_left": {
+            "label": "Front 3/4 L",
+            "desc": "Looking slightly left"
+        },
+        "facing_front_3_4_right": {
+            "label": "Front 3/4 R",
+            "desc": "Looking slightly right"
+        },
+        "facing_left": {
+            "label": "Profile (Left)",
+            "desc": "Complete side view facing left"
+        },
+        "facing_right": {
+            "label": "Profile (Right)",
+            "desc": "Complete side view facing right"
+        },
+        "facing_back_3_4_left": {
+            "label": "Back 3/4 L",
+            "desc": "Back view, head turned left"
+        },
+        "facing_back_3_4_right": {
+            "label": "Back 3/4 R",
+            "desc": "Back view, head turned right"
+        },
+        "facing_back": {
+            "label": "Back",
+            "desc": "Completely turned away"
+        }
+    },
+    "angles": {
+        "eye_level": {
+            "label": "Eye Level",
+            "desc": "Natural perspective"
+        },
+        "low_angle": {
+            "label": "Low Angle",
+            "desc": "Looking up, imposing"
+        },
+        "high_angle": {
+            "label": "High Angle",
+            "desc": "Looking down, contrasting"
+        },
+        "top_down": {
+            "label": "Top Down",
+            "desc": "90° Vertical, Flat Lay"
+        },
+        "isometric": {
+            "label": "Isometric",
+            "desc": "Game/Infographic style (45°)"
+        },
+        "dutch_angle": {
+            "label": "Dutch Angle",
+            "desc": "Tilted, dynamic/tense"
+        }
+    },
+    "shots": {
+        "close_up": {
+            "label": "Close Up",
+            "desc": "Focus on face or object"
+        },
+        "bust_shot": {
+            "label": "Bust Shot",
+            "desc": "Upper chest, standard portrait"
+        },
+        "medium_shot": {
+            "label": "Medium Shot",
+            "desc": "Waist up, gestures"
+        },
+        "full_shot": {
+            "label": "Full Shot",
+            "desc": "Full body and context"
+        },
+        "selfie": {
+            "label": "Selfie",
+            "desc": "Handheld style"
+        },
+        "over_the_shoulder": {
+            "label": "Over The Shoulder",
+            "desc": "View from behind subject"
+        },
+        "first_person": {
+            "label": "First Person (POV)",
+            "desc": "Through the protagonist's eyes"
+        }
+    },
+    "compositions": {
+        "rule_of_thirds": {
+            "label": "Rule of Thirds",
+            "desc": "Balanced framing"
+        },
+        "center": {
+            "label": "Center",
+            "desc": "Strong focus on subject"
+        },
+        "diagonal": {
+            "label": "Diagonal",
+            "desc": "Dynamic movement"
+        },
+        "golden_ratio": {
+            "label": "Golden Ratio",
+            "desc": "Aesthetically pleasing"
+        },
+        "framing": {
+            "label": "Framing",
+            "desc": "Frame within a frame"
+        },
+        "leading_lines": {
+            "label": "Leading Lines",
+            "desc": "Guiding eyes to subject"
+        },
+        "negative_space": {
+            "label": "Negative Space",
+            "desc": "Minimalist, isolation"
+        }
+    },
+    "styles": {
+        "realistic": {
+            "label": "Realistic/Photo",
+            "desc": "Photorealistic"
+        },
+        "anime": {
+            "label": "Anime",
+            "desc": "Anime"
+        },
+        "3d_render": {
+            "label": "3D Render",
+            "desc": "3D Rendering"
+        },
+        "oil_painting": {
+            "label": "Van Gogh",
+            "desc": "Van Gogh Style"
+        },
+        "concept_art": {
+            "label": "Concept Art",
+            "desc": "Digital painting, Game/Movie"
+        },
+        "cyberpunk": {
+            "label": "Cyberpunk",
+            "desc": "Neon, Futuristic, High-tech"
+        }
+    },
+    "lighting": {
+        "natural": {
+            "label": "Natural",
+            "desc": "Soft sunlight"
+        },
+        "studio": {
+            "label": "Studio",
+            "desc": "Professional lighting"
+        },
+        "neon": {
+            "label": "Neon",
+            "desc": "Vibrant neon signs"
+        },
+        "dramatic": {
+            "label": "Dramatic",
+            "desc": "High contrast"
+        },
+        "cinematic": {
+            "label": "Cinematic",
+            "desc": "Movie-like atmosphere"
+        },
+        "rembrandt": {
+            "label": "Rembrandt",
+            "desc": "Classical portrait lighting"
+        }
+    },
+    "resolutions": {
+        "16:9": {
+            "label": "Youtube/Landscape"
+        },
+        "1:1": {
+            "label": "Insta/Profile"
+        },
+        "9:16": {
+            "label": "Shorts/Reels"
+        }
+    },
+    "palette": {
+        "subject": "Main Subject",
+        "subject_2": "Subject 2",
+        "sub_subject": "Sub Subject",
+        "prop": "Prop",
+        "erase": "Eraser",
+        "obj_a": "Object A",
+        "obj_b": "Object B",
+        "obj_c": "Object C",
+        "obj_d": "Object D",
+        "obj_e": "Object E",
+        "obj_f": "Object F",
+        "bg": "Background"
+    },
+    "memes": {
+        "distracted_boyfriend": {
+            "label": "Distracted Boyfriend",
+            "desc": "Man looking back at another woman"
+        },
+        "woman_yelling_cat": {
+            "label": "Woman Yelling at Cat",
+            "desc": "Crying woman and confused cat"
+        },
+        "disaster_girl": {
+            "label": "Disaster Girl",
+            "desc": "Girl smiling at house fire"
+        },
+        "this_is_fine": {
+            "label": "This is Fine",
+            "desc": "Dog sitting in burning room"
+        },
+        "success_kid": {
+            "label": "Success Kid",
+            "desc": "Determined baby with fist"
+        },
+        "drake_hotline": {
+            "label": "Drake (Yes/No)",
+            "desc": "Drake rejecting and liking"
+        },
+        "two_buttons": {
+            "label": "Two Buttons",
+            "desc": "Sweating over choice"
+        },
+        "change_my_mind": {
+            "label": "Change My Mind",
+            "desc": "Man sitting at table"
+        },
+        "grumpy_cat": {
+            "label": "Grumpy Cat",
+            "desc": "Annoyed cat face"
+        },
+        "doge": {
+            "label": "Doge",
+            "desc": "Shiba Inu side eye"
+        },
+        "roll_safe": {
+            "label": "Roll Safe",
+            "desc": "Tapping temple"
+        },
+        "mocking_spongebob": {
+            "label": "Mocking Startup",
+            "desc": "Spongebob acting like chicken"
+        },
+        "futurama_fry": {
+            "label": "Suspicious Fry",
+            "desc": "Squinting eyes"
+        },
+        "one_does_not_simply": {
+            "label": "One Does Not Simply",
+            "desc": "Boromir making zero gesture"
+        },
+        "ancient_aliens": {
+            "label": "Ancient Aliens",
+            "desc": "History channel guy"
+        },
+        "batman_slapping": {
+            "label": "Batman Slapping",
+            "desc": "Batman slapping Robin"
+        },
+        "hide_the_pain": {
+            "label": "Hide The Pain Harold",
+            "desc": "Old man smiling in pain"
+        },
+        "is_this_a_pigeon": {
+            "label": "Is This A Pigeon",
+            "desc": "Guy pointing at butterfly"
+        },
+        "surprised_pikachu": {
+            "label": "Surprised Pikachu",
+            "desc": "Shocked Pikachu face"
+        },
+        "spider_man_pointing": {
+            "label": "Spider-Man Pointing",
+            "desc": "Spidermen pointing at each other"
+        },
+        "tuxedo_pooh": {
+            "label": "Tuxedo Pooh",
+            "desc": "Fancy Winnie the Pooh"
+        },
+        "galaxy_brain": {
+            "label": "Galaxy Brain",
+            "desc": "Glowing brain progression"
+        },
+        "waiting_skeleton": {
+            "label": "Waiting Skeleton",
+            "desc": "Skeleton on bench"
+        },
+        "sad_keanu": {
+            "label": "Sad Keanu",
+            "desc": "Keanu sitting alone"
+        },
+        "confused_math_lady": {
+            "label": "Confused Math Lady",
+            "desc": "Woman calculating"
+        },
+        "pepe_frog": {
+            "label": "Sad Frog (Pepe)",
+            "desc": "Sad Pepe face"
+        },
+        "leonardo_toast": {
+            "label": "Leo Toast",
+            "desc": "DiCaprio raising glass"
+        },
+        "bernie_mittens": {
+            "label": "Bernie Mittens",
+            "desc": "Bernie Sanders in chair"
+        },
+        "spongebob_imma_head_out": {
+            "label": "Imma Head Out",
+            "desc": "Spongebob leaving chair"
+        },
+        "gta_wasted": {
+            "label": "WASTED (GTA)",
+            "desc": "Gray screen with WASTED"
+        }
+    },
+    "variants": {
+        "standard": "Standard",
+        "extreme_low": "Extreme",
+        "slight_low": "Slight",
+        "birds_eye": "Bird's Eye",
+        "extreme_high": "Extreme",
+        "extreme_cu": "Extreme CU",
+        "tight_cu": "Tight",
+        "wide": "Wide",
+        "long_shot": "Long Shot"
+    }
+}

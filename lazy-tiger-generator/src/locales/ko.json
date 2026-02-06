@@ -1,0 +1,478 @@
+{
+    "common": {
+        "none": "선택 안 함",
+        "reset": "초기화",
+        "generate": "이미지 생성하기",
+        "generating": "이미지 생성 중...",
+        "step_type": "타입",
+        "step_pick": "선택",
+        "step_draw": "그리기",
+        "step_generate": "생성",
+        "copy": "복사",
+        "share": "공유",
+        "download": "다운로드",
+        "feedback": "피드백",
+        "close": "닫기",
+        "submit": "전송",
+        "back": "뒤로",
+        "next": "다음",
+        "copied_toast": "복사되었습니다!",
+        "share_public": "다른 사람과 공유하기 (공개)",
+        "send_ai": "AI로 보내기",
+        "save": "저장",
+        "character": "인물",
+        "object": "사물",
+        "explore": "탐색하기",
+        "guide": "사용법",
+        "my_gallery": "내 갤러리"
+    },
+    "discover": {
+        "start": "시작하기",
+        "sort_popular": "인기순",
+        "sort_recent": "최신순",
+        "loading": "프롬프트를 불러오는 중...",
+        "no_prompts_title": "아직 공개된 프롬프트가 없습니다",
+        "no_prompts_desc": "첫 번째로 멋진 프롬프트를 공유해보세요!",
+        "create_prompt": "프롬프트 만들기",
+        "no_title": "제목 없음",
+        "anonymous": "익명",
+        "nav_discover": "탐색",
+        "nav_create": "만들기",
+        "nav_guide": "가이드"
+    },
+    "modal": {
+        "title": "프롬프트 상세",
+        "no_image": "이미지 없음",
+        "card_combo": "사용된 카드 조합",
+        "generated_prompt": "생성된 프롬프트",
+        "use_this": "이 설정으로 시작하기",
+        "close": "닫기"
+    },
+    "guide": {
+        "title": "Lazy Guide",
+        "back": "돌아가기",
+        "intro_title": "상상을 현실로 만드는 가장 게으른 방법",
+        "intro_desc": "복잡한 프롬프트 공부는 그만. 직관적인 카드 덱 시스템으로 누구나 전문가급 AI 이미지를 생성할 수 있습니다.",
+        "how_to_use": "사용 방법 (How to use)",
+        "step1_title": "피사체와 배경 입력",
+        "step1_desc": "먼저 무엇을 그릴지 입력하세요.",
+        "step2_title": "스타일과 구도 선택",
+        "step2_desc": "왼쪽 소품 상자에서 원하는 카드를 선택하세요.",
+        "step3_title": "AI의 시선 (선택)",
+        "step3_desc": "캔버스에 브러시로 대략적인 위치를 그리거나, 스탬프로 오브젝트를 배치해보세요.",
+        "step4_title": "프롬프트 생성 및 복사",
+        "step4_desc": "하단의 '프롬프트 생성' 버튼을 누르세요. 완성된 프롬프트를 복사해서 사용하세요!",
+        "features_title": "주요 기능 한눈에 보기",
+        "feature1_title": "직관적인 소품 상자",
+        "feature1_desc": "복잡한 용어 대신 아이콘 카드로 쉽게 선택하세요.",
+        "feature2_title": "비주얼 가이드 생성",
+        "feature2_desc": "그림 위치까지 설명하는 정교한 프롬프트를 만듭니다.",
+        "feature3_title": "모바일 최적화",
+        "feature3_desc": "언제 어디서든 터치 한번으로 아이디어를 구체화하세요.",
+        "feature4_title": "나만의 갤러리",
+        "feature4_desc": "만든 프롬프트를 저장하고 언제든 다시 불러오세요.",
+        "start_button": "지금 바로 시작하기"
+    },
+    "placeholders": {
+        "character": "누구를 그리실 건가요? (예: 썬글라스를 쓴 힙한 호랑이)",
+        "object": "무엇을 그리실 건가요? (예: 앤티크한 목재 의자)",
+        "context": "어떤 상황인가요? (예: 네온 사인이 빛나는 서울의 밤거리에서)",
+        "ai_vision": "캔버스에 그림을 그리거나 소품을 배치하면 AI가 이곳에서 실시간으로 분석합니다..."
+    },
+    "tools": {
+        "brush": "브러시",
+        "stamp": "스탬프",
+        "clear": "캔버스 지우기",
+        "guide_lines": "가이드선 (Rule of Thirds)",
+        "add_object": "새로운 개체 추가",
+        "stamps_label": "스탬프 목록",
+        "copy_text": "텍스트 복사"
+    },
+    "status": {
+        "generate_prompt": "프롬프트 생성",
+        "generating": "생성 중...",
+        "complete": "생성 완료",
+        "copied": "프롬프트가 복사되었습니다!"
+    },
+    "workspace": {
+        "hint": "소품 상자에서 아이템을 이곳으로 끌어오세요"
+    },
+    "sections": {
+        "scene": "장면 구성 (Scene)",
+        "scene_desc": "피사체와 배경을 설정하여 장면을 구성하세요",
+        "main_character": "MAIN CHARACTER (메인 캐릭터)",
+        "main_subject": "MAIN SUBJECT (메인 피사체)",
+        "character_hint": "*모든 프롬프트는 메인 캐릭터를 중심으로 구성됩니다",
+        "object_hint": "*시선/포즈 관련 키워드가 자동으로 제외됩니다 (가구/사물용)",
+        "context": "CONTEXT (배경/상황)",
+        "ai_vision": "AI의 시선 (AI Vision)",
+        "ai_vision_desc": "AI가 당신의 배치를 어떻게 해석하는지 확인하세요",
+        "shot": "샷 (Shot)",
+        "angle": "앵글 (Angle)",
+        "composition": "구도 (Composition)",
+        "style": "스타일 (Style)",
+        "lighting": "조명 (Lighting)",
+        "facing": "시선/방향 (Facing)",
+        "meme": "밈 (Meme)",
+        "resolution": "해상도 (Resolution)"
+    },
+    "stamps": {
+        "face": {
+            "label": "얼굴"
+        },
+        "bust": {
+            "label": "어깨라인"
+        },
+        "upper_body": {
+            "label": "상체"
+        },
+        "full_body": {
+            "label": "전신"
+        },
+        "tree": {
+            "label": "나무"
+        },
+        "car": {
+            "label": "자동차"
+        },
+        "person_full_simple": {
+            "label": "사람(전신)"
+        },
+        "person_half_simple": {
+            "label": "사람(반신)"
+        },
+        "house_simple": {
+            "label": "집"
+        }
+    },
+    "facing": {
+        "facing_front": {
+            "label": "정면",
+            "desc": "카메라를 정면으로 응시"
+        },
+        "facing_front_3_4_left": {
+            "label": "정면 반측면 (좌)",
+            "desc": "살짝 왼쪽을 보는 각도"
+        },
+        "facing_front_3_4_right": {
+            "label": "정면 반측면 (우)",
+            "desc": "살짝 오른쪽을 보는 각도"
+        },
+        "facing_left": {
+            "label": "측면 (좌)",
+            "desc": "완전히 왼쪽을 보는 옆모습"
+        },
+        "facing_right": {
+            "label": "측면 (우)",
+            "desc": "완전히 오른쪽을 보는 옆모습"
+        },
+        "facing_back_3_4_left": {
+            "label": "후면 반측면 (좌)",
+            "desc": "등을 지고 왼쪽으로 고개 돌림"
+        },
+        "facing_back_3_4_right": {
+            "label": "후면 반측면 (우)",
+            "desc": "등을 지고 오른쪽으로 고개 돌림"
+        },
+        "facing_back": {
+            "label": "뒷모습",
+            "desc": "완전히 등을 돌린 모습"
+        }
+    },
+    "angles": {
+        "eye_level": {
+            "label": "아이 레벨",
+            "desc": "가장 자연스러운 눈높이"
+        },
+        "low_angle": {
+            "label": "로우 앵글",
+            "desc": "아래에서 위로, 웅장함"
+        },
+        "high_angle": {
+            "label": "하이 앵글",
+            "desc": "위에서 아래로, 귀여움/왜소함"
+        },
+        "top_down": {
+            "label": "탑다운 뷰",
+            "desc": "90도 수직, 제품/음식 (Flat Lay)"
+        },
+        "isometric": {
+            "label": "아이소메트릭",
+            "desc": "게임/인포그래픽 스타일 (45도)"
+        },
+        "dutch_angle": {
+            "label": "더치 앵글",
+            "desc": "기울어진 화면, 긴박감/불안"
+        }
+    },
+    "shots": {
+        "close_up": {
+            "label": "클로즈업",
+            "desc": "얼굴이나 사물 집중"
+        },
+        "bust_shot": {
+            "label": "바스트 샷",
+            "desc": "가슴 윗부분, 인물 표준"
+        },
+        "medium_shot": {
+            "label": "미디엄 샷",
+            "desc": "상반신과 동작"
+        },
+        "full_shot": {
+            "label": "풀 샷",
+            "desc": "전신과 배경 약간"
+        },
+        "selfie": {
+            "label": "셀피",
+            "desc": "직접 찍은 듯한 구도"
+        },
+        "over_the_shoulder": {
+            "label": "오버 더 숄더",
+            "desc": "어깨 너머 시점"
+        },
+        "first_person": {
+            "label": "1인칭 시점",
+            "desc": "주인공의 눈으로 본 세상"
+        }
+    },
+    "compositions": {
+        "rule_of_thirds": {
+            "label": "3분할 법칙",
+            "desc": "안정적인 기본 구도"
+        },
+        "center": {
+            "label": "중앙 구도",
+            "desc": "피사체에 강력한 집중"
+        },
+        "diagonal": {
+            "label": "대각선 구도",
+            "desc": "역동적인 움직임"
+        },
+        "golden_ratio": {
+            "label": "황금비",
+            "desc": "가장 아름다운 비율"
+        },
+        "framing": {
+            "label": "프레이밍",
+            "desc": "배경 요소를 활용한 액자식 구성"
+        },
+        "leading_lines": {
+            "label": "리딩 라인",
+            "desc": "시선을 피사체로 유도하는 선"
+        },
+        "negative_space": {
+            "label": "여백의 미",
+            "desc": "여백을 강조한 감성적 구도"
+        }
+    },
+    "styles": {
+        "realistic": {
+            "label": "실사/사진",
+            "desc": "Photorealistic"
+        },
+        "anime": {
+            "label": "애니메이션",
+            "desc": "Anime"
+        },
+        "3d_render": {
+            "label": "3D 렌더링",
+            "desc": "3D 렌더링"
+        },
+        "oil_painting": {
+            "label": "반 고흐",
+            "desc": "Van Gogh"
+        },
+        "concept_art": {
+            "label": "컨셉 아트",
+            "desc": "디지털 페인팅, 게임/영화 컨셉"
+        },
+        "cyberpunk": {
+            "label": "사이버펑크",
+            "desc": "네온, 미래지향적, 하이테크"
+        }
+    },
+    "lighting": {
+        "natural": {
+            "label": "자연광",
+            "desc": "부드러운 햇살"
+        },
+        "studio": {
+            "label": "스튜디오",
+            "desc": "전문적인 조명"
+        },
+        "neon": {
+            "label": "네온",
+            "desc": "화려한 네온 사인"
+        },
+        "dramatic": {
+            "label": "드라마틱",
+            "desc": "강한 명암 대비"
+        },
+        "cinematic": {
+            "label": "시네마틱",
+            "desc": "영화 같은 분위기"
+        },
+        "rembrandt": {
+            "label": "렘브란트",
+            "desc": "고전적인 인물 조명"
+        }
+    },
+    "resolutions": {
+        "16:9": {
+            "label": "유튜브/가로"
+        },
+        "1:1": {
+            "label": "인스타/프로필"
+        },
+        "9:16": {
+            "label": "쇼츠/릴스"
+        }
+    },
+    "palette": {
+        "subject": "주 피사체",
+        "subject_2": "피사체 2",
+        "sub_subject": "보조 피사체",
+        "prop": "소품",
+        "erase": "지우개",
+        "obj_a": "개체 A",
+        "obj_b": "개체 B",
+        "obj_c": "개체 C",
+        "obj_d": "개체 D",
+        "obj_e": "개체 E",
+        "obj_f": "개체 F",
+        "bg": "배경"
+    },
+    "memes": {
+        "distracted_boyfriend": {
+            "label": "딴청 피우는 남친",
+            "desc": "지나가던 여자 보는 남자와 화난 여친"
+        },
+        "woman_yelling_cat": {
+            "label": "고양이에게 소리치는 여자",
+            "desc": "우는 여자와 식탁 위 고양이"
+        },
+        "disaster_girl": {
+            "label": "재앙의 소녀",
+            "desc": "불타는 집 앞에서 미소 짓는 소녀"
+        },
+        "this_is_fine": {
+            "label": "이건 괜찮아 (강아지)",
+            "desc": "불타는 방 안에 앉은 강아지"
+        },
+        "success_kid": {
+            "label": "성공한 아기",
+            "desc": "주먹을 꽉 쥔 결의에 찬 아기"
+        },
+        "drake_hotline": {
+            "label": "드레이크 (좋아/싫어)",
+            "desc": "거절하는 모습과 좋아하는 모습"
+        },
+        "two_buttons": {
+            "label": "두 개의 버튼",
+            "desc": "땀 흘리며 고민하는 우주비행사/사람"
+        },
+        "change_my_mind": {
+            "label": "내 마음을 바꿔봐",
+            "desc": "테이블에 앉아 커피 마시는 남자"
+        },
+        "grumpy_cat": {
+            "label": "심술난 고양이",
+            "desc": "언짢은 표정의 고양이"
+        },
+        "doge": {
+            "label": "도지 (시바견)",
+            "desc": "곁눈질하는 시바견"
+        },
+        "roll_safe": {
+            "label": "머리를 쓰는 흑인",
+            "desc": "관자놀이를 검지로 가리키는 남자"
+        },
+        "mocking_spongebob": {
+            "label": "놀리는 스폰지밥",
+            "desc": "이상한 자세의 스폰지밥"
+        },
+        "futurama_fry": {
+            "label": "의심하는 프라이",
+            "desc": "눈을 가늘게 뜨고 의심하는 표정"
+        },
+        "one_does_not_simply": {
+            "label": "그렇게 쉽게 되는 게 아냐",
+            "desc": "손가락으로 원을 만드는 보로미르"
+        },
+        "ancient_aliens": {
+            "label": "외계인 전문가",
+            "desc": "양손을 벌리고 열변을 토하는 남자"
+        },
+        "batman_slapping": {
+            "label": "배트맨 따귀",
+            "desc": "로빈의 뺨을 때리는 배트맨"
+        },
+        "hide_the_pain": {
+            "label": "고통을 숨기는 해롤드",
+            "desc": "억지 미소를 짓는 할아버지"
+        },
+        "is_this_a_pigeon": {
+            "label": "이게 비둘기인가?",
+            "desc": "나비를 가리키는 남자"
+        },
+        "surprised_pikachu": {
+            "label": "놀란 피카츄",
+            "desc": "입을 벌리고 멍하니 있는 피카츄"
+        },
+        "spider_man_pointing": {
+            "label": "서로 가리키는 스파이더맨",
+            "desc": "서로를 가리키는 스파이더맨들"
+        },
+        "tuxedo_pooh": {
+            "label": "턱시도 푸",
+            "desc": "격식 있는 곰돌이 푸"
+        },
+        "galaxy_brain": {
+            "label": "우주 뇌",
+            "desc": "빛나는 우주 뇌"
+        },
+        "waiting_skeleton": {
+            "label": "기다리는 해골",
+            "desc": "벤치에 앉아 기다리다 해골이 됨"
+        },
+        "sad_keanu": {
+            "label": "슬픈 키아누",
+            "desc": "벤치에 혼자 앉아 샌드위치 먹는 남자"
+        },
+        "confused_math_lady": {
+            "label": "혼란스러운 수학 여자",
+            "desc": "수학 공식이 떠다니며 고민하는 여자"
+        },
+        "pepe_frog": {
+            "label": "슬픈 개구리 (페페)",
+            "desc": "슬픈 표정의 개구리"
+        },
+        "leonardo_toast": {
+            "label": "레오의 건배",
+            "desc": "잔을 들어올리며 웃는 디카프리오"
+        },
+        "bernie_mittens": {
+            "label": "버니의 장갑",
+            "desc": "패딩 입고 의자에 앉은 버니 샌더스"
+        },
+        "spongebob_imma_head_out": {
+            "label": "전 나갈게요 (스폰지밥)",
+            "desc": "의자에서 일어나는 스폰지밥"
+        },
+        "gta_wasted": {
+            "label": "WASTED (GTA)",
+            "desc": "흑백 화면에 WASTED 자막"
+        }
+    },
+    "variants": {
+        "standard": "기본 (Standard)",
+        "extreme_low": "극단적 (Extreme)",
+        "slight_low": "약간 (Slight)",
+        "birds_eye": "버드 아이 (Bird's Eye)",
+        "extreme_high": "극단적 (Extreme)",
+        "extreme_cu": "익스트림 (Extreme CU)",
+        "tight_cu": "타이트 (Tight)",
+        "wide": "와이드 (Wide)",
+        "long_shot": "롱 샷 (Long Shot)"
+    }
+}

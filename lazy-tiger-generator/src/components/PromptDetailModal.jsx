@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Sparkles, Eye, Calendar, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function PromptDetailModal({ prompt, onClose }) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     if (!prompt) return null;
 
@@ -23,7 +25,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
             >
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center z-10">
-                    <h2 className="text-xl font-bold text-gray-800">프롬프트 상세</h2>
+                    <h2 className="text-xl font-bold text-gray-800">{t('modal.title')}</h2>
                     <button
                         onClick={onClose}
                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -48,7 +50,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                 </div>
                             ) : (
                                 <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl aspect-square flex items-center justify-center">
-                                    <span className="text-gray-400 text-lg">이미지 없음</span>
+                                    <span className="text-gray-400 text-lg">{t('modal.no_image')}</span>
                                 </div>
                             )}
                         </div>
@@ -58,11 +60,11 @@ export default function PromptDetailModal({ prompt, onClose }) {
                             {/* Title & User */}
                             <div>
                                 <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                                    {prompt.settings?.subject || '제목 없음'}
+                                    {prompt.settings?.subject || t('discover.no_title')}
                                 </h3>
                                 <p className="text-gray-600 flex items-center mb-3">
                                     <User size={16} className="mr-2" />
-                                    by {prompt.username || prompt.user_id || 'Anonymous'}
+                                    by {prompt.username || prompt.user_id || t('discover.anonymous')}
                                 </p>
                                 {prompt.settings?.context && (
                                     <p className="text-gray-600 text-sm mb-4">
@@ -88,7 +90,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                             {/* Card Composition Tags */}
                             {prompt.settings && (
                                 <div className="border-t border-gray-200 pt-4">
-                                    <h4 className="text-sm font-bold text-gray-700 mb-3">사용된 카드 조합</h4>
+                                    <h4 className="text-sm font-bold text-gray-700 mb-3">{t('modal.card_combo')}</h4>
                                     <div className="grid grid-cols-2 gap-2">
                                         {prompt.settings.shot && (
                                             <div className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium">
@@ -119,7 +121,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
 
                     {/* Bottom Section: Full Prompt */}
                     <div className="p-6 bg-gray-50 border-b border-gray-200">
-                        <h4 className="text-sm font-bold text-gray-700 mb-3">생성된 프롬프트</h4>
+                        <h4 className="text-sm font-bold text-gray-700 mb-3">{t('modal.generated_prompt')}</h4>
                         <div className="bg-gray-900 rounded-xl overflow-hidden">
                             <div className="p-4 max-h-60 overflow-y-auto">
                                 <pre className="text-orange-400 text-sm font-mono leading-relaxed whitespace-pre-wrap">
@@ -136,7 +138,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                             className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center"
                         >
                             <Sparkles size={20} className="mr-2" />
-                            이 설정으로 시작하기
+                            {t('modal.use_this')}
                         </button>
                     </div>
                 </div>

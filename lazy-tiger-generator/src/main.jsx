@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
+import './i18n'; // Initialize i18n
+
 import GuidePage from './pages/GuidePage.jsx'
 import DiscoverPage from './pages/DiscoverPage.jsx'
 

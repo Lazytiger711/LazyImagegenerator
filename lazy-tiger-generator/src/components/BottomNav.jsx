@@ -1,27 +1,29 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Compass, Sparkles, BookOpen } from 'lucide-react';
 
 export default function BottomNav() {
     const navigate = useNavigate();
     const location = useLocation();
+    const { t } = useTranslation();
 
     const tabs = [
         {
             id: 'discover',
-            label: '탐색',
+            label: t('discover.nav_discover'),
             icon: Compass,
             path: '/',
         },
         {
             id: 'create',
-            label: '만들기',
+            label: t('discover.nav_create'),
             icon: Sparkles,
             path: '/create',
         },
         {
             id: 'guide',
-            label: '가이드',
+            label: t('discover.nav_guide'),
             icon: BookOpen,
             path: '/guide',
         },
