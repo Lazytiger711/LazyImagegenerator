@@ -486,6 +486,11 @@ export default function App() {
     setToastMsg(t('common.chaos_activated'));
     setShowToast(true);
     trackEvent('chaos_mode_triggered');
+
+    // Auto-generate after brief delay to allow state updates
+    setTimeout(() => {
+      generatePrompt();
+    }, 200);
   };
 
   // --- CANVAS DRAWING LOGIC ---
@@ -1506,7 +1511,6 @@ export default function App() {
           lockedCategories={lockedCategories}
           onAssetClick={handleAssetClick}
           currentSelections={selections}
-          onChaos={applyChaos}
         />
 
         {/* Right Panel: Canvas & Workspace */}
@@ -1575,6 +1579,16 @@ export default function App() {
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium"
                 />
               </div>
+
+              {/* Chaos Button (New Location) */}
+              <button
+                onClick={applyChaos}
+                className="w-full py-2.5 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center group"
+              >
+                <Zap size={18} className="mr-2 fill-white group-hover:rotate-12 transition-transform" />
+                <span>{t('common.chaos_mode')}</span>
+                <span className="text-xs font-normal opacity-80 ml-2">({t('common.chaos_desc')})</span>
+              </button>
             </div>
           </div>
 
