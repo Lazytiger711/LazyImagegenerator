@@ -469,6 +469,7 @@ export default function App() {
     // Let's just put the whole phrase in Context text.
     // "Context: [Adj], [Act] [Loc]"
     const chaosContext = `${adj}, ${act} ${loc}`;
+    console.log('[Chaos] Setting context:', chaosContext);
     setContextText(chaosContext);
 
     // 2. Randomize Settings
@@ -496,10 +497,8 @@ export default function App() {
     setShowToast(true);
     trackEvent('chaos_mode_triggered');
 
-    // Auto-generate after brief delay to allow state updates
-    setTimeout(() => {
-      generatePrompt();
-    }, 200);
+    // Trigger auto-generation via state to ensure new values are used
+    setChaosTrigger(c => c + 1);
   };
 
   // --- CANVAS DRAWING LOGIC ---
@@ -1049,6 +1048,8 @@ export default function App() {
     setCursorPos(null);
 
     setTimeout(async () => {
+      console.log('[Generate] Inside Timeout. Context:', contextText);
+      console.log('[Generate] Inside Timeout. Selections:', selections);
       try {
         const baseGridDesc = getGridDescription();
 
