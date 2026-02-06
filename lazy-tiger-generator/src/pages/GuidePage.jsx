@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle2, Wand2 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
 export default function GuidePage() {
