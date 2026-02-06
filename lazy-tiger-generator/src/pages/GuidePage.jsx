@@ -159,7 +159,7 @@ export default function GuidePage() {
 
                 <div className="text-center">
                     <button
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate('/create')}
                         className="inline-flex items-center justify-center px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-lg hover:bg-orange-700 transition-all shadow-lg hover:shadow-orange-200"
                     >
                         {t('guide.start_button')}
