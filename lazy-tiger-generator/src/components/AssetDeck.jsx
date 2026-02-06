@@ -205,7 +205,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
 // Update CategorySection to accept currentSelections (it is passed but not explicitly destructured in the previous call, it is passed a `isSelected` logic in the map. Wait, I need to make sure CategorySection receives `currentSelections`? No, I injected the logic directly into the map in the previous tool call.
 // BUT, I need to update the AssetDeck component signature to accept `currentSelections`.
 
-export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [], currentSelections = {} }) {
+export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [], currentSelections = {}, onChaos }) {
     const [isMobileOpen, setIsMobileOpen] = useState(false); // Default collapsed on mobile
 
     const [openSections, setOpenSections] = useState({
@@ -280,17 +280,35 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     onClick={() => setIsMobileOpen(!isMobileOpen)}
                     className="p-4 border-b border-gray-200 bg-orange-50/50 flex items-center justify-between cursor-pointer md:cursor-default h-14 shrink-0"
                 >
-                    <div>
-                        <h2 className="font-black text-lg text-gray-800 flex items-center">
-                            <Grid size={20} className="mr-2 text-orange-600" />
-                            소품 상자 (Props)
-                        </h2>
-                        <p className={`text-xs text-gray-500 mt-1 ${!isMobileOpen ? 'hidden md:block' : ''}`}>
-                            스튜디오로 아이템을 드래그하세요
-                        </p>
+                    <div className="flex items-center">
+                        <div>
+                            <h2 className="font-black text-lg text-gray-800 flex items-center">
+                                <Grid size={20} className="mr-2 text-orange-600" />
+                                소품 상자
+                            </h2>
+                            <p className={`text-xs text-gray-500 mt-1 ${!isMobileOpen ? 'hidden md:block' : ''}`}>
+                                스튜디오로 아이템을 드래그하세요
+                            </p>
+                        </div>
                     </div>
-                    <div className="md:hidden bg-white p-1 rounded-full shadow-sm">
-                        {isMobileOpen ? <ChevronDown size={20} className="text-gray-500" /> : <ChevronUp size={20} className="text-orange-500" />}
+
+                    <div className="flex items-center gap-2">
+                        {/* Chaos Button */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (onChaos) onChaos();
+                            }}
+                            className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg shadow-sm hover:shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-1 group/chaos"
+                            title="Mystery Box (Chaos Mode)"
+                        >
+                            <Zap size={16} className="fill-white" />
+                            <span className="text-xs font-bold hidden md:inline">Chaos</span>
+                        </button>
+
+                        <div className="md:hidden bg-white p-1 rounded-full shadow-sm">
+                            {isMobileOpen ? <ChevronDown size={20} className="text-gray-500" /> : <ChevronUp size={20} className="text-orange-500" />}
+                        </div>
                     </div>
                 </div>
 

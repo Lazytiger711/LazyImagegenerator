@@ -11,6 +11,7 @@ import {
   STAMPS, FACING_DIRECTIONS, ANGLES, SHOT_TYPES, COMPOSITIONS, STYLES, RESOLUTIONS, LIGHTING,
   PALETTE_COLORS as INITIAL_PALETTE_COLORS, INITIAL_PALETTE, EXTRA_COLORS, CONFLICTS, MEME_TEMPLATES
 } from './data/constants';
+import CHAOS_DESCRIPTORS from './data/chaos_descriptors.json';
 
 import PixelArtIcon from './components/PixelArtIcon';
 import CompositionGuides from './components/CompositionGuides';
@@ -441,6 +442,50 @@ export default function App() {
       setPaletteColors(newPalette);
       setSelectedColor(newPalette[newPalette.length - 2]);
     }
+  };
+
+  // --- CHAOS MODE LOGIC ---
+  const applyChaos = () => {
+    // 1. Generate Random Context
+    const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const adj = randomItem(CHAOS_DESCRIPTORS.adjectives);
+    const act = randomItem(CHAOS_DESCRIPTORS.actions);
+    const loc = randomItem(CHAOS_DESCRIPTORS.locations);
+
+    // Construct Context String: "Adjective Subject(implicit) Action Location"
+    // Since Subject is in separate input, we just put the "scenario" in context.
+    // e.g. "Zombie (Subject) fighting a dragon in a volcano"
+    // We will prepend the Adjective to the Context for now, or append.
+    // Actually, asking user to type Subject and then we add adj?
+    // Let's just put the whole phrase in Context text.
+    // "Context: [Adj], [Act] [Loc]"
+    const chaosContext = `${adj}, ${act} ${loc}`;
+    setContextText(chaosContext);
+
+    // 2. Randomize Settings
+    // Helper to pick valid non-none item if possible, or just random
+    const pickRandom = (list) => {
+      if (!list || list.length === 0) return { id: 'none', label: 'common.none' };
+      const validItems = list.filter(i => i.id !== 'none');
+      if (validItems.length === 0) return list[0];
+      return randomItem(validItems);
+    };
+
+    setSelections(prev => ({
+      ...prev,
+      shot: pickRandom(SHOT_TYPES),
+      angle: pickRandom(ANGLES),
+      composition: pickRandom(COMPOSITIONS),
+      style: pickRandom(STYLES),
+      lighting: pickRandom(LIGHTING),
+      facing: pickRandom(FACING_DIRECTIONS),
+      resolution: pickRandom(RESOLUTIONS),
+      meme: { id: 'none', label: 'common.none' } // Reset meme
+    }));
+
+    setToastMsg(t('common.chaos_activated'));
+    setShowToast(true);
+    trackEvent('chaos_mode_triggered');
   };
 
   // --- CANVAS DRAWING LOGIC ---
@@ -1461,6 +1506,7 @@ export default function App() {
           lockedCategories={lockedCategories}
           onAssetClick={handleAssetClick}
           currentSelections={selections}
+          onChaos={applyChaos}
         />
 
         {/* Right Panel: Canvas & Workspace */}
