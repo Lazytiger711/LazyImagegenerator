@@ -120,7 +120,7 @@ export default function GuidePage() {
                 {/* Features Recap */}
                 <section className="bg-gray-900 text-white p-8 md:p-12 rounded-3xl mb-12">
                     <h2 className="text-2xl font-bold mb-8 flex items-center">
-                        <Zap className="mr-3 text-yellow-400" />
+                        <span className="mr-3 text-yellow-400 text-2xl">⚡</span>
                         주요 기능 한눈에 보기
                     </h2>
                     <div className="grid md:grid-cols-2 gap-6">
