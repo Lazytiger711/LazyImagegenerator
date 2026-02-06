@@ -1,4 +1,4 @@
-import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Monitor, Instagram, Smartphone, Eraser, Grid, User, Home, Smile, Star } from 'lucide-react';
+import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Monitor, Instagram, Smartphone, Eraser, Grid, User, Home, Smile, Star, Sparkles } from 'lucide-react';
 
 export const STAMPS = [
     {
