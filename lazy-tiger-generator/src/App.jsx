@@ -132,6 +132,7 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
+  const [chaosTrigger, setChaosTrigger] = useState(0); // Trigger for chaos auto-gen
   const [finalPrompt, setFinalPrompt] = useState("");
 
   // AI Vision State
@@ -430,6 +431,14 @@ export default function App() {
       window.removeEventListener('touchend', handleGlobalPointerUp);
     };
   }, []);
+
+  // Effect to handle Auto-Generation for Chaos Mode (avoids stale state/closure)
+  useEffect(() => {
+    if (chaosTrigger > 0) {
+      generatePrompt();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chaosTrigger]);
 
 
 
