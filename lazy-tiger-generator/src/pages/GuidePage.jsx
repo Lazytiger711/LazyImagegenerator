@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, MousePointer, Image as ImageIcon, Wand2, Zap, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle2 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
 export default function GuidePage() {
@@ -45,8 +45,8 @@ export default function GuidePage() {
                     <div className="space-y-12">
                         {/* Step 1: Type */}
                         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <Wand2 size={100} />
+                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
+                                <img src="/icons/type-icon.png" alt="Type" className="w-full h-full object-contain" />
                             </div>
                             <div className="relative z-10">
                                 <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01 • TYPE</span>
@@ -63,8 +63,8 @@ export default function GuidePage() {
 
                         {/* Step 2: Pick */}
                         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <MousePointer size={100} />
+                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
+                                <img src="/icons/pick-icon.png" alt="Pick" className="w-full h-full object-contain" />
                             </div>
                             <div className="relative z-10">
                                 <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02 • PICK</span>
@@ -81,8 +81,8 @@ export default function GuidePage() {
 
                         {/* Step 3: Draw */}
                         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <ImageIcon size={100} />
+                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
+                                <img src="/icons/draw-icon.png" alt="Draw" className="w-full h-full object-contain" />
                             </div>
                             <div className="relative z-10">
                                 <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold mb-4">STEP 03 • DRAW</span>
@@ -99,8 +99,8 @@ export default function GuidePage() {
 
                         {/* Step 4: Generate */}
                         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <Zap size={100} />
+                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
+                                <img src="/icons/generate-icon.png" alt="Generate" className="w-full h-full object-contain" />
                             </div>
                             <div className="relative z-10">
                                 <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-4">STEP 04 • GENERATE</span>
