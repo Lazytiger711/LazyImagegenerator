@@ -328,6 +328,14 @@
         "claymation": {
             "label": "클레이 애니메이션",
             "desc": "Clay Animation"
+        },
+        "cubism": {
+            "label": "큐비즘 (입체파)",
+            "desc": "피카소 스타일"
+        },
+        "surrealism": {
+            "label": "초현실주의",
+            "desc": "달리/마그리트 스타일"
         }
     },
     "lighting": {

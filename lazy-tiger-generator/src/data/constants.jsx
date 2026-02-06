@@ -225,6 +225,8 @@ export const STYLES = [
     { id: 'watercolor', label: 'styles.watercolor.label', sub: 'Watercolor', prompt: 'watercolor painting, wet on wet, paper texture, soft edges, bleeding colors, artistic, dreamy, transparent layers', neg: '--no oil painting, acrylic, thick paint, digital, sharp', icon: Paintbrush },
     { id: 'oriental_painting', label: 'styles.oriental_painting.label', sub: 'Eastern', prompt: 'traditional eastern painting, ink wash painting, sumi-e style, rice paper texture, brush calligraphy strokes, minimal color, negative space, nature focus', neg: '--no western art, oil painting, heavy saturation, digital', icon: Paintbrush },
     { id: 'claymation', label: 'styles.claymation.label', sub: 'Clay', prompt: 'clay animation style, aardman style, plasticine texture, stop motion look, handmade, fingerprint details, soft lighting, miniature world', neg: '--no cgi, 2d, drawing, sharp', icon: Box },
+    { id: 'cubism', label: 'styles.cubism.label', sub: 'Cubism', prompt: 'cubism style, pablo picasso inspired, georges braque style, geometric abstraction, fragmented objects, multiple viewpoints, avant-garde, flat planes', neg: '--no realistic, smooth, 3d, photo', icon: Grid },
+    { id: 'surrealism', label: 'styles.surrealism.label', sub: 'Surrealism', prompt: 'surrealism style, salvador dali inspired, rene magritte style, dreamlike atmosphere, melting objects, impossible geometry, subconscious imagery, bizarre combinations', neg: '--no realistic, logical, ordinary, photo', icon: Sparkles },
 ];
 
 export const LIGHTING = [
