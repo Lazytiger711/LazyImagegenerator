@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import { Globe, TrendingUp, Clock, ArrowRight, Loader2, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PromptDetailModal from '../components/PromptDetailModal';
+import BottomNav from '../components/BottomNav';
 
 export default function DiscoverPage() {
     const [prompts, setPrompts] = useState([]);
@@ -197,26 +198,6 @@ export default function DiscoverPage() {
                     )}
                 </section>
 
-                {/* CTA Section */}
-                {!loading && prompts.length > 0 && (
-                    <section className="bg-gradient-to-r from-orange-500 to-red-500 py-16">
-                        <div className="max-w-4xl mx-auto px-4 text-center text-white">
-                            <h2 className="text-4xl font-black mb-4">
-                                당신만의 프롬프트를 만들어보세요
-                            </h2>
-                            <p className="text-xl mb-8 opacity-90">
-                                간단한 드래그 앤 드롭으로 멋진 AI 이미지 프롬프트를 생성하세요
-                            </p>
-                            <button
-                                onClick={() => navigate('/create')}
-                                className="px-8 py-4 bg-white text-orange-600 font-black rounded-full shadow-xl hover:scale-105 transition-transform text-lg"
-                            >
-                                무료로 시작하기 →
-                            </button>
-                        </div>
-                    </section>
-                )}
-
                 {/* Prompt Detail Modal */}
                 {selectedPrompt && (
                     <PromptDetailModal
@@ -225,6 +206,9 @@ export default function DiscoverPage() {
                     />
                 )}
             </div>
+
+            {/* Bottom Navigation */}
+            <BottomNav />
         </div>
     );
 }

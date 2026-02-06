@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, MousePointer, Image as ImageIcon, Wand2, Zap, CheckCircle2 } from 'lucide-react';
+import BottomNav from '../components/BottomNav';
 
 export default function GuidePage() {
     const navigate = useNavigate();
@@ -42,51 +43,73 @@ export default function GuidePage() {
                     </h2>
 
                     <div className="space-y-12">
-                        {/* Step 1 */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <MousePointer size={100} />
-                            </div>
-                            <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01</span>
-                                <h3 className="text-xl font-bold mb-3">원하는 스타일과 구도 선택</h3>
-                                <p className="text-gray-600 leading-relaxed">
-                                    왼쪽 <strong>'소품 상자 (Props)'</strong>에서 원하는 카드를 고르세요.
-                                    <br />
-                                    모바일에서는 <strong>카드를 터치</strong>만 하면 바로 추가되고,
-                                    PC에서는 <strong>드래그 앤 드롭</strong>으로 자유롭게 배치할 수 있습니다.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Step 2 */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <ImageIcon size={100} />
-                            </div>
-                            <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02</span>
-                                <h3 className="text-xl font-bold mb-3">AI의 시선 (AI Vision)</h3>
-                                <p className="text-gray-600 leading-relaxed">
-                                    오른쪽 <strong>스튜디오 (Studio)</strong>에 카드가 놓입니다.
-                                    브러시 도구를 사용해 대략적인 위치를 그리거나,
-                                    <strong>스탬프</strong>로 오브젝트를 배치해보세요.
-                                    AI가 이 구도를 분석해서 프롬프트에 반영합니다.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Step 3 */}
+                        {/* Step 1: Type */}
                         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-4 opacity-10">
                                 <Wand2 size={100} />
                             </div>
                             <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold mb-4">STEP 03</span>
+                                <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01 • TYPE</span>
+                                <h3 className="text-xl font-bold mb-3">피사체와 배경 입력</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    먼저 <strong>무엇을 그릴지</strong> 입력하세요.
+                                    <br />
+                                    "썬글라스를 쓴 힙한 호랑이" 같은 메인 캐릭터와
+                                    <br />
+                                    "네온 사인이 빛나는 서울의 밤거리" 같은 배경을 자유롭게 적어보세요.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Step 2: Pick */}
+                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <MousePointer size={100} />
+                            </div>
+                            <div className="relative z-10">
+                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02 • PICK</span>
+                                <h3 className="text-xl font-bold mb-3">스타일과 구도 선택</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    왼쪽 <strong>소품 상자</strong>에서 원하는 카드를 선택하세요.
+                                    <br />
+                                    앵글, 샷 타입, 조명, 스타일 등을 <strong>클릭만</strong> 하면 자동으로 추가됩니다.
+                                    <br />
+                                    복잡한 용어는 몰라도 괜찮아요. 아이콘만 보고 골라보세요!
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Step 3: Draw */}
+                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <ImageIcon size={100} />
+                            </div>
+                            <div className="relative z-10">
+                                <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold mb-4">STEP 03 • DRAW</span>
+                                <h3 className="text-xl font-bold mb-3">AI의 시선 (선택)</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    캔버스에 <strong>브러시</strong>로 대략적인 위치를 그리거나,
+                                    <br />
+                                    <strong>스탬프</strong>로 오브젝트를 배치해보세요.
+                                    <br />
+                                    AI가 이 구도를 분석해서 더 정교한 프롬프트를 만들어줍니다. (생략 가능)
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Step 4: Generate */}
+                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <Zap size={100} />
+                            </div>
+                            <div className="relative z-10">
+                                <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-4">STEP 04 • GENERATE</span>
                                 <h3 className="text-xl font-bold mb-3">프롬프트 생성 및 복사</h3>
                                 <p className="text-gray-600 leading-relaxed">
                                     하단의 <strong>'프롬프트 생성'</strong> 버튼을 누르세요.
+                                    <br />
                                     완성된 프롬프트를 복사해서 <strong>Midjourney</strong>나 <strong>ChatGPT/Gemini</strong>에
+                                    <br />
                                     붙여넣기만 하면 끝입니다!
                                 </p>
                             </div>
@@ -147,6 +170,9 @@ export default function GuidePage() {
             <footer className="bg-white border-t border-gray-200 py-12 text-center text-gray-400 text-sm">
                 <p>&copy; {new Date().getFullYear()} Lazy Tiger Generator. All rights reserved.</p>
             </footer>
+
+            {/* Bottom Navigation */}
+            <BottomNav />
         </div>
     );
 }

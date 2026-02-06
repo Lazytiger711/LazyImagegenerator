@@ -26,6 +26,7 @@ import AssetDeck from './components/AssetDeck';
 import Workspace from './components/Workspace';
 import FeedbackModal from './components/FeedbackModal'; // Import Feedback Modal
 import StepIndicator from './components/StepIndicator'; // Import Step Indicator
+import BottomNav from './components/BottomNav'; // Import Bottom Navigation
 
 
 // --- Sortable Color Button Component ---
@@ -1928,6 +1929,9 @@ export default function App() {
             animation: fade-in-up 0.3s ease-out forwards;
         }
       `}</style>
+
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div >
   );
 }
