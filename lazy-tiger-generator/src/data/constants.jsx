@@ -1,4 +1,4 @@
-import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Monitor, Instagram, Smartphone, Eraser, Grid, User, Home, Smile } from 'lucide-react';
+import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Monitor, Instagram, Smartphone, Eraser, Grid, User, Home, Smile, Star } from 'lucide-react';
 
 export const STAMPS = [
     {
@@ -216,6 +216,15 @@ export const STYLES = [
     { id: 'oil_painting', label: 'styles.oil_painting.label', sub: 'Van Gogh', prompt: 'vincent van gogh style, post-impressionist, swirling brushstrokes, impasto texture, vibrant colors, starry night inspired, thick oil paint, emotional expression', neg: '--no photo, digital art, pixel art, smooth', icon: Paintbrush },
     { id: 'concept_art', label: 'styles.concept_art.label', sub: 'Concept Art', description: 'styles.concept_art.desc', prompt: 'digital concept art, speed painting, fantasy atmosphere, matte painting, highly detailed, sharp focus', neg: '--no photo, low quality, sketch', icon: Pencil },
     { id: 'cyberpunk', label: 'styles.cyberpunk.label', sub: 'Cyberpunk', description: 'styles.cyberpunk.desc', prompt: 'cyberpunk style, futuristic city, chromatic aberration, synthwave aesthetic, night time, glowing details', neg: '--no vintage, rustic, natural', icon: Zap },
+    { id: 'pixel_8bit', label: 'styles.pixel_8bit.label', sub: '8-bit', prompt: '8-bit pixel art, NES style, retro game asset, low resolution, limited palette, chunky pixels, arcade aesthetic', neg: '--no smooth, high resolution, anti-aliasing, vector, modern', icon: Grid },
+    { id: 'pixel_16bit', label: 'styles.pixel_16bit.label', sub: '16-bit', prompt: '16-bit pixel art, SNES style, retro RPG aesthetic, detailed pixel art, vibrant colors, dithering, game sprite', neg: '--no 3d, vector, smooth, blurry', icon: Grid },
+    { id: 'chalk_art', label: 'styles.chalk_art.label', sub: 'Chalk', prompt: 'chalk art style, blackboard drawing, rough texture, dusty look, pastel colors on dark background, blackboard menu style, hand drawn', neg: '--no digital, glossy, sharp, photo', icon: Pencil },
+    { id: 'monet', label: 'styles.monet.label', sub: 'Monet', prompt: 'claude monet style, impressionism, dappled light, loose brushstrokes, plein air, atmospheric, pastel color palette, oil painting', neg: '--no sharp lines, digital, cartoon, dark', icon: Paintbrush },
+    { id: 'american_comic', label: 'styles.american_comic.label', sub: 'Comic', prompt: 'american comic book style, marvel/dc style, bold outlines, halftones, dynamic action, speech bubbles vibe, ben-day dots, ink and color', neg: '--no manga, anime, photorealistic, 3d', icon: Pencil },
+    { id: 'pop_art', label: 'styles.pop_art.label', sub: 'Pop Art', prompt: 'pop art style, andy warhol inspired, roy lichtenstein dots, bold solid colors, high contrast, repetitive patterns, commercial art aesthetic, silkscreen print', neg: '--no realistic, painterly, soft, muted', icon: Star },
+    { id: 'watercolor', label: 'styles.watercolor.label', sub: 'Watercolor', prompt: 'watercolor painting, wet on wet, paper texture, soft edges, bleeding colors, artistic, dreamy, transparent layers', neg: '--no oil painting, acrylic, thick paint, digital, sharp', icon: Paintbrush },
+    { id: 'oriental_painting', label: 'styles.oriental_painting.label', sub: 'Eastern', prompt: 'traditional eastern painting, ink wash painting, sumi-e style, rice paper texture, brush calligraphy strokes, minimal color, negative space, nature focus', neg: '--no western art, oil painting, heavy saturation, digital', icon: Paintbrush },
+    { id: 'claymation', label: 'styles.claymation.label', sub: 'Clay', prompt: 'clay animation style, aardman style, plasticine texture, stop motion look, handmade, fingerprint details, soft lighting, miniature world', neg: '--no cgi, 2d, drawing, sharp', icon: Box },
 ];
 
 export const LIGHTING = [

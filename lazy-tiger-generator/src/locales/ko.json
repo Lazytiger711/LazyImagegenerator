@@ -289,6 +289,42 @@
         "cyberpunk": {
             "label": "사이버펑크",
             "desc": "네온, 미래지향적, 하이테크"
+        },
+        "pixel_8bit": {
+            "label": "8비트 픽셀",
+            "desc": "Pixel Art 8-bit"
+        },
+        "pixel_16bit": {
+            "label": "16비트 픽셀",
+            "desc": "Pixel Art 16-bit"
+        },
+        "chalk_art": {
+            "label": "초크 아트",
+            "desc": "Chalk Art"
+        },
+        "monet": {
+            "label": "클로드 모네",
+            "desc": "Claude Monet"
+        },
+        "american_comic": {
+            "label": "미국 코믹스",
+            "desc": "American Comics"
+        },
+        "pop_art": {
+            "label": "팝아트",
+            "desc": "Pop Art"
+        },
+        "watercolor": {
+            "label": "수채화",
+            "desc": "Watercolor"
+        },
+        "oriental_painting": {
+            "label": "동양화",
+            "desc": "Eastern Painting"
+        },
+        "claymation": {
+            "label": "클레이 애니메이션",
+            "desc": "Clay Animation"
         }
     },
     "lighting": {
