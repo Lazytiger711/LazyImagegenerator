@@ -42,76 +42,76 @@ export default function GuidePage() {
                         사용 방법 (How to use)
                     </h2>
 
-                    <div className="space-y-12">
+                    <div className="space-y-8">
                         {/* Step 1: Type */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
-                                <img src="/icons/type-icon.png" alt="Type" className="w-full h-full object-contain" />
-                            </div>
-                            <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01 • TYPE</span>
-                                <h3 className="text-xl font-bold mb-3">피사체와 배경 입력</h3>
-                                <p className="text-gray-600 leading-relaxed">
-                                    먼저 <strong>무엇을 그릴지</strong> 입력하세요.
-                                    <br />
-                                    "썬글라스를 쓴 힙한 호랑이" 같은 메인 캐릭터와
-                                    <br />
-                                    "네온 사인이 빛나는 서울의 밤거리" 같은 배경을 자유롭게 적어보세요.
-                                </p>
+                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div className="flex flex-col md:flex-row items-center">
+                                <div className="w-full md:w-1/3 bg-gradient-to-br from-orange-50 to-orange-100 p-8 flex items-center justify-center">
+                                    <img src="/icons/type-icon.png" alt="Type" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                </div>
+                                <div className="flex-1 p-8">
+                                    <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01 • TYPE</span>
+                                    <h3 className="text-2xl font-bold mb-3 text-gray-900">피사체와 배경 입력</h3>
+                                    <p className="text-gray-600 leading-relaxed">
+                                        먼저 <strong>무엇을 그릴지</strong> 입력하세요.
+                                        "썬글라스를 쓴 힙한 호랑이" 같은 메인 캐릭터와
+                                        "네온 사인이 빛나는 서울의 밤거리" 같은 배경을 자유롭게 적어보세요.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Step 2: Pick */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
-                                <img src="/icons/pick-icon.png" alt="Pick" className="w-full h-full object-contain" />
-                            </div>
-                            <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02 • PICK</span>
-                                <h3 className="text-xl font-bold mb-3">스타일과 구도 선택</h3>
-                                <p className="text-gray-600 leading-relaxed">
-                                    왼쪽 <strong>소품 상자</strong>에서 원하는 카드를 선택하세요.
-                                    <br />
-                                    앵글, 샷 타입, 조명, 스타일 등을 <strong>클릭만</strong> 하면 자동으로 추가됩니다.
-                                    <br />
-                                    복잡한 용어는 몰라도 괜찮아요. 아이콘만 보고 골라보세요!
-                                </p>
+                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div className="flex flex-col md:flex-row items-center">
+                                <div className="w-full md:w-1/3 bg-gradient-to-br from-blue-50 to-blue-100 p-8 flex items-center justify-center">
+                                    <img src="/icons/pick-icon.png" alt="Pick" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                </div>
+                                <div className="flex-1 p-8">
+                                    <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02 • PICK</span>
+                                    <h3 className="text-2xl font-bold mb-3 text-gray-900">스타일과 구도 선택</h3>
+                                    <p className="text-gray-600 leading-relaxed">
+                                        왼쪽 <strong>소품 상자</strong>에서 원하는 카드를 선택하세요.
+                                        앵글, 샷 타입, 조명, 스타일 등을 <strong>클릭만</strong> 하면 자동으로 추가됩니다.
+                                        복잡한 용어는 몰라도 괜찮아요. 아이콘만 보고 골라보세요!
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Step 3: Draw */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
-                                <img src="/icons/draw-icon.png" alt="Draw" className="w-full h-full object-contain" />
-                            </div>
-                            <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold mb-4">STEP 03 • DRAW</span>
-                                <h3 className="text-xl font-bold mb-3">AI의 시선 (선택)</h3>
-                                <p className="text-gray-600 leading-relaxed">
-                                    캔버스에 <strong>브러시</strong>로 대략적인 위치를 그리거나,
-                                    <br />
-                                    <strong>스탬프</strong>로 오브젝트를 배치해보세요.
-                                    <br />
-                                    AI가 이 구도를 분석해서 더 정교한 프롬프트를 만들어줍니다. (생략 가능)
-                                </p>
+                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div className="flex flex-col md:flex-row items-center">
+                                <div className="w-full md:w-1/3 bg-gradient-to-br from-purple-50 to-purple-100 p-8 flex items-center justify-center">
+                                    <img src="/icons/draw-icon.png" alt="Draw" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                </div>
+                                <div className="flex-1 p-8">
+                                    <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold mb-4">STEP 03 • DRAW</span>
+                                    <h3 className="text-2xl font-bold mb-3 text-gray-900">AI의 시선 (선택)</h3>
+                                    <p className="text-gray-600 leading-relaxed">
+                                        캔버스에 <strong>브러시</strong>로 대략적인 위치를 그리거나,
+                                        <strong>스탬프</strong>로 오브젝트를 배치해보세요.
+                                        AI가 이 구도를 분석해서 더 정교한 프롬프트를 만들어줍니다. (생략 가능)
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Step 4: Generate */}
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
-                            <div className="absolute top-4 right-4 w-24 h-24 opacity-20">
-                                <img src="/icons/generate-icon.png" alt="Generate" className="w-full h-full object-contain" />
-                            </div>
-                            <div className="relative z-10">
-                                <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-4">STEP 04 • GENERATE</span>
-                                <h3 className="text-xl font-bold mb-3">프롬프트 생성 및 복사</h3>
-                                <p className="text-gray-600 leading-relaxed">
-                                    하단의 <strong>'프롬프트 생성'</strong> 버튼을 누르세요.
-                                    <br />
-                                    완성된 프롬프트를 복사해서 <strong>Midjourney</strong>나 <strong>ChatGPT/Gemini</strong>에
-                                    <br />
-                                    붙여넣기만 하면 끝입니다!
-                                </p>
+                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div className="flex flex-col md:flex-row items-center">
+                                <div className="w-full md:w-1/3 bg-gradient-to-br from-green-50 to-green-100 p-8 flex items-center justify-center">
+                                    <img src="/icons/generate-icon.png" alt="Generate" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                </div>
+                                <div className="flex-1 p-8">
+                                    <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-4">STEP 04 • GENERATE</span>
+                                    <h3 className="text-2xl font-bold mb-3 text-gray-900">프롬프트 생성 및 복사</h3>
+                                    <p className="text-gray-600 leading-relaxed">
+                                        하단의 <strong>'프롬프트 생성'</strong> 버튼을 누르세요.
+                                        완성된 프롬프트를 복사해서 <strong>Midjourney</strong>나 <strong>ChatGPT/Gemini</strong>에
+                                        붙여넣기만 하면 끝입니다!
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
