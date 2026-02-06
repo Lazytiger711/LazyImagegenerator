@@ -151,6 +151,23 @@ export default function App() {
 
   const [showGallery, setShowGallery] = useState(false);
   const [isPublic, setIsPublic] = useState(false); // Public share toggle
+  const [showFeedback, setShowFeedback] = useState(false); // Feedback modal state
+
+  // Google Analytics Event Tracking Helper
+  const trackEvent = (eventName, eventParams = {}) => {
+    // 개발자 모드가 활성화되어 있으면 추적하지 않음
+    const isDevMode = localStorage.getItem('dev_mode') === 'true';
+
+    if (isDevMode) {
+      console.log('🚫 개발자 모드: 이벤트 추적 안 함 ->', eventName, eventParams);
+      return;
+    }
+
+    if (window.gtag) {
+      window.gtag('event', eventName, eventParams);
+      console.log('✅ GA 이벤트 전송:', eventName, eventParams);
+    }
+  };
 
   // Step Indicator Configuration
   const STEPS = [
@@ -255,6 +272,13 @@ export default function App() {
 
   // Handle Click Selection (Alternative to Drag & Drop) with Toggle
   const handleAssetClick = (item, type, variantId = null) => {
+    // Track asset selection
+    trackEvent('asset_selected', {
+      asset_type: type,
+      asset_id: item.id,
+      variant_id: variantId || 'none'
+    });
+
     // If it's a resolution, update immediately
     if (type === 'resolution') {
       setSelections(prev => ({ ...prev, resolution: item }));
@@ -539,6 +563,12 @@ export default function App() {
     if (isGenerating) return;
     // Safety: Ignore if clicking a button inside (unlikely) or scrolling
     if (e.target.closest('button')) return;
+
+    // Track canvas drawing (once per session to avoid spam)
+    if (!sessionStorage.getItem('canvas_drawn')) {
+      trackEvent('canvas_draw');
+      sessionStorage.setItem('canvas_drawn', 'true');
+    }
 
     // Ghost Click protection: If keyboard just closed (blur), ignore taps for 500ms
     if (Date.now() - lastBlurTime.current < 500) return;
@@ -1135,6 +1165,13 @@ export default function App() {
           }
         }
 
+        // Track prompt generation
+        trackEvent('prompt_generate', {
+          has_subject: !!subjectText,
+          has_context: !!contextText,
+          has_canvas: !!generatedImage
+        });
+
         setShowResult(true);
       } catch (error) {
         console.error("Prompt generation failed:", error);
@@ -1177,6 +1214,9 @@ export default function App() {
     link.href = generatedImage;
     link.click();
 
+    // Track image download
+    trackEvent('image_download');
+
     setToastMsg("이미지가 다운로드됩니다.");
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
@@ -1208,6 +1248,9 @@ export default function App() {
         ]);
 
       if (error) throw error;
+
+      // Track save to gallery
+      trackEvent('prompt_save', { is_public: isPublic });
 
       setToastMsg(isPublic ? "갤러리에 공개되었습니다!" : "갤러리에 저장되었습니다!");
       setTimeout(() => setShowToast(false), 2000);
@@ -1254,6 +1297,9 @@ export default function App() {
 
       // Copy to clipboard
       await navigator.clipboard.writeText(shareUrl);
+
+      // Track prompt share
+      trackEvent('prompt_share', { share_type: 'link' });
 
       setToastMsg("🔗 공유 링크가 복사되었습니다!");
       setTimeout(() => setShowToast(false), 3000);
@@ -1377,6 +1423,15 @@ export default function App() {
             >
               <ImageIcon size={16} className="mr-1.5" />
               <span className="hidden sm:inline">내 갤러리</span>
+            </button>
+
+            <button
+              onClick={() => setShowFeedback(true)}
+              className="px-3 py-1.5 text-gray-500 hover:text-orange-600 font-bold transition-colors flex items-center text-sm"
+              title="피드백 보내기"
+            >
+              <MessageSquare size={16} className="mr-1.5" />
+              <span className="hidden md:inline">피드백</span>
             </button>
             <button
               onClick={() => window.location.reload()}
