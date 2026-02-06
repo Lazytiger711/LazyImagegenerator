@@ -46,8 +46,8 @@ export default function GuidePage() {
                         {/* Step 1: Type */}
                         <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
                             <div className="flex flex-col md:flex-row items-center">
-                                <div className="w-full md:w-1/3 bg-gradient-to-br from-orange-50 to-orange-100 p-8 flex items-center justify-center">
-                                    <img src="/icons/type-icon.png" alt="Type" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
+                                    <img src="/icons/type-icon.png" alt="Type" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
                                 </div>
                                 <div className="flex-1 p-8">
                                     <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold mb-4">STEP 01 • TYPE</span>
@@ -64,8 +64,8 @@ export default function GuidePage() {
                         {/* Step 2: Pick */}
                         <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
                             <div className="flex flex-col md:flex-row items-center">
-                                <div className="w-full md:w-1/3 bg-gradient-to-br from-blue-50 to-blue-100 p-8 flex items-center justify-center">
-                                    <img src="/icons/pick-icon.png" alt="Pick" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
+                                    <img src="/icons/pick-icon.png" alt="Pick" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
                                 </div>
                                 <div className="flex-1 p-8">
                                     <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-4">STEP 02 • PICK</span>
@@ -82,8 +82,8 @@ export default function GuidePage() {
                         {/* Step 3: Draw */}
                         <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
                             <div className="flex flex-col md:flex-row items-center">
-                                <div className="w-full md:w-1/3 bg-gradient-to-br from-purple-50 to-purple-100 p-8 flex items-center justify-center">
-                                    <img src="/icons/draw-icon.png" alt="Draw" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
+                                    <img src="/icons/draw-icon.png" alt="Draw" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
                                 </div>
                                 <div className="flex-1 p-8">
                                     <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold mb-4">STEP 03 • DRAW</span>
@@ -100,8 +100,8 @@ export default function GuidePage() {
                         {/* Step 4: Generate */}
                         <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
                             <div className="flex flex-col md:flex-row items-center">
-                                <div className="w-full md:w-1/3 bg-gradient-to-br from-green-50 to-green-100 p-8 flex items-center justify-center">
-                                    <img src="/icons/generate-icon.png" alt="Generate" className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg" />
+                                <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
+                                    <img src="/icons/generate-icon.png" alt="Generate" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
                                 </div>
                                 <div className="flex-1 p-8">
                                     <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-4">STEP 04 • GENERATE</span>
