@@ -1913,7 +1913,7 @@ export default function App() {
                   )}
 
                   <div className="relative mb-4 group">
-                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 break-words pr-10">
+                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 whitespace-nowrap overflow-x-auto pr-12 scrollbar-hide">
                       {finalPrompt}
                     </div>
                     <button
@@ -1923,7 +1923,7 @@ export default function App() {
                         setShowToast(true);
                         setTimeout(() => setShowToast(false), 2000);
                       }}
-                      className="absolute top-2 right-2 p-1.5 text-gray-400 hover:text-orange-600 bg-white/50 hover:bg-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      className="absolute top-2 right-2 p-1.5 text-gray-500 hover:text-orange-600 bg-white border border-gray-200 shadow-sm rounded-lg transition-all"
                       title={t('tools.copy_text')}
                     >
                       <Copy size={16} />
