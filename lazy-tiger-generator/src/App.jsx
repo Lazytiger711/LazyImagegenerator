@@ -458,17 +458,13 @@ export default function App() {
     // 1. Generate Random Context
     const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const adj = randomItem(CHAOS_DESCRIPTORS.adjectives);
+    const mod = randomItem(CHAOS_DESCRIPTORS.modifiers);
     const act = randomItem(CHAOS_DESCRIPTORS.actions);
     const loc = randomItem(CHAOS_DESCRIPTORS.locations);
 
-    // Construct Context String: "Adjective Subject(implicit) Action Location"
-    // Since Subject is in separate input, we just put the "scenario" in context.
-    // e.g. "Zombie (Subject) fighting a dragon in a volcano"
-    // We will prepend the Adjective to the Context for now, or append.
-    // Actually, asking user to type Subject and then we add adj?
-    // Let's just put the whole phrase in Context text.
-    // "Context: [Adj], [Act] [Loc]"
-    const chaosContext = `${adj}, ${act} ${loc}`;
+    // Context: "Adjective Subject(implicit in Mod/Act), Modifier, Action Location"
+    // e.g. "Zombie, wearing a tuxedo, fighting a dragon in a volcano"
+    const chaosContext = `${adj}, ${mod}, ${act} ${loc}`;
     setContextText(chaosContext);
 
     // 2. Randomize Settings
