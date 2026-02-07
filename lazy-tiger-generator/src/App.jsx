@@ -435,7 +435,7 @@ export default function App() {
   // Effect to handle Auto-Generation for Chaos Mode (avoids stale state/closure)
   useEffect(() => {
     if (chaosTrigger > 0) {
-      generatePrompt();
+      generatePrompt(null, true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaosTrigger]);
@@ -1034,7 +1034,7 @@ export default function App() {
   }, []); // Run once on mount
 
 
-  const generatePrompt = (e) => {
+  const generatePrompt = (e, isChaos = false) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -1225,7 +1225,8 @@ export default function App() {
         trackEvent('prompt_generate', {
           has_subject: !!subjectText,
           has_context: !!contextText,
-          has_canvas: !!generatedImage
+          has_canvas: !!generatedImage,
+          is_chaos_mode: isChaos
         });
 
         setShowResult(true);
