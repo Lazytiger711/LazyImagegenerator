@@ -469,7 +469,6 @@ export default function App() {
     // Let's just put the whole phrase in Context text.
     // "Context: [Adj], [Act] [Loc]"
     const chaosContext = `${adj}, ${act} ${loc}`;
-    console.log('[Chaos] Setting context:', chaosContext);
     setContextText(chaosContext);
 
     // 2. Randomize Settings
@@ -1048,8 +1047,6 @@ export default function App() {
     setCursorPos(null);
 
     setTimeout(async () => {
-      console.log('[Generate] Inside Timeout. Context:', contextText);
-      console.log('[Generate] Inside Timeout. Selections:', selections);
       try {
         const baseGridDesc = getGridDescription();
 
