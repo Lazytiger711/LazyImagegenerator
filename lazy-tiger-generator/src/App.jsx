@@ -1907,7 +1907,7 @@ export default function App() {
                   )}
 
                   <div className="relative mb-4 group">
-                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 whitespace-nowrap overflow-x-auto pr-12 scrollbar-hide">
+                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 whitespace-nowrap md:whitespace-pre-wrap overflow-x-auto md:overflow-x-hidden pr-12 scrollbar-hide">
                       {finalPrompt}
                     </div>
                     <button
