@@ -17,8 +17,26 @@ export default function DiscoverPage() {
     // Sample prompts to show when DB is empty
     const SAMPLE_PROMPTS = [
         {
-            id: 'sample-1',
+            id: 'sample-2',
             created_at: new Date().toISOString(),
+            view_count: 85,
+            username: 'LazyTiger',
+            image_url: null, // Placeholder or upload image to public/
+            settings: {
+                subject: 'Radioactive Princess',
+                context: 'Summoning a demon in a futuristic laboratory',
+                shot: { label: 'Full Shot' },
+                angle: { label: 'Low Angle' },
+                style: { label: 'Concept Art' },
+                composition: { label: 'Golden Ratio' },
+                lighting: { label: 'Dramatic' },
+                resolution: { label: '9:16' }
+            },
+            prompt_text: 'Digital concept art, speed painting, fantasy atmosphere, matte painting, highly detailed, sharp focus. Low angle, full body shot. Radioactive Princess summoning a demon in a futuristic laboratory, body facing away from camera, back visible, head turned left looking over left shoulder, three-quarter rear view, left side of face partially visible, glancing back towards left, back shoulder stance, rear angle with left head turn, dynamic pose, action shot. Golden ratio composition, fibonacci spiral, aesthetically pleasing balance, artistic layout, perfect proportions. Dramatic lighting, chiaroscuro, high contrast, heavy shadows, cinematic lighting, moody atmosphere. --ar 9:16 --no photo, low quality, sketch'
+        },
+        {
+            id: 'sample-1',
+            created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
             view_count: 142,
             username: 'LazyTiger',
             image_url: '/sample-cat-butterfly.jpg',
