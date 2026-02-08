@@ -21,7 +21,7 @@ export default function DiscoverPage() {
             created_at: new Date().toISOString(),
             view_count: 85,
             username: 'LazyTiger',
-            image_url: null, // Placeholder or upload image to public/
+            image_url: '/radioactive-princess.jpg',
             settings: {
                 subject: 'Radioactive Princess',
                 context: 'Summoning a demon in a futuristic laboratory',
