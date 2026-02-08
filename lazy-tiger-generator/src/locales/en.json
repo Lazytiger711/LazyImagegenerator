@@ -108,13 +108,20 @@
         "ai_vision": "AI Vision",
         "ai_vision_desc": "See how AI interprets your layout",
         "shot": "Shot",
+        "shot_desc": "Distance & Size",
         "angle": "Angle",
+        "angle_desc": "Camera Height & View",
         "composition": "Composition",
+        "composition_desc": "Layout & Framing",
         "style": "Style",
+        "style_desc": "Art Style & Mood",
         "lighting": "Lighting",
+        "lighting_desc": "Light & Atmosphere",
         "facing": "Facing",
+        "facing_desc": "Subject Direction",
         "meme": "Meme",
-        "resolution": "Resolution"
+        "resolution": "Resolution",
+        "resolution_desc": "Aspect Ratio"
     },
     "stamps": {
         "face": {

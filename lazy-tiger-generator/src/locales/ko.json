@@ -111,13 +111,20 @@
         "ai_vision": "AI의 시선 (AI Vision)",
         "ai_vision_desc": "AI가 당신의 배치를 어떻게 해석하는지 확인하세요",
         "shot": "샷 (Shot)",
+        "shot_desc": "피사체와의 거리와 크기",
         "angle": "앵글 (Angle)",
+        "angle_desc": "카메라의 높이와 시선",
         "composition": "구도 (Composition)",
+        "composition_desc": "화면의 구도와 배치",
         "style": "스타일 (Style)",
+        "style_desc": "전체적인 화풍과 스타일",
         "lighting": "조명 (Lighting)",
+        "lighting_desc": "빛의 연출과 분위기",
         "facing": "시선/방향 (Facing)",
+        "facing_desc": "피사체가 바라보는 방향",
         "meme": "밈 (Meme)",
-        "resolution": "해상도 (Resolution)"
+        "resolution": "해상도 (Resolution)",
+        "resolution_desc": "화면 비율"
     },
     "stamps": {
         "face": {

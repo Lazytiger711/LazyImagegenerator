@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities'; // Import CSS for transform utility
 import { ChevronDown, ChevronRight, ChevronLeft, ChevronUp, Grid, Layout, Camera, Video, Palette, User, Monitor, Zap, Lock, Smile } from 'lucide-react';
@@ -18,6 +19,7 @@ import {
 
 // Draggable Icon Card (Updated for Dial/Card Look)
 const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
+    const { t } = useTranslation();
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: item.uid || item.id,
         data: { item, type, source: 'deck' },
@@ -64,7 +66,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
                 )}
             </div>
             <span className="text-sm font-bold text-gray-700 text-center leading-tight line-clamp-1 z-10 w-full px-1">
-                {item.label}
+                {t(item.label)}
             </span>
 
             {/* Background decoration for 'Card' feel */}
@@ -77,6 +79,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
 };
 
 const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onAssetClick, locked, currentSelections }) => {
+    const { t } = useTranslation();
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
@@ -112,12 +115,12 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                 <div className="flex flex-col items-start overflow-hidden">
                     <div className="flex items-center text-gray-700 font-bold text-xs uppercase tracking-wider">
                         <Icon size={14} className="mr-2 text-orange-500" />
-                        {title}
+                        {t(title)}
                         {locked && <Lock size={12} className="ml-2 text-red-400" />}
                     </div>
                     {/* Brief Description */}
                     <span className="text-[10px] text-gray-400 font-medium ml-6 mt-0.5 truncate max-w-[200px] group-hover:text-gray-500 transition-colors">
-                        {description}
+                        {t(description)}
                     </span>
                 </div>
                 {isOpen ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
@@ -187,7 +190,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
                                                         : 'bg-gray-50 text-gray-500 border-gray-100 hover:bg-white hover:border-gray-200'}
                                             `}
                                             >
-                                                {variant.label}
+                                                {t(variant.label)}
                                             </button>
                                         );
                                     })}
@@ -307,11 +310,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
 
 
                     <CategorySection
-                        title="RESOLUTION"
+                        title="sections.resolution"
                         icon={Monitor}
                         items={RESOLUTIONS}
                         type="resolution"
-                        description="화면 비율"
+                        description="sections.resolution_desc"
                         isOpen={openSections.resolution}
                         onToggle={() => toggleSection('resolution')}
                         disabledIds={disabledIds}
@@ -321,11 +324,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     />
 
                     <CategorySection
-                        title="ART STYLE"
+                        title="sections.style"
                         icon={Palette}
                         items={STYLES}
                         type="style"
-                        description="전체적인 화풍과 스타일"
+                        description="sections.style_desc"
                         isOpen={openSections.style}
                         onToggle={() => toggleSection('style')}
                         disabledIds={disabledIds}
@@ -335,11 +338,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     />
 
                     <CategorySection
-                        title="SHOT SIZE"
+                        title="sections.shot"
                         icon={Camera}
                         items={SHOT_TYPES}
                         type="shot"
-                        description="피사체와의 거리와 크기"
+                        description="sections.shot_desc"
                         isOpen={openSections.shot}
                         onToggle={() => toggleSection('shot')}
                         disabledIds={disabledIds}
@@ -349,11 +352,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     />
 
                     <CategorySection
-                        title="CAMERA ANGLE"
+                        title="sections.angle"
                         icon={Video}
                         items={ANGLES}
                         type="angle"
-                        description="카메라의 높이와 시선"
+                        description="sections.angle_desc"
                         isOpen={openSections.angle}
                         onToggle={() => toggleSection('angle')}
                         disabledIds={disabledIds}
@@ -363,11 +366,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     />
 
                     <CategorySection
-                        title="SUBJECT FACING"
+                        title="sections.facing"
                         icon={User}
                         items={FACING_DIRECTIONS}
                         type="facing"
-                        description="피사체가 바라보는 방향"
+                        description="sections.facing_desc"
                         isOpen={openSections.facing}
                         onToggle={() => toggleSection('facing')}
                         disabledIds={disabledIds}
@@ -377,11 +380,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     />
 
                     <CategorySection
-                        title="COMPOSITION"
+                        title="sections.composition"
                         icon={Grid}
                         items={COMPOSITIONS}
                         type="composition"
-                        description="화면의 구도와 배치"
+                        description="sections.composition_desc"
                         isOpen={openSections.composition}
                         onToggle={() => toggleSection('composition')}
                         disabledIds={disabledIds}
@@ -391,11 +394,11 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     />
 
                     <CategorySection
-                        title="LIGHTING"
+                        title="sections.lighting"
                         icon={Zap}
                         items={LIGHTING}
                         type="lighting"
-                        description="빛의 연출과 분위기"
+                        description="sections.lighting_desc"
                         isOpen={openSections.lighting}
                         onToggle={() => toggleSection('lighting')}
                         disabledIds={disabledIds}

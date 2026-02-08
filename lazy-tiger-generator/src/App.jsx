@@ -82,7 +82,10 @@ function SortableColorButton({ colorItem, isSelected, onClick }) {
 
 // --- Main Component ---
 export default function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'en' ? 'ko' : 'en');
+  };
   const navigate = useNavigate();
 
   const [selections, setSelections] = useState({
@@ -1491,6 +1494,12 @@ export default function App() {
               <span className="hidden md:inline">{t('common.feedback')}</span>
             </button>
             <button
+              onClick={toggleLanguage}
+              className="px-3 py-1.5 text-gray-500 hover:text-orange-600 font-bold transition-colors flex items-center text-sm uppercase"
+            >
+              {i18n.language === 'en' ? 'EN' : 'KO'}
+            </button>
+            <button
               onClick={() => window.location.reload()}
               className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
               title={t('common.reset')}
@@ -1971,6 +1980,10 @@ export default function App() {
           />
         )
       }
+
+      {showFeedback && (
+        <FeedbackModal onClose={() => setShowFeedback(false)} />
+      )}
 
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {
