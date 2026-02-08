@@ -98,7 +98,11 @@
         "copied": "프롬프트가 복사되었습니다!"
     },
     "workspace": {
-        "hint": "소품 상자에서 아이템을 이곳으로 끌어오세요"
+        "title": "스튜디오 (Studio)",
+        "desc": "선택한 옵션들이 이곳에 표시됩니다.",
+        "items_selected": "아이템 선택됨",
+        "empty_title": "선택된 옵션 없음",
+        "empty_desc": "왼쪽 소품 상자에서 원하는 스타일을 클릭하세요."
     },
     "sections": {
         "scene": "장면 구성 (Scene)",

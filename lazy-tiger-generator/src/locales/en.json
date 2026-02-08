@@ -98,6 +98,11 @@
         "copied": "Prompt copied!"
     },
     "workspace": {
+        "title": "Studio",
+        "desc": "Selected options appear here.",
+        "items_selected": "Items Selected",
+        "empty_title": "No Options Selected",
+        "empty_desc": "Select items from the prop box on the left.",
         "hint": "Drag items from the prop box here"
     },
     "sections": {

@@ -1,20 +1,21 @@
 import React from 'react';
 import DraggableCard from './DraggableCard';
 import { Plus, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Workspace({ items, onRemove }) {
-    // Simplified Workspace: Just a display container
+    const { t } = useTranslation();
 
     return (
         <div className="flex-1 h-full flex flex-col transition-colors p-6 bg-gray-50">
             {/* Workspace Header */}
             <div className="mb-6 flex justify-between items-end">
                 <div>
-                    <h2 className="text-2xl font-black text-gray-800">스튜디오 (Studio)</h2>
-                    <p className="text-sm text-gray-500">선택한 옵션들이 이곳에 표시됩니다.</p>
+                    <h2 className="text-2xl font-black text-gray-800">{t('workspace.title')}</h2>
+                    <p className="text-sm text-gray-500">{t('workspace.desc')}</p>
                 </div>
                 <div className="text-xs font-mono bg-gray-200 px-3 py-1 rounded-full text-gray-600">
-                    {items.length} Items Selected
+                    {items.length} {t('workspace.items_selected')}
                 </div>
             </div>
 
@@ -39,8 +40,8 @@ export default function Workspace({ items, onRemove }) {
                         <div className="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4">
                             <Plus size={40} className="text-gray-300" />
                         </div>
-                        <h3 className="text-lg font-bold mb-1">선택된 옵션 없음</h3>
-                        <p className="text-sm">왼쪽 소품 상자에서 원하는 스타일을 클릭하세요.</p>
+                        <h3 className="text-lg font-bold mb-1">{t('workspace.empty_title')}</h3>
+                        <p className="text-sm">{t('workspace.empty_desc')}</p>
                     </div>
                 )}
             </div>

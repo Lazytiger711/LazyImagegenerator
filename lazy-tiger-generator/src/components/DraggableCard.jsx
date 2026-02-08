@@ -1,9 +1,10 @@
 import React from 'react';
 import PixelArtIcon from './PixelArtIcon';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function DraggableCard({ item, id, onRemove, onClick }) {
-    // No more useSortable hooks
+    const { t } = useTranslation();
 
     return (
         <div
@@ -19,11 +20,11 @@ export default function DraggableCard({ item, id, onRemove, onClick }) {
                 <PixelArtIcon type={item.type} name={item.id} className="w-8 h-8" />
             </div>
             <span className="text-xs font-bold text-gray-700 text-center line-clamp-2 leading-tight px-1">
-                {item.label}
+                {t(item.label)}
             </span>
             {item.variantId && item.variantId !== 'standard' && (
                 <span className="text-[10px] text-orange-500 font-medium mt-1 bg-orange-50 px-1.5 py-0.5 rounded-full">
-                    {item.variants?.find(v => v.id === item.variantId)?.label || 'Variant'}
+                    {t(item.variants?.find(v => v.id === item.variantId)?.label || 'Variant')}
                 </span>
             )}
 
