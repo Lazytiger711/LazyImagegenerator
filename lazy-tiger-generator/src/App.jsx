@@ -1459,23 +1459,7 @@ export default function App() {
             <div className={`w-2 h-2 rounded-full ${supabase ? 'bg-green-500' : 'bg-red-500'}`} title="Supabase Connected"></div>
           </div>
           <div className="flex items-center space-x-2">
-            <button
-              onClick={() => navigate('/')}
-              className="px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-sm font-bold transition-colors flex items-center"
-              title={t('common.step_pick')}
-            >
-              <Compass size={16} className="mr-1.5" />
-              <span className="hidden sm:inline">{t('common.explore')}</span>
-            </button>
 
-            <button
-              onClick={() => window.open('/guide', '_blank')}
-              className="hidden md:flex px-3 py-1.5 text-gray-500 hover:text-orange-600 font-bold transition-colors items-center mr-1 text-sm"
-              title={t('common.guide')}
-            >
-              <Info size={16} className="mr-1.5" />
-              {t('common.guide')}
-            </button>
 
             <button
               onClick={() => setShowGallery(true)}
