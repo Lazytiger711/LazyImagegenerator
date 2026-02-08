@@ -24,7 +24,10 @@
         "object": "Object",
         "explore": "Explore",
         "guide": "Guide",
-        "my_gallery": "My Gallery"
+        "my_gallery": "My Gallery",
+        "chaos_mode": "Chaos Mode",
+        "chaos_desc": "Enter only the subject and leave the rest to luck!",
+        "chaos_activated": "🌀 Chaos Activated! 🌀"
     },
     "discover": {
         "start": "Get Started",
