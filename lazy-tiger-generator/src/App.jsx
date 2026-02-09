@@ -722,14 +722,9 @@ export default function App() {
     // Safety check for 0 dimensions
     if (width === 0 || height === 0) return "Visual map empty.";
 
-
-
-    // 1. 샘플링 설정 (모든 픽셀을 다 보면 느리므로 일정 간격으로 확인)
+    // 1. Sampling (Consistent with previous logic)
     const sampleStep = 10;
     const totalSamples = (width / sampleStep) * (height / sampleStep);
-
-    // 색상별 통계 데이터 저장소
-    // 구조: { [hexColor]: { 픽셀수, X좌표합, Y좌표합, 최소/최대 좌표(영역) } }
     let colorStats = {};
 
     const hexToRgb = (hex) => {
@@ -738,20 +733,18 @@ export default function App() {
       return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
     }
 
-    // 팔레트 색상 RGB 캐싱
     const paletteRgb = paletteColors
       .filter(p => p.color)
       .map(p => ({ ...p, rgb: hexToRgb(p.color) }));
 
     const pixelData = ctx.getImageData(0, 0, width, height).data;
 
-    // 2. 픽셀 분석 루프
     for (let y = 0; y < height; y += sampleStep) {
       for (let x = 0; x < width; x += sampleStep) {
         const index = (y * width + x) * 4;
-        const a = pixelData[index + 3]; // Alpha 값
+        const a = pixelData[index + 3];
 
-        if (a > 50) { // 투명하지 않은 픽셀이라면 (색칠된 부분)
+        if (a > 50) {
           const r = pixelData[index];
           const g = pixelData[index + 1];
           const b = pixelData[index + 2];
@@ -759,26 +752,23 @@ export default function App() {
           let closestColor = null;
           let minDist = Infinity;
 
-          // 현재 픽셀이 팔레트의 어떤 색과 가장 가까운지 판별 (유클리드 거리)
           paletteRgb.forEach(p => {
             const dist = Math.sqrt(
               Math.pow(r - p.rgb.r, 2) +
               Math.pow(g - p.rgb.g, 2) +
               Math.pow(b - p.rgb.b, 2)
             );
-            if (dist < 50 && dist < minDist) { // 오차 범위 50
+            if (dist < 50 && dist < minDist) {
               minDist = dist;
               closestColor = p.color;
             }
           });
 
-          // 해당 색상의 통계 데이터 누적
           if (closestColor) {
             if (!colorStats[closestColor]) {
               colorStats[closestColor] = {
-                count: 0,
-                sumX: 0, sumY: 0, // 무게중심 계산용
-                minX: x, maxX: x, minY: y, maxY: y // 바운딩 박스용
+                count: 0, sumX: 0, sumY: 0,
+                minX: x, maxX: x, minY: y, maxY: y
               };
             }
             const s = colorStats[closestColor];
@@ -791,14 +781,8 @@ export default function App() {
             s.maxY = Math.max(s.maxY, y);
           }
         } else {
-          // 3. 여백(빈 공간) 추적 로직 (__empty__ 키 사용)
           if (!colorStats['__empty__']) {
-            colorStats['__empty__'] = {
-              count: 0,
-              sumX: 0,
-              sumY: 0,
-              minX: x, maxX: x, minY: y, maxY: y
-            };
+            colorStats['__empty__'] = { count: 0, sumX: 0, sumY: 0, minX: x, maxX: x, minY: y, maxY: y };
           }
           const s = colorStats['__empty__'];
           s.count++;
@@ -808,18 +792,12 @@ export default function App() {
       }
     }
 
-    // 4. 통계 데이터를 바탕으로 자연어 설명 생성 (Advanced Relational Logic)
+    // 2. Generate Descriptions (Merged Unified Logic)
     let objectDescriptions = [];
-    let legendNotes = [];
 
-    // Helper: Get label for a color item
-    const getLabel = (item) => {
-      // if (item.id === 'subject') return subjectText.trim() ? subjectText.trim() : "Main Subject"; // Removed to avoid repetition
-      if (item.promptName) return item.promptName;
-      return item.label;
-    };
+    const getLabel = (item) => item.promptName || item.label;
 
-    // Helper: Check overlap between two stats
+    // Helper: Check overlap
     const getOverlapRatio = (stats1, stats2) => {
       const xOverlap = Math.max(0, Math.min(stats1.maxX, stats2.maxX) - Math.max(stats1.minX, stats2.minX));
       const yOverlap = Math.max(0, Math.min(stats1.maxY, stats2.maxY) - Math.max(stats1.minY, stats2.minY));
@@ -828,193 +806,101 @@ export default function App() {
       return minArea > 0 ? intersectionArea / minArea : 0;
     };
 
-    // Identify active objects
     const activeObjects = paletteColors.filter(item => {
-      if (item.id === 'erase') return false;
-      const stats = colorStats[item.color];
-      if (!stats) return false;
-      // Background logic remains same (just legend)
-      if (item.id === 'bg') {
-        legendNotes.push(`(Blue areas define Background)`);
-        return false;
-      }
-      return true;
-    }).map(item => {
-      // Add layer priority based on palette index (lower = foreground, higher = background)
-      const layerPriority = paletteColors.findIndex(p => p.color === item.color);
-      return { ...item, stats: colorStats[item.color], layerPriority };
-    });
+      if (item.id === 'erase' || item.id === 'bg') return false;
+      return !!colorStats[item.color];
+    }).map(item => ({ ...item, stats: colorStats[item.color], layerPriority: paletteColors.findIndex(p => p.color === item.color) }));
 
-    // Find Main Subject (Priority: 'subject' id > First object)
     const mainSubject = activeObjects.find(obj => obj.id === 'subject') || activeObjects[0];
 
-    if (activeObjects.length > 0) {
-      // If only one object (or just Main Subject unrelated to others logic if we strictly follow pairs)
-      // We still use the sophisticated position reasoning for single objects
-
-      activeObjects.forEach(obj => {
-        // Skip iteration if we handle relationships for everything relative to Main, 
-        // but let's do a Pairwise check against Main Subject for all others.
-
-        if (obj === mainSubject) return; // Will handle Main Subject last or implicitly
-
-        // Relationship with Main Subject
-        const overlap = getOverlapRatio(obj.stats, mainSubject.stats);
-        const isOverlapping = overlap > 0.1; // 10% overlap threshold
-
-        const label = getLabel(obj);
-        const mainLabel = getLabel(mainSubject);
-
-        let relationStr = "";
-
-        if (isOverlapping) {
-          // NEW: Use palette order as primary depth indicator
-          // Lower layerPriority (earlier in palette) = Foreground
-          // Higher layerPriority (later in palette) = Background
-
-          if (obj.layerPriority < mainSubject.layerPriority) {
-            // Object is earlier in palette -> in front
-            relationStr = `in the foreground, in front of ${mainLabel}`;
-          } else if (obj.layerPriority > mainSubject.layerPriority) {
-            // Object is later in palette -> behind
-            relationStr = `in the background, standing behind ${mainLabel}`;
-          } else {
-            // Same palette priority - fallback to Y-axis depth
-            // Lower maxY (higher on screen) = Behind
-            // Higher maxY (lower on screen) = Front
-            if (obj.stats.maxY < mainSubject.stats.maxY) {
-              relationStr = `standing behind ${mainLabel}`;
-            } else {
-              relationStr = `in front of ${mainLabel}`;
-            }
-          }
-        } else {
-          // No significant overlap -> Calculate Distance & Spatial relation
-          const objCenterX = obj.stats.sumX / obj.stats.count;
-          const objCenterY = obj.stats.sumY / obj.stats.count;
-          const mainCenterX = mainSubject.stats.sumX / mainSubject.stats.count;
-          const mainCenterY = mainSubject.stats.sumY / mainSubject.stats.count;
-
-          const distX = objCenterX - mainCenterX;
-          const distY = objCenterY - mainCenterY;
-          const distance = Math.sqrt(distX * distX + distY * distY);
-          const normalizedDist = distance / width; // Normalize by canvas width
-
-          if (normalizedDist < 0.15) {
-            relationStr = `standing right next to ${mainLabel}`;
-          } else if (normalizedDist > 0.6) {
-            relationStr = `positioned far away from ${mainLabel}`;
-          } else {
-            // Intermediate distance -> Directional
-            if (objCenterX < mainCenterX) relationStr = `to the left of ${mainLabel}`;
-            else relationStr = `to the right of ${mainLabel}`;
-          }
-        }
-
-        objectDescriptions.push(`${label} ${relationStr}`);
-      });
-
-      // Add Main Subject description itself (Position on screen)
+    // B. Describe Main Subject (Always first, clear absolute position)
+    if (mainSubject) {
       const stats = mainSubject.stats;
       const centerX = stats.sumX / stats.count;
       const centerY = stats.sumY / stats.count;
-      const normX = centerX / width;
-      const normY = centerY / height;
 
-      let vPos = "middle";
-      if (normY < 0.33) vPos = "top";
-      else if (normY > 0.66) vPos = "bottom";
+      // Grid Position
+      const col = Math.floor((centerX / width) * 3);
+      const row = Math.floor((centerY / height) * 3);
+      const hPos = ["left", "center", "right"][col];
+      const vPos = ["top", "middle", "bottom"][row];
 
-      let hPos = "center";
-      if (normX < 0.33) hPos = "left";
-      else if (normX > 0.66) hPos = "right";
-
-      let positionStr = "";
-      if (vPos === "middle" && hPos === "center") positionStr = "in the center";
-      else if (vPos === "middle") positionStr = `on the ${hPos}`;
-      else if (hPos === "center") positionStr = `at the ${vPos}`;
-      else positionStr = `at the ${vPos}-${hPos}`;
-
-      // Calculate size coverage with explicit percentage
+      // Size
       const coverageRatio = stats.count / totalSamples;
       const coveragePercent = Math.round(coverageRatio * 100);
-
-      // Build size description with explicit frame percentage
       let sizeStr = "";
-      if (coverageRatio > 0.6) {
-        sizeStr = `large subject filling most of frame (occupies ${coveragePercent}% of image)`;
-      } else if (coverageRatio > 0.35) {
-        sizeStr = `medium-sized subject occupying ${coveragePercent}% of frame`;
-      } else if (coverageRatio > 0.15) {
-        sizeStr = `subject occupying ${coveragePercent}% of canvas`;
-      } else if (coverageRatio > 0.05) {
-        sizeStr = `small subject (${coveragePercent}% of frame)`;
+      if (coverageRatio > 0.6) sizeStr = "large";
+      else if (coverageRatio > 0.35) sizeStr = "medium-sized";
+      else if (coverageRatio > 0.15) sizeStr = "standard-sized";
+      else sizeStr = "small";
+
+      let posDesc = "";
+      if (vPos === "middle" && hPos === "center") posDesc = "in the center of the frame";
+      else posDesc = `grid-positioned at ${vPos}-${hPos}`;
+
+      objectDescriptions.push(`The ${getLabel(mainSubject)} is a ${sizeStr} subject, positioned ${posDesc} (occupying ${coveragePercent}% of the view)`);
+    }
+
+    // C. Describe Other Objects (Relative to Main if suitable, otherwise Grid)
+    activeObjects.forEach(obj => {
+      if (obj === mainSubject) return;
+
+      const s = obj.stats;
+      const centerX = s.sumX / s.count;
+      const centerY = s.sumY / s.count;
+
+      // 1. Check Overlap (Depth)
+      const overlap = getOverlapRatio(obj.stats, mainSubject.stats);
+      const isOverlapping = overlap > 0.1;
+
+      let desc = "";
+
+      if (isOverlapping) {
+        // Depth Relation
+        if (obj.layerPriority < mainSubject.layerPriority) {
+          desc = `The ${getLabel(obj)} is in the foreground, placed in front of the ${getLabel(mainSubject)}`;
+        } else {
+          desc = `The ${getLabel(obj)} is in the background, standing behind the ${getLabel(mainSubject)}`;
+        }
       } else {
-        sizeStr = `tiny distant subject, ${coveragePercent}% of image`;
+        // 2. Check Distance
+        const mx = mainSubject.stats.sumX / mainSubject.stats.count;
+        const my = mainSubject.stats.sumY / mainSubject.stats.count;
+        const dist = Math.sqrt(Math.pow(centerX - mx, 2) + Math.pow(centerY - my, 2));
+        const normDist = dist / width;
+
+        if (normDist < 0.25) {
+          // Close proximity
+          if (centerX < mx) desc = `The ${getLabel(obj)} is standing immediately to the left of the ${getLabel(mainSubject)}`;
+          else desc = `The ${getLabel(obj)} is standing immediately to the right of the ${getLabel(mainSubject)}`;
+        } else {
+          // 3. Fallback: Absolute Grid Position (Independent)
+          const col = Math.floor((centerX / width) * 3);
+          const row = Math.floor((centerY / height) * 3);
+          const hPos = ["left", "center", "right"][col];
+          const vPos = ["top", "middle", "bottom"][row];
+
+          let loc = "";
+          if (vPos === "middle" && hPos === "center") loc = "in the center";
+          else loc = `in the ${vPos}-${hPos} quadrant`;
+
+          desc = `The ${getLabel(obj)} is positioned ${loc}`;
+        }
       }
 
-      // If there are other objects described relative to Main, simple Main desc is enough.
-      // If Main is alone, describe it fully with size.
-      if (activeObjects.length === 1) {
-        objectDescriptions.push(`${sizeStr}, ${getLabel(mainSubject)} positioned ${positionStr}`);
-      } else {
-        // Multiple objects - add layer context if applicable
-        let layerContext = "";
+      objectDescriptions.push(desc);
+    });
 
-        // Determine if mainSubject is in foreground, middle, or background
-        const totalLayers = activeObjects.length;
-        if (totalLayers >= 3 && mainSubject.layerPriority === 1) {
-          // Middle layer in 3+ layer system
-          layerContext = " in the middle ground,";
-        } else if (mainSubject.layerPriority === 0) {
-          // First layer (foreground)
-          layerContext = " in the foreground,";
-        } else if (mainSubject.layerPriority >= 2) {
-          // Background layers
-          layerContext = " in the background,";
-        }
-
-        // E.g. "Main Subject in the foreground, positioned in the center (50% of frame)"
-        objectDescriptions.push(`${getLabel(mainSubject)}${layerContext} positioned ${positionStr} (${coveragePercent}% of frame)`);
+    // D. Empty Space (Minimalist Check)
+    if (colorStats['__empty__']) {
+      const emptyRatio = colorStats['__empty__'].count / totalSamples;
+      if (emptyRatio > 0.75) {
+        objectDescriptions.push("The composition features significant negative space");
       }
     }
 
-    // 5. 여백(Negative Space) 설명 생성
-    const emptyStats = colorStats['__empty__'];
-    if (emptyStats) {
-      const coverageRatio = emptyStats.count / totalSamples;
-
-      // 여백이 30% ~ 95% 사이일 때만 유효한 여백으로 인식
-      if (coverageRatio > 0.3 && coverageRatio < 0.95) {
-        const centerX = emptyStats.sumX / emptyStats.count;
-        const centerY = emptyStats.sumY / emptyStats.count;
-        const normX = centerX / width;
-        const normY = centerY / height;
-
-        let hPos = "center";
-        if (normX < 0.4) hPos = "left";
-        else if (normX > 0.6) hPos = "right";
-
-        let vPos = "middle";
-        if (normY < 0.4) vPos = "top";
-        else if (normY > 0.6) vPos = "bottom";
-
-        let positionStr = "";
-        // 완전히 중앙에 빈 공간이 있는 경우가 아니라면 위치 설명 추가
-        if (!(vPos === "middle" && hPos === "center")) {
-          if (vPos === "middle") positionStr = `on the ${hPos}`;
-          else if (hPos === "center") positionStr = `at the ${vPos}`;
-          else positionStr = `at the ${vPos}-${hPos}`;
-
-          objectDescriptions.push(`Negative space positioned ${positionStr}`);
-        }
-      }
-    }
-
-    // 결과 반환 (단일 피사체일 경우 레이아웃 가이드 생략 -> 고스팅/충돌 방지)
-    if (objectDescriptions.length <= 1) return "";
-
-    return objectDescriptions.join(", ");
+    if (objectDescriptions.length === 0) return "";
+    return objectDescriptions.join(". ") + ".";
   };
 
   // Real-time Analysis Effect
@@ -1067,7 +953,7 @@ export default function App() {
         // 2. Construct View/Camera String (The "Look")
         // Logic: [Angle] + [Shot] + "of" + [Subject]
 
-        let cameraPart = "";
+        let cameraContent = "";
 
         // Helper to get full prompt including variant
         const getPromptWithVariant = (item) => {
@@ -1092,91 +978,81 @@ export default function App() {
         let instructionPrefix = "";
 
         if (selections.meme.id !== 'none') {
-          // Simple Mode: Meme Prompt + User Subject + Resolution
+          // --- MODE: MEME PRESET ---
           const memePrompt = selections.meme.prompt;
           const resolutionPrompt = selections.resolution?.prompt || "";
 
-          // Construct clean prompt
-          // We want to emphasize the User Subject within the Meme Context.
+          // Construct clean prompt: MEME + USER SUBJECT
           const subjectInsertion = fullSubject ? `, featuring ${fullSubject}` : "";
-
           generatedText = `${memePrompt}${subjectInsertion}, high quality. ${resolutionPrompt}`;
 
-          instructionPrefix = `**System Instruction:**\nGenerate the image based on the following Meme description. Ensure the user's specific subject is integrated into the meme scene.\n\n`;
+          // Strict Meme Instruction
+          instructionPrefix = `**System Instruction:**\nGenerate the image based on the specific Meme Template described below. You MUST strictly adhere to the visual composition, camera angle, and style of this meme. Insert the user's subject (${fullSubject}) into this scene naturally.\n\n`;
           setFinalPrompt(instructionPrefix + generatedText);
         } else {
-          // STANDARD MODE (Existing Logic)
-          const angleStr = getPromptWithVariant(effectiveAngle);
-          const shotStr = getPromptWithVariant(effectiveShot);
+          // --- MODE: STANDARD GENERATION ---
 
-          // Build separate Camera Angle section
-          let cameraAngleSection = "";
+          // 1. VISUAL STYLE
+          const styleContent = selections.style.id !== 'none' ? selections.style.prompt : "";
+
+          // 2. CAMERA ANGLE (Strict Conflict Resolution)
           if (effectiveShot.id === 'selfie') {
-            cameraAngleSection = "Selfie shot, point of view (POV)";
+            // Conflict Rule: 'Selfie' overrides all other angle settings implies a specific POV
+            cameraContent = "Selfie shot, point of view (POV) from camera held by subject";
           } else {
-            const cameraParts = [angleStr, shotStr].filter(Boolean);
-            if (cameraParts.length > 0) {
-              cameraAngleSection = cameraParts.join(", ");
-            }
+            const angleStr = getPromptWithVariant(effectiveAngle);
+            const shotStr = getPromptWithVariant(effectiveShot);
+            cameraContent = [angleStr, shotStr].filter(Boolean).join(", ");
           }
 
-          // 3. Facing Modifier (e.g. "Looking at camera")
+          // 3. MAIN SUBJECT
+          // Combine Subject + Context + Facing + Dynamic Modifiers
+          let subjectContent = fullSubject;
+
           const facingModifier = (subjectType === 'character' && effectiveFacing.id !== 'none') ? effectiveFacing.prompt : "";
-
-          // 4. Construct Main Subject Segment (without camera angle)
-          let mainSegment = fullSubject;
-
-          // Append Facing Direction if exists
-          if (facingModifier) {
-            mainSegment += `, ${facingModifier}`;
-          }
+          if (facingModifier) subjectContent += `, ${facingModifier}`;
 
           // Dynamic Pose Injection for Characters
           const isDynamicAngle = ['low_angle', 'high_angle', 'dutch_angle', 'birds_eye'].includes(effectiveAngle.id);
           const isDynamicComp = ['diagonal', 'leading_lines'].includes(effectiveComp.id);
-
-          if (subjectType === 'character' && (isDynamicAngle || isDynamicComp) && !mainSegment.toLowerCase().includes('dynamic') && !mainSegment.toLowerCase().includes('action')) {
-            mainSegment += `, dynamic pose, action shot`;
+          if (subjectType === 'character' && (isDynamicAngle || isDynamicComp) && !subjectContent.toLowerCase().includes('dynamic') && !subjectContent.toLowerCase().includes('action')) {
+            subjectContent += `, dynamic pose, action shot`;
           }
 
-          // 5. Build Final Structured Prompt with Style-First Hybrid approach
+          // 4. COMPOSITION
+          const compositionContent = effectiveComp.id !== 'none' ? effectiveComp.prompt : "";
+
+          // 5. LIGHTING
+          const lightingContent = selections.lighting?.id !== 'none' ? selections.lighting?.prompt : "";
+
+          // 6. TECHNICAL
+          const technicalContent = [
+            selections.resolution?.prompt,
+            selections.style.neg, // Negative Prompt implicitly handled as technical constraint
+            "high quality, detailed"
+          ].filter(Boolean).join(', ');
+
+          // 7. LAYOUT GUIDE (Vision)
+          const layoutContent = baseGridDesc ? `(Layout Constraint) ${baseGridDesc}` : "";
+
+
+          // Build Final Structured String
           const sections = [
-            {
-              label: '1. VISUAL STYLE',
-              content: selections.style.id !== 'none' ? selections.style.prompt : ""
-            },
-            {
-              label: cameraAngleSection ? '2. CAMERA ANGLE' : null,
-              content: cameraAngleSection
-            },
-            {
-              label: '3. MAIN SUBJECT',
-              content: mainSegment
-            },
-            {
-              label: '4. COMPOSITION',
-              content: effectiveComp.id !== 'none' ? effectiveComp.prompt : ""
-            },
-            {
-              label: '5. LIGHTING',
-              content: selections.lighting?.id !== 'none' ? selections.lighting?.prompt : ""
-            },
-            {
-              label: '6. TECHNICAL',
-              content: [selections.resolution?.prompt, selections.style.neg].filter(Boolean).join(', ')
-            },
-            {
-              label: '7. LAYOUT GUIDE',
-              content: baseGridDesc ? `The generated image should follow this layout - ${baseGridDesc}` : ""
-            }
+            { label: '1. VISUAL STYLE', content: styleContent },
+            { label: '2. CAMERA ANGLE', content: cameraContent },
+            { label: '3. MAIN SUBJECT', content: subjectContent },
+            { label: '4. COMPOSITION', content: compositionContent },
+            { label: '5. LIGHTING', content: lightingContent },
+            { label: '6. TECHNICAL', content: technicalContent },
+            { label: '7. LAYOUT GUIDE', content: layoutContent }
           ];
 
           generatedText = sections
-            .filter(section => section.label && section.content && section.content.trim() !== '')
-            .map(section => `**${section.label}**\n${section.content}`)
+            .filter(s => s.content && s.content.trim() !== "")
+            .map(s => `**${s.label}**\n${s.content}`)
             .join('\n\n');
 
-          instructionPrefix = `**System Instruction:**\nCreate a detailed image prompt based on the following structured keywords. Prioritize visual style first to establish the medium, then strictly follow the camera angle specification.\n\n`;
+          instructionPrefix = `**System Instruction:**\nCreate a detailed image prompt based on the following structured keywords. Prioritize visual style first, then strictly follow the camera angle/shot type.\n\n`;
           setFinalPrompt(instructionPrefix + generatedText);
         }
 
@@ -1900,7 +1776,7 @@ export default function App() {
                   )}
 
                   <div className="relative mb-4 group">
-                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 whitespace-nowrap md:whitespace-pre-wrap overflow-x-auto md:overflow-x-hidden pr-12 scrollbar-hide">
+                    <div className="bg-gray-100 p-4 rounded-xl text-sm font-mono text-gray-800 whitespace-pre-wrap overflow-y-auto max-h-40 pr-12 scrollbar-hide">
                       {finalPrompt}
                     </div>
                     <button
