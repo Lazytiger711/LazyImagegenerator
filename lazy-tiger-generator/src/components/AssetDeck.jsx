@@ -33,7 +33,12 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
 
     // Check if icon is an image path (string) or a React component
     const isImageIcon = typeof item.icon === 'string';
-    const isFullBleed = item.displayStyle === 'full' || (isImageIcon && !item.icon.includes('/icons/facing/')); // Default to full for new images, except facing icons which act as diagrams
+    // Force full bleed for style, lighting and compositions that are images
+    const isFullBleed = item.displayStyle === 'full'
+        || type === 'style'
+        || type === 'lighting'
+        || (type === 'composition' && isImageIcon)
+        || (isImageIcon && !item.icon.includes('/icons/facing/'));
 
     return (
         <div
