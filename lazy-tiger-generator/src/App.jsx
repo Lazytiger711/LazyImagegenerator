@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import html2canvas from 'html2canvas'; // Ensure this is installed
-import { useNavigate } from 'react-router-dom';
+
 
 import { RefreshCw, Wand2, Check, Save, Download, Grid, Info, Camera, Sparkles, Pencil, Brush, Stamp, Trash2, Plus, Image as ImageIcon, Send, Palette, BoxSelect, X, MessageSquare, User, Box, Zap, Copy, Share2, Compass } from 'lucide-react';
 
@@ -86,7 +86,7 @@ export default function App() {
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'en' ? 'ko' : 'en');
   };
-  const navigate = useNavigate();
+
 
   const [selections, setSelections] = useState({
     shot: { id: 'none', label: 'common.none' },
@@ -945,10 +945,23 @@ export default function App() {
         const p = selections.meme.presets;
         const memeActive = selections.meme.id !== 'none' && p;
 
-        const effectiveShot = (memeActive && p.shot) ? ({ ...SHOT_TYPES.find(s => s.id === p.shot), variantId: null } || selections.shot) : selections.shot;
-        const effectiveAngle = (memeActive && p.angle) ? ({ ...ANGLES.find(a => a.id === p.angle), variantId: null } || selections.angle) : selections.angle;
-        const effectiveFacing = (memeActive && p.facing) ? ({ ...FACING_DIRECTIONS.find(f => f.id === p.facing), variantId: null } || selections.facing) : selections.facing;
-        const effectiveComp = (memeActive && p.composition) ? ({ ...COMPOSITIONS.find(c => c.id === p.composition), variantId: null } || selections.composition) : selections.composition;
+        const getPreset = (list, id) => list.find(item => item.id === id);
+
+        const effectiveShot = (memeActive && p.shot)
+          ? (getPreset(SHOT_TYPES, p.shot) ? { ...getPreset(SHOT_TYPES, p.shot), variantId: null } : selections.shot)
+          : selections.shot;
+
+        const effectiveAngle = (memeActive && p.angle)
+          ? (getPreset(ANGLES, p.angle) ? { ...getPreset(ANGLES, p.angle), variantId: null } : selections.angle)
+          : selections.angle;
+
+        const effectiveFacing = (memeActive && p.facing)
+          ? (getPreset(FACING_DIRECTIONS, p.facing) ? { ...getPreset(FACING_DIRECTIONS, p.facing), variantId: null } : selections.facing)
+          : selections.facing;
+
+        const effectiveComp = (memeActive && p.composition)
+          ? (getPreset(COMPOSITIONS, p.composition) ? { ...getPreset(COMPOSITIONS, p.composition), variantId: null } : selections.composition)
+          : selections.composition;
 
         // 2. Construct View/Camera String (The "Look")
         // Logic: [Angle] + [Shot] + "of" + [Subject]

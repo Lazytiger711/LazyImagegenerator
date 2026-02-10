@@ -85,14 +85,7 @@ export default function DiscoverPage() {
         }
     };
 
-    const handlePromptClick = (promptId) => {
-        // Don't navigate for sample prompts, just go to create page
-        if (promptId.startsWith('sample-')) {
-            navigate('/create');
-        } else {
-            navigate(`/create?prompt=${promptId}`);
-        }
-    };
+
 
     return (
         <div className="min-h-screen bg-gray-100 page-transition relative">

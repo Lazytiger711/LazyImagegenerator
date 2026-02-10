@@ -20,7 +20,7 @@ import {
 // Draggable Icon Card (Updated for Dial/Card Look)
 const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
     const { t } = useTranslation();
-    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: item.uid || item.id,
         data: { item, type, source: 'deck' },
         disabled: disabled,
