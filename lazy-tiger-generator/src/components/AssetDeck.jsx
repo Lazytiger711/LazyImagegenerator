@@ -211,7 +211,34 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
 export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [], currentSelections = {}, className = "" }) {
     const [isMobileOpen, setIsMobileOpen] = useState(false); // Default collapsed on mobile
 
-    // ... (keep existing logic) ...
+    const [openSections, setOpenSections] = useState({
+        shot: true,
+        angle: true,
+        composition: false,
+        style: false,
+        facing: false,
+        resolution: false,
+        lighting: false,
+        meme: false
+    });
+
+    const toggleSection = (section) => {
+        setOpenSections(prev => {
+            // Close all others, toggle current (Accordion)
+            const newState = {
+                shot: false, angle: false, composition: false,
+                style: false, facing: false, resolution: false, lighting: false, meme: false
+            };
+            if (!prev[section]) {
+                newState[section] = true;
+            }
+            return newState;
+        });
+    };
+
+    const handleAssetClickWrapper = (item, type, variantId) => {
+        if (onAssetClick) onAssetClick(item, type, variantId);
+    };
 
     // ... (skip down to return) ...
 
@@ -378,6 +405,20 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                         disabledIds={disabledIds}
                         onAssetClick={handleAssetClickWrapper}
                         locked={lockedCategories.includes('lighting')}
+                        currentSelections={currentSelections}
+                    />
+
+                    <CategorySection
+                        title="sections.meme"
+                        icon={Smile}
+                        items={MEME_TEMPLATES}
+                        type="meme"
+                        description="sections.meme_desc"
+                        isOpen={openSections.meme}
+                        onToggle={() => toggleSection('meme')}
+                        disabledIds={disabledIds}
+                        onAssetClick={handleAssetClickWrapper}
+                        locked={lockedCategories.includes('meme')}
                         currentSelections={currentSelections}
                     />
 
