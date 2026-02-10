@@ -33,6 +33,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
 
     // Check if icon is an image path (string) or a React component
     const isImageIcon = typeof item.icon === 'string';
+    const isFullBleed = item.displayStyle === 'full' || (isImageIcon && !item.icon.includes('/icons/facing/')); // Default to full for new images, except facing icons which act as diagrams
 
     return (
         <div
@@ -48,26 +49,52 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
                     : isSelected
                         ? 'bg-orange-100 border-orange-500 ring-4 ring-orange-200/50 shadow-lg scale-[1.02] z-10'
                         : 'bg-white border-gray-200 hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group active:scale-95 cursor-pointer'
-                }`}
+                }
+                ${isFullBleed ? 'p-0' : ''} 
+                `}
         >
-            <div className="w-16 h-16 mb-2 rounded-md flex items-center justify-center transition-colors z-10">
-                {isImageIcon ? (
-                    <img
-                        src={item.icon}
-                        alt={item.label}
-                        className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
-                    />
-                ) : (
-                    <PixelArtIcon
-                        type={type}
-                        name={item.id}
-                        className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
-                    />
+            {isFullBleed ? (
+                // Full Bleed Image Layout
+                <div className="absolute inset-0 z-0">
+                    {isImageIcon && (
+                        <img
+                            src={item.icon}
+                            alt={item.label}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                    )}
+                    <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent ${isSelected ? 'opacity-80' : 'opacity-60 group-hover:opacity-70'}`} />
+                </div>
+            ) : (
+                // Centered Icon Layout (Original)
+                <div className="w-16 h-16 mb-2 rounded-md flex items-center justify-center transition-colors z-10">
+                    {isImageIcon ? (
+                        <img
+                            src={item.icon}
+                            alt={item.label}
+                            className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+                        />
+                    ) : (
+                        <PixelArtIcon
+                            type={type}
+                            name={item.id}
+                            className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
+                        />
+                    )}
+                </div>
+            )}
+
+            {/* Label & Subtitle */}
+            <div className={`relative z-10 text-center ${isFullBleed ? 'mt-auto w-full px-2 pb-2' : 'w-full px-1'}`}>
+                <span className={`text-sm font-bold block mb-0.5 leading-tight line-clamp-1 ${isFullBleed ? 'text-white text-shadow-sm' : 'text-gray-700 group-hover:text-orange-600'}`}>
+                    {t(item.label)}
+                </span>
+                {item.sub && (
+                    <span className={`text-xs block mt-0.5 ${isFullBleed ? 'text-gray-200' : 'text-gray-400'}`}>
+                        {item.sub}
+                    </span>
                 )}
             </div>
-            <span className="text-sm font-bold text-gray-700 text-center leading-tight line-clamp-1 z-10 w-full px-1">
-                {t(item.label)}
-            </span>
 
             {/* Background decoration for 'Card' feel */}
             <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50 -z-0"></div>

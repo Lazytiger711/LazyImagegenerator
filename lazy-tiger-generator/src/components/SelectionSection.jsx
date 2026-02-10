@@ -96,14 +96,26 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                         <div className="flex flex-col h-full p-4 relative">
                                             <div className="flex justify-between items-start mb-1 z-10 w-full shrink-0">
                                                 <div className={`p-1.5 rounded-lg transition-colors ${isSelected ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-400'}`}>
-                                                    {title.includes('Shot') || title.includes('Style') || title.includes('Angle') || title.includes('Composition') || title.includes('Facing') ? <Icon size={16} /> : <Icon size={16} />}
+                                                    {typeof item.icon === 'string' ? (
+                                                        <img src={item.icon} alt="" className="w-4 h-4 object-contain" />
+                                                    ) : (
+                                                        <Icon size={16} />
+                                                    )}
                                                 </div>
                                                 {isSelected && <Check size={18} className="text-orange-500" />}
                                             </div>
 
                                             {/* --- Image Container (Flexible but limited height) --- */}
                                             <div className={`flex-1 flex items-center justify-center w-full min-h-0 my-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-60'}`}>
-                                                {title.includes('Shot') || title.includes('Angle') || title.includes('Composition') || title.includes('Facing') ? (
+                                                {typeof item.icon === 'string' ? (
+                                                    <div className={`
+                                relative aspect-square h-full max-h-[100px] sm:max-h-[120px]
+                                rounded-xl overflow-hidden border transition-all 
+                                ${isSelected ? 'bg-orange-100/50 border-orange-200/50 scale-105 shadow-sm' : 'bg-gray-50 border-gray-100'}
+                            `}>
+                                                        <img src={item.icon} alt={t(item.label)} className="w-full h-full object-cover" />
+                                                    </div>
+                                                ) : title.includes('Shot') || title.includes('Angle') || title.includes('Composition') || title.includes('Facing') ? (
                                                     <div className={`
                                 relative aspect-square h-full max-h-[100px] sm:max-h-[120px] /* Limit max height for image */
                                 rounded-xl p-1 border transition-all 

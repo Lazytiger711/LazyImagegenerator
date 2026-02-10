@@ -16,8 +16,12 @@ export default function DraggableCard({ item, id, onRemove, onClick }) {
         group animate-pop-in border-gray-100 hover:border-orange-200 cursor-pointer
       `}
         >
-            <div className="w-12 h-12 mb-3 rounded-xl bg-orange-50 flex items-center justify-center">
-                <PixelArtIcon type={item.type} name={item.id} className="w-8 h-8" />
+            <div className="w-12 h-12 mb-3 rounded-xl bg-orange-50 flex items-center justify-center overflow-hidden">
+                {typeof item.icon === 'string' ? (
+                    <img src={item.icon} alt={item.label} className="w-full h-full object-cover" />
+                ) : (
+                    <PixelArtIcon type={item.type} name={item.id} className="w-8 h-8" />
+                )}
             </div>
             <span className="text-xs font-bold text-gray-700 text-center line-clamp-2 leading-tight px-1">
                 {t(item.label)}
