@@ -1378,16 +1378,18 @@ export default function App() {
       {/* Modified Layout: flex-col ensures Deck is TOP on mobile, Row on Desktop */}
       <main className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-visible md:overflow-hidden h-auto min-h-[calc(100vh-64px)] md:h-[calc(100vh-64px)]">
 
-        {/* Left Panel: Asset Deck (Now Click-Only) */}
-        <AssetDeck
-          disabledIds={disabledOptions}
-          lockedCategories={lockedCategories}
-          onAssetClick={handleAssetClick}
-          currentSelections={selections}
-        />
+        {/* Left Panel: Asset Deck (Desktop Only) */}
+        <div className="hidden md:flex flex-col h-full shrink-0">
+          <AssetDeck
+            disabledIds={disabledOptions}
+            lockedCategories={lockedCategories}
+            onAssetClick={handleAssetClick}
+            currentSelections={selections}
+          />
+        </div>
 
         {/* Right Panel: Canvas & Workspace */}
-        <div className="flex-1 flex flex-col h-auto md:h-full overflow-visible md:overflow-y-auto bg-gray-50 relative pb-20 md:pb-0">
+        <div className="flex-1 flex flex-col h-auto md:h-full overflow-visible md:overflow-y-auto bg-gray-50 relative pb-32 md:pb-0">
 
           {/* Top Area: Montage Inputs */}
           <div className="p-6 pb-4 shrink-0 border-b border-gray-200 bg-white z-20 shadow-sm">
@@ -1868,6 +1870,18 @@ export default function App() {
             animation: fade-in-up 0.3s ease-out forwards;
         }
       `}</style>
+
+      {/* Mobile Asset Deck (Floating w/ Explicit Override) */}
+      {/* Mobile Asset Deck (Floating) */}
+      <div className="md:hidden">
+        <AssetDeck
+          disabledIds={disabledOptions}
+          lockedCategories={lockedCategories}
+          onAssetClick={handleAssetClick}
+          currentSelections={selections}
+          className="!fixed !bottom-[70px] !left-2 !right-2 !z-[100] !rounded-xl shadow-2xl border border-gray-200"
+        />
+      </div>
 
       {/* Bottom Navigation */}
       <BottomNav />

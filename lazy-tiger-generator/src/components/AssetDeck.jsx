@@ -208,38 +208,12 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
 // Update CategorySection to accept currentSelections (it is passed but not explicitly destructured in the previous call, it is passed a `isSelected` logic in the map. Wait, I need to make sure CategorySection receives `currentSelections`? No, I injected the logic directly into the map in the previous tool call.
 // BUT, I need to update the AssetDeck component signature to accept `currentSelections`.
 
-export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [], currentSelections = {} }) {
+export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCategories = [], currentSelections = {}, className = "" }) {
     const [isMobileOpen, setIsMobileOpen] = useState(false); // Default collapsed on mobile
 
-    const [openSections, setOpenSections] = useState({
-        shot: true,
-        angle: true,
-        composition: false,
-        style: false,
-        facing: false,
-        resolution: false,
-        lighting: false,
-        meme: false
-    });
+    // ... (keep existing logic) ...
 
-    const toggleSection = (section) => {
-        setOpenSections(prev => {
-            // Close all others, toggle current (Accordion)
-            const newState = {
-                shot: false, angle: false, composition: false,
-                style: false, facing: false, resolution: false, lighting: false, meme: false
-            };
-            if (!prev[section]) {
-                newState[section] = true;
-            }
-            return newState;
-        });
-    };
-
-    const handleAssetClickWrapper = (item, type, variantId) => {
-        if (onAssetClick) onAssetClick(item, type, variantId);
-        // setIsMobileOpen(false); // Removed auto-close per user request
-    };
+    // ... (skip down to return) ...
 
     return (
         <>
@@ -253,14 +227,14 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
 
             <div
                 className={`
-                    fixed bottom-0 left-0 right-0 z-50 
-                    md:relative md:top-auto md:left-auto md:right-auto md:order-none md:z-10
+                    fixed bottom-[60px] left-0 right-0 z-[60] 
+                    md:relative md:top-auto md:left-auto md:right-auto md:bottom-auto md:z-10 md:order-none
                     w-full md:w-80 bg-white md:border-r border-t md:border-t-0 border-gray-200 
                     shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-lg selection-section 
-                    transition-all duration-300 ease-in-out
                     md:transform-none flex flex-col
                     md:h-full
-                    ${isMobileOpen ? 'h-[70vh]' : 'h-14'}
+                    ${isMobileOpen ? 'h-[60vh]' : 'h-14'}
+                    ${className}
                 `}
             >
                 <style>{`

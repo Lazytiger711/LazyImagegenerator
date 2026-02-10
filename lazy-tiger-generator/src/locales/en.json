@@ -333,14 +333,17 @@
         }
     },
     "resolutions": {
-        "16:9": {
-            "label": "Youtube/Landscape"
-        },
+        "ratio_1_1": "1:1 Square",
+        "ratio_16_9": "16:9 Widescreen",
+        "ratio_9_16": "9:16 Mobile Portrait",
         "1:1": {
-            "label": "Insta/Profile"
+            "label": "1:1 Square"
+        },
+        "16:9": {
+            "label": "16:9 Widescreen"
         },
         "9:16": {
-            "label": "Shorts/Reels"
+            "label": "9:16 Mobile Portrait"
         }
     },
     "palette": {

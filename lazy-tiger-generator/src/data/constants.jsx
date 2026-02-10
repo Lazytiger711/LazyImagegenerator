@@ -240,21 +240,9 @@ export const LIGHTING = [
 ];
 
 export const RESOLUTIONS = [
-    {
-        id: '16:9', label: 'resolutions.16:9.label', sub: '16:9', width: 16, height: 9,
-        prompt: '--ar 16:9', icon: Monitor,
-        grids: { cols: 16, rows: 9 } // Simple grid config
-    },
-    {
-        id: '1:1', label: 'resolutions.1:1.label', sub: '1:1', width: 1, height: 1,
-        prompt: '--ar 1:1', icon: Instagram,
-        grids: { cols: 12, rows: 12 }
-    },
-    {
-        id: '9:16', label: 'resolutions.9:16.label', sub: '9:16', width: 9, height: 16,
-        prompt: '--ar 9:16', icon: Smartphone,
-        grids: { cols: 9, rows: 16 }
-    },
+    { id: '1:1', label: 'resolutions.ratio_1_1', sub: '1:1', icon: Monitor, width: 1024, height: 1024, prompt: 'square aspect ratio 1:1', grids: { cols: 12, rows: 12 } },
+    { id: '16:9', label: 'resolutions.ratio_16_9', sub: '16:9', icon: Monitor, width: 1280, height: 720, prompt: 'widescreen aspect ratio 16:9', grids: { cols: 16, rows: 9 } },
+    { id: '9:16', label: 'resolutions.ratio_9_16', sub: '9:16', icon: Smartphone, width: 720, height: 1280, prompt: 'tall mobile aspect ratio 9:16', grids: { cols: 9, rows: 16 } },
 ];
 
 export const PALETTE_COLORS = [
