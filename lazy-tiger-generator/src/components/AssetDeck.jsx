@@ -48,7 +48,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
             {...attributes}
             onClick={() => !disabled && onClick && onClick()}
             // Increased size to w-60 (240px) to show ~1 card at a time
-            className={`flex-shrink-0 w-60 flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm transition-all select-none relative overflow-hidden
+            className={`flex-shrink-0 w-60 h-40 flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm transition-all select-none relative overflow-hidden
                 ${disabled
                     ? 'bg-white opacity-40 grayscale cursor-not-allowed border-gray-100'
                     : isSelected
