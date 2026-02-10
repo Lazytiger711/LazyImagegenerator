@@ -47,8 +47,8 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
             {...listeners}
             {...attributes}
             onClick={() => !disabled && onClick && onClick()}
-            // Increased size to w-60 (240px) to show ~1 card at a time
-            className={`flex-shrink-0 w-60 h-40 flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm transition-all select-none relative overflow-hidden
+            // Fixed dimensions for consistency
+            className={`flex-shrink-0 w-40 h-56 flex flex-col items-center justify-center p-4 rounded-xl border shadow-sm transition-all select-none relative overflow-hidden
                 ${disabled
                     ? 'bg-white opacity-40 grayscale cursor-not-allowed border-gray-100'
                     : isSelected
@@ -117,7 +117,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
     const scroll = (direction) => {
         if (scrollRef.current) {
             const { current } = scrollRef;
-            const scrollAmount = 252; // Card width (240) + Gap (12)
+            const scrollAmount = 172; // Card width (160) + Gap (12)
 
             if (direction === 'left') {
                 // If at the start (or very close), wrap to the end
