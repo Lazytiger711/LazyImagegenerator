@@ -116,7 +116,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                                         <img
                                                             src={item.icon}
                                                             alt={t(item.label)}
-                                                            className="w-full h-full object-contain bg-white"
+                                                            className="w-full h-full object-contain"
                                                             onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.classList.add('bg-red-200'); }}
                                                         />
                                                     </div>
