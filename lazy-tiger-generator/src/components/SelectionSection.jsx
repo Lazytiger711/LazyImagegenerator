@@ -109,11 +109,11 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                             <div className={`flex-1 flex items-center justify-center w-full min-h-0 my-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-60'}`}>
                                                 {typeof item.icon === 'string' ? (
                                                     <div className={`
-                                relative aspect-square h-full max-h-[100px] sm:max-h-[120px]
+                                relative aspect-square h-full w-full
                                 rounded-xl overflow-hidden border transition-all 
                                 ${isSelected ? 'bg-orange-100/50 border-orange-200/50 scale-105 shadow-sm' : 'bg-gray-50 border-gray-100'}
                             `}>
-                                                        <img src={item.icon} alt={t(item.label)} className="w-full h-full object-cover" />
+                                                        <img src={item.icon} alt={t(item.label)} className="w-full h-full object-contain p-1" />
                                                     </div>
                                                 ) : title.includes('Shot') || title.includes('Angle') || title.includes('Composition') || title.includes('Facing') ? (
                                                     <div className={`
