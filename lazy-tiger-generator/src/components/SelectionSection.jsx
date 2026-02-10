@@ -109,7 +109,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                             <div className={`flex-1 flex items-center justify-center w-full min-h-0 my-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-60'}`}>
                                                 {typeof item.icon === 'string' ? (
                                                     <div className={`
-                                relative aspect-square h-full w-full
+                                relative h-full w-full flex items-center justify-center
                                 rounded-xl overflow-hidden border transition-all 
                                 ${isSelected ? 'bg-orange-100/50 border-orange-200/50 scale-105 shadow-sm' : 'bg-gray-50 border-gray-100'}
                             `}>
