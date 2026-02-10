@@ -462,12 +462,23 @@ export default function App() {
     const randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const adj = randomItem(CHAOS_DESCRIPTORS.adjectives);
     const mod = randomItem(CHAOS_DESCRIPTORS.modifiers);
-    const act = randomItem(CHAOS_DESCRIPTORS.actions);
     const loc = randomItem(CHAOS_DESCRIPTORS.locations);
 
-    // Context: "Adjective Subject(implicit in Mod/Act), Modifier, Action Location"
-    // e.g. "Zombie, wearing a tuxedo, fighting a dragon in a volcano"
-    const chaosContext = `${adj}, ${mod}, ${act} ${loc}`;
+    let chaosContext = "";
+
+    // 30% chance for Multi-Subject Interaction (if data exists)
+    const canInteract = CHAOS_DESCRIPTORS.second_subjects && CHAOS_DESCRIPTORS.interactions;
+    const isInteraction = canInteract && Math.random() < 0.3;
+
+    if (isInteraction) {
+      const interaction = randomItem(CHAOS_DESCRIPTORS.interactions);
+      const sub2 = randomItem(CHAOS_DESCRIPTORS.second_subjects);
+      chaosContext = `${adj}, ${mod}, ${interaction} ${sub2} ${loc}`;
+    } else {
+      const act = randomItem(CHAOS_DESCRIPTORS.actions);
+      chaosContext = `${adj}, ${mod}, ${act} ${loc}`;
+    }
+
     setContextText(chaosContext);
 
     // 2. Randomize Settings
