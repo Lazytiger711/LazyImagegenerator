@@ -109,15 +109,20 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                             <div className={`flex-1 flex items-center justify-center w-full min-h-0 my-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-60'}`}>
                                                 {typeof item.icon === 'string' ? (
                                                     <div className={`
-                                relative w-full h-24 sm:h-32
-                                rounded-xl overflow-hidden border transition-all 
-                                ${isSelected ? 'bg-orange-100/50 border-orange-200/50 scale-105 shadow-sm' : 'bg-gray-50 border-gray-100'}
+                                relative w-full h-32 mx-auto
+                                rounded-xl overflow-hidden border transition-all
+                                ${isSelected ? 'bg-orange-100/50 border-orange-200/50 scale-105 shadow-sm' : 'bg-gray-200 border-gray-100'}
                             `}>
-                                                        <img src={item.icon} alt={t(item.label)} className="w-full h-full object-contain p-1" />
+                                                        <img
+                                                            src={item.icon}
+                                                            alt={t(item.label)}
+                                                            className="w-full h-full object-contain bg-white"
+                                                            onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.classList.add('bg-red-200'); }}
+                                                        />
                                                     </div>
                                                 ) : title.includes('Shot') || title.includes('Angle') || title.includes('Composition') || title.includes('Facing') ? (
                                                     <div className={`
-                                relative aspect-square h-full max-h-[100px] sm:max-h-[120px] /* Limit max height for image */
+                                relative aspect-square h-full max-h-[100px] sm:max-h-[120px]
                                 rounded-xl p-1 border transition-all 
                                 ${isSelected ? 'bg-orange-100/50 border-orange-200/50 scale-105' : 'bg-gray-50 border-gray-100'}
                             `}>
@@ -125,8 +130,7 @@ const SelectionSection = ({ title, description, items, selectedId, onSelect, typ
                                                     </div>
                                                 ) : (
                                                     <Icon className={`w-12 h-12 transition-colors ${isSelected ? 'text-orange-300' : 'text-gray-200'}`} strokeWidth={1} />
-                                                )
-                                                }
+                                                )}
                                             </div>
 
                                             <div className="mt-auto relative z-10 w-full text-center sm:text-left shrink-0">
