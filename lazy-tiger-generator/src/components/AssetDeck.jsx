@@ -101,8 +101,8 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
                 )}
             </div>
 
-            {/* Background decoration for 'Card' feel */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50 -z-0"></div>
+            {/* Background decoration for 'Card' feel - Only for non-full-bleed */}
+            {!isFullBleed && <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50 -z-0"></div>}
 
             {/* Lock Icon Overlay */}
             {disabled && <div className="absolute top-2 right-2 z-20"><Lock size={14} className="text-gray-400" /></div>}
