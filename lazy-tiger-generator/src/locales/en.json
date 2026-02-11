@@ -281,6 +281,10 @@
         }
     },
     "styles": {
+        "hyper_realistic": {
+            "label": "Hyper Realism",
+            "desc": "Extreme Detail (Pores/Texture)"
+        },
         "realistic": {
             "label": "Realistic/Photo",
             "desc": "Photorealistic"

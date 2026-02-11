@@ -280,6 +280,10 @@
         }
     },
     "styles": {
+        "hyper_realistic": {
+            "label": "하이퍼 리얼리즘",
+            "desc": "극사실주의 (주름/모공 디테일)"
+        },
         "realistic": {
             "label": "실사/사진",
             "desc": "Photorealistic"

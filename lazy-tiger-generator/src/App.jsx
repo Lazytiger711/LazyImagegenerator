@@ -468,7 +468,7 @@ export default function App() {
 
     // 30% chance for Multi-Subject Interaction (if data exists)
     const canInteract = CHAOS_DESCRIPTORS.second_subjects && CHAOS_DESCRIPTORS.interactions;
-    const isInteraction = canInteract && Math.random() < 0.3;
+    const isInteraction = canInteract && Math.random() < 0.5;
 
     if (isInteraction) {
       const interaction = randomItem(CHAOS_DESCRIPTORS.interactions);
@@ -902,13 +902,15 @@ export default function App() {
       objectDescriptions.push(desc);
     });
 
-    // D. Empty Space (Minimalist Check)
+    // D. Empty Space (Minimalist Check) - REMOVED per user request (Empty canvas should be ignored)
+    /*
     if (colorStats['__empty__']) {
       const emptyRatio = colorStats['__empty__'].count / totalSamples;
       if (emptyRatio > 0.75) {
         objectDescriptions.push("The composition features significant negative space");
       }
     }
+    */
 
     if (objectDescriptions.length === 0) return "";
     return objectDescriptions.join(". ") + ".";

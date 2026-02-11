@@ -210,6 +210,7 @@ export const COMPOSITIONS = [
 export const STYLES = [
 
 
+    { id: 'hyper_realistic', label: 'styles.hyper_realistic.label', sub: 'Hyper Real', prompt: 'hyper-realistic, highly detailed skin texture, visible pores, imperfections, 8k resolution, raw photography, sharp focus, volumetric lighting, ray tracing, incredibly lifelike, dslr, macro lens detail', neg: '--no plastic skin, smooth skin, cartoon, drawing, painting, blur, airbrushed', icon: '/icons/styles/realistic.png', displayStyle: 'full' },
     { id: 'realistic', label: 'styles.realistic.label', sub: 'Photorealistic', prompt: 'photorealistic, raw photo, 8k uhd, dslr, high quality, fujifilm, grainy texture, masterpiece', neg: '--no pixel art, illustration, cartoon, drawing, painting', icon: '/icons/styles/realistic.png', displayStyle: 'full' },
     { id: 'anime', label: 'styles.anime.label', sub: 'Anime', prompt: 'anime style, key visual, vibrant colors, studio ghibli inspired, high definition, detailed line art, 2d animation', neg: '--no photorealistic, 3d render, live action', icon: '/icons/styles/anime.png', displayStyle: 'full' },
     { id: '3d_render', label: 'styles.3d_render.label', sub: '3D 렌더링', prompt: '3d render, octane render, unreal engine 5, ray tracing, clay material, high fidelity, 8k, blender style', neg: '--no 2d, sketch, flat, cartoon, low poly', icon: '/icons/styles/3d_render.png', displayStyle: 'full' },
