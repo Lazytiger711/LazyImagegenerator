@@ -225,13 +225,13 @@ export default function App() {
     if (showResult) return 3; // Step 4: generate (completed)
 
     // Check if canvas has any drawings
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const hasDrawing = imageData.data.some((value, index) => index % 4 === 3 && value > 0);
-      if (hasDrawing) return 2; // Step 3: draw
-    }
+    // Optmized: Use canvasTrigger as proxy for drawing activity instead of scanning pixels every render
+    // const canvas = canvasRef.current;
+    // if (canvas) {
+    //   const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    //   // ... (expensive check removed)
+    // }
+    if (sessionStorage.getItem('canvas_drawn') === 'true') return 2; // Step 3: draw
 
     // Check if any cards are selected
     const hasSelections = Object.values(selections).some(
@@ -255,7 +255,8 @@ export default function App() {
 
 
   const [isDragging, setIsDragging] = useState(false);
-  const [cursorPos, setCursorPos] = useState(null); // Track cursor position for preview
+  // const [cursorPos, setCursorPos] = useState(null); // REMOVED: Caused excessive re-renders
+  const cursorRef = useRef(null); // New Ref for direct DOM manipulation
 
 
   // DnD Sensors
@@ -406,7 +407,7 @@ export default function App() {
     canvas.width = Math.max(1, baseWidth);
     canvas.height = Math.max(1, baseHeight);
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   }, [selections.resolution]);
@@ -532,7 +533,7 @@ export default function App() {
   const drawOnCanvas = (startx, starty, endx, endy, isEraser) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
     ctx.beginPath();
     ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : selectedColor.color;
@@ -559,7 +560,7 @@ export default function App() {
   const placeStampOnCanvas = (x, y) => {
     const canvas = canvasRef.current;
     if (!canvas || !selectedStamp) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const stamp = STAMPS.find(s => s.id === selectedStamp);
     if (!stamp) return;
 
@@ -659,7 +660,7 @@ export default function App() {
       const isEraser = selectedColor.id === 'erase';
       // Draw a single dot for click
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
       ctx.beginPath();
       ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
       if (isEraser) {
@@ -692,25 +693,40 @@ export default function App() {
 
 
   const handleCanvasPointerMove = (e) => {
-    if (isGenerating) return; // Prevent updates during generation to avoid DOM conflicts
+    if (isGenerating) return; // Prevent updates during generation
 
-    // Provide legacy event prevention just in case
-    // e.preventDefault(); 
-
-    // 1. Calculate CSS pixels for Visual Cursor (UI Overlay)
+    // 1. Calculate Rect ONCE (Performance Critical)
     if (!canvasRef.current) return;
-    const rect = canvasRef.current.getBoundingClientRect();
+    const canvas = canvasRef.current;
+
+    // Using cached rect if possible or just one call
+    const rect = canvas.getBoundingClientRect();
     const cssX = e.clientX - rect.left;
     const cssY = e.clientY - rect.top;
 
     // Calculate Scale: Internal Width / Displayed Width
-    const scaleX = canvasRef.current.width / rect.width;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
-    setCursorPos({ x: cssX, y: cssY, scale: scaleX });
+    // 2. Update Visual Cursor (Direct DOM)
+    if (cursorRef.current) {
+      // Calculate visual size based on tool mode
+      const visualSize = (toolMode === 'stamp' ? ((brushSize * 4) + 50) : brushSize) / (scaleX || 1);
 
-    // 2. Draw if dragging (Brush Mode) - Use Internal Coordinates
+      // Apply styles directly
+      cursorRef.current.style.transform = `translate(${cssX}px, ${cssY}px) translate(-50%, -50%)`;
+      cursorRef.current.style.width = `${visualSize}px`;
+      cursorRef.current.style.height = `${visualSize}px`;
+      cursorRef.current.style.opacity = '1'; // Ensure visible
+      cursorRef.current.style.display = 'flex'; // Ensure flex layout
+    }
+
+    // 3. Draw if dragging (Brush Mode) - Use calculated coords
     if (isDragging && toolMode === 'brush') {
-      const { x, y } = getPointerPos(e); // Helper already does scaling
+      // Calculate internal coordinates reusing the SAME rect data
+      const x = cssX * scaleX;
+      const y = cssY * scaleY;
+
       const isEraser = selectedColor.id === 'erase';
 
       if (lastPos.current) {
@@ -941,7 +957,7 @@ export default function App() {
       e.stopPropagation();
     }
     setIsGenerating(true);
-    setCursorPos(null);
+    // setCursorPos(null); // Fixed: Removed as state is deleted
 
     setTimeout(async () => {
       try {
@@ -1335,7 +1351,7 @@ export default function App() {
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       setCanvasTrigger(c => c + 1);
     }
@@ -1667,11 +1683,14 @@ export default function App() {
                 onPointerDown={handleCanvasPointerDown}
                 onPointerMove={handleCanvasPointerMove}
                 onPointerLeave={() => {
-                  // Do not stop dragging immediately on leave for better UX (can drag back in)
                   // But hide cursor preview
+                  if (cursorRef.current) {
+                    cursorRef.current.style.opacity = '0';
+                    cursorRef.current.style.display = 'none';
+                  }
                   // setIsDragging(false); // Allow dragging outside if captured
                   lastPos.current = null;
-                  setCursorPos(null);
+                  // setCursorPos(null); // Removed
                 }}
                 onPointerUp={(e) => {
                   // Ensure capture is released
@@ -1697,39 +1716,38 @@ export default function App() {
                   style={{ touchAction: 'none' }}
                 />
 
-                {/* Visual Cursor Overlay */}
-                {cursorPos && (
-                  <div
-                    className="pointer-events-none absolute flex items-center justify-center transition-transform duration-75 z-50"
-                    style={{
-                      left: 0,
-                      top: 0,
-                      // Update size formula to match placeStampOnCanvas
-                      width: (toolMode === 'stamp' ? ((brushSize * 4) + 50) : brushSize) / (cursorPos.scale || 1),
-                      height: (toolMode === 'stamp' ? ((brushSize * 4) + 50) : brushSize) / (cursorPos.scale || 1),
-                      // Position: Use CSS pixel coordinates directly
-                      transform: `translate(${cursorPos.x}px, ${cursorPos.y}px) translate(-50%, -50%)`,
-                      // Only add background/border for BRUSH mode. Stamp uses SVG.
-                      backgroundColor: toolMode === 'stamp' ? 'transparent' : (selectedColor.id === 'erase' ? 'rgba(0,0,0,0.1)' : selectedColor.color),
-                      border: toolMode === 'stamp' ? 'none' : '1px solid rgba(255,255,255,0.8)',
-                      borderRadius: '50%',
-                      boxShadow: toolMode === 'stamp' ? 'none' : '0 0 2px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    {/* Show Stamp Preview in Cursor */}
-                    {toolMode === 'stamp' && selectedStamp && (() => {
-                      const stamp = STAMPS.find(s => s.id === selectedStamp);
-                      return stamp ? (
-                        <div className="w-full h-full flex items-center justify-center opacity-50" style={{ color: selectedColor.id === 'erase' ? '#000000' : selectedColor.color }}>
-                          {/* Render SVG directly or use Icon component if valid */}
-                          <svg viewBox="0 0 256 256" width="100%" height="100%" style={{ overflow: 'visible' }}>
-                            <path d={stamp.path} fill="currentColor" />
-                          </svg>
-                        </div>
-                      ) : null;
-                    })()}
-                  </div>
-                )}
+                {/* Visual Cursor Overlay - Optimized with Ref */}
+                <div
+                  ref={cursorRef}
+                  className="pointer-events-none absolute flex items-center justify-center transition-opacity duration-75 z-50"
+                  style={{
+                    left: 0,
+                    top: 0,
+                    // Initial styles (will be updated by JS)
+                    width: '0px',
+                    height: '0px',
+                    opacity: 0,
+                    display: 'none',
+                    // Only add background/border for BRUSH mode. Stamp uses SVG.
+                    backgroundColor: toolMode === 'stamp' ? 'transparent' : (selectedColor.id === 'erase' ? 'rgba(0,0,0,0.1)' : selectedColor.color),
+                    border: toolMode === 'stamp' ? 'none' : '1px solid rgba(255,255,255,0.8)',
+                    borderRadius: '50%',
+                    boxShadow: toolMode === 'stamp' ? 'none' : '0 0 2px rgba(0,0,0,0.5)'
+                  }}
+                >
+                  {/* Show Stamp Preview in Cursor */}
+                  {toolMode === 'stamp' && selectedStamp && (() => {
+                    const stamp = STAMPS.find(s => s.id === selectedStamp);
+                    return stamp ? (
+                      <div className="w-full h-full flex items-center justify-center opacity-50" style={{ color: selectedColor.id === 'erase' ? '#000000' : selectedColor.color }}>
+                        {/* Render SVG directly or use Icon component if valid */}
+                        <svg viewBox="0 0 256 256" width="100%" height="100%" style={{ overflow: 'visible' }}>
+                          <path d={stamp.path} fill="currentColor" />
+                        </svg>
+                      </div>
+                    ) : null;
+                  })()}
+                </div>
 
                 {/* 3. Composition Guides (Overlay) - z-20 puts it on top, pointer-events-none lets clicks pass to canvas */}
                 <div className="absolute inset-0 z-20 pointer-events-none">
@@ -1855,7 +1873,7 @@ export default function App() {
         </div>
 
 
-      </main>
+      </main >
 
       <Toast message={toastMsg} show={showToast} />
 
@@ -1868,9 +1886,11 @@ export default function App() {
         )
       }
 
-      {showFeedback && (
-        <FeedbackModal onClose={() => setShowFeedback(false)} />
-      )}
+      {
+        showFeedback && (
+          <FeedbackModal onClose={() => setShowFeedback(false)} />
+        )
+      }
 
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {

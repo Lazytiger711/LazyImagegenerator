@@ -53,10 +53,6 @@ export default function DiscoverPage() {
 
 
 
-    useEffect(() => {
-        fetchPublicPrompts();
-    }, [fetchPublicPrompts]);
-
     const fetchPublicPrompts = useCallback(async () => {
         try {
             setLoading(true);
@@ -85,6 +81,10 @@ export default function DiscoverPage() {
             setLoading(false);
         }
     }, [sortBy]);
+
+    useEffect(() => {
+        fetchPublicPrompts();
+    }, [fetchPublicPrompts]);
 
 
 

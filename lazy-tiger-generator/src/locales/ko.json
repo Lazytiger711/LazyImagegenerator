@@ -127,6 +127,7 @@
         "facing": "시선/방향 (Facing)",
         "facing_desc": "피사체가 바라보는 방향",
         "meme": "밈 (Meme)",
+        "meme_desc": "밈 템플릿 선택",
         "resolution": "해상도 (Resolution)",
         "resolution_desc": "화면 비율"
     },
