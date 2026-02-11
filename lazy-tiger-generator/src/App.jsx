@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import html2canvas from 'html2canvas'; // Ensure this is installed
@@ -723,7 +723,7 @@ export default function App() {
 
 
   // --- UPDATED ANALYSIS LOGIC FOR CANVAS ---
-  const getGridDescription = () => {
+  const getGridDescription = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return "";
 
@@ -913,7 +913,7 @@ export default function App() {
 
     if (objectDescriptions.length === 0) return "";
     return objectDescriptions.join(". ") + ".";
-  };
+  }, [paletteColors]);
 
   // Real-time Analysis Effect
   useEffect(() => {
@@ -923,7 +923,7 @@ export default function App() {
       setAiVisionText(desc);
     }, 500);
     return () => clearTimeout(timer);
-  }, [canvasTrigger, workspaceItems, paletteColors, subjectText]);
+  }, [canvasTrigger, workspaceItems, paletteColors, subjectText, getGridDescription]);
 
   // Prevent auto-scroll on first interaction
   useEffect(() => {

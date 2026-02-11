@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { X, Trash2, Wand2, Loader2, Calendar, Globe, Clock, TrendingUp } from 'lucide-react';
 
@@ -11,9 +11,9 @@ export default function Gallery({ onClose, onLoad }) {
     // Fetch prompts from Supabase
     useEffect(() => {
         fetchPrompts();
-    }, [galleryMode, sortBy]);
+    }, [fetchPrompts]);
 
-    const fetchPrompts = async () => {
+    const fetchPrompts = useCallback(async () => {
         try {
             setLoading(true);
             let query = supabase.from('prompts').select('*');
@@ -39,7 +39,7 @@ export default function Gallery({ onClose, onLoad }) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [galleryMode, sortBy]);
 
     const handleDelete = async (id, e) => {
         e.stopPropagation(); // Prevent triggering onLoad
@@ -92,8 +92,8 @@ export default function Gallery({ onClose, onLoad }) {
                         <button
                             onClick={() => setGalleryMode('my')}
                             className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${galleryMode === 'my'
-                                    ? 'bg-orange-500 text-white shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-orange-500 text-white shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
                             <Calendar size={16} className="mr-1.5" />
@@ -102,8 +102,8 @@ export default function Gallery({ onClose, onLoad }) {
                         <button
                             onClick={() => setGalleryMode('explore')}
                             className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${galleryMode === 'explore'
-                                    ? 'bg-blue-500 text-white shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-blue-500 text-white shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
                             <Globe size={16} className="mr-1.5" />
@@ -117,8 +117,8 @@ export default function Gallery({ onClose, onLoad }) {
                             <button
                                 onClick={() => setSortBy('recent')}
                                 className={`px-3 py-1.5 rounded-md font-medium transition-all flex items-center ${sortBy === 'recent'
-                                        ? 'bg-gray-100 text-gray-700'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                    ? 'bg-gray-100 text-gray-700'
+                                    : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
                                 <Clock size={14} className="mr-1" />
@@ -127,8 +127,8 @@ export default function Gallery({ onClose, onLoad }) {
                             <button
                                 onClick={() => setSortBy('popular')}
                                 className={`px-3 py-1.5 rounded-md font-medium transition-all flex items-center ${sortBy === 'popular'
-                                        ? 'bg-gray-100 text-gray-700'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                    ? 'bg-gray-100 text-gray-700'
+                                    : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
                                 <TrendingUp size={14} className="mr-1" />

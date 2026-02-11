@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities'; // Import CSS for transform utility
 import { ChevronDown, ChevronRight, ChevronLeft, ChevronUp, Grid, Layout, Camera, Video, Palette, User, Monitor, Zap, Lock, Smile } from 'lucide-react';
-import PixelArtIcon from './PixelArtIcon';
+
 import {
     SHOT_TYPES,
     ANGLES,
@@ -110,7 +110,8 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
     );
 };
 
-const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, description, disabledIds, onAssetClick, locked, currentSelections }) => {
+// eslint-disable-next-line no-unused-vars
+const CategorySection = ({ title, icon: CategoryIcon, items, type, isOpen, onToggle, description, disabledIds, onAssetClick, locked, currentSelections }) => {
     const { t } = useTranslation();
     const scrollRef = useRef(null);
 
@@ -146,7 +147,7 @@ const CategorySection = ({ title, icon: Icon, items, type, isOpen, onToggle, des
             >
                 <div className="flex flex-col items-start overflow-hidden">
                     <div className="flex items-center text-gray-700 font-bold text-xs uppercase tracking-wider">
-                        <Icon size={14} className="mr-2 text-orange-500" />
+                        <CategoryIcon size={14} className="mr-2 text-orange-500" />
                         {t(title)}
                         {locked && <Lock size={12} className="ml-2 text-red-400" />}
                     </div>
