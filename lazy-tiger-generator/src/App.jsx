@@ -205,11 +205,11 @@ export default function App() {
             // Load the prompt settings
             handleLoadPrompt(data.settings);
 
-            // Increment view count
-            await supabase
-              .from('prompts')
-              .update({ view_count: (data.view_count || 0) + 1 })
-              .eq('id', promptId);
+            // Increment view count (Securely via RPC)
+            const { error: viewError } = await supabase
+              .rpc('increment_view_count', { p_id: promptId });
+
+            if (viewError) console.error("View count update failed:", viewError);
           }
         } catch (error) {
           console.error('Error loading prompt from URL:', error);
@@ -275,7 +275,16 @@ export default function App() {
     { ...selections.lighting, type: 'lighting', uid: 'lighting-item' },
     { ...selections.facing, type: 'facing', uid: 'facing-item' },
     // Resolution usually not shown in workspace as card, but let's include if it's not default
-  ].filter(item => item && item.id !== 'none'); // Only show active items
+    { ...selections.resolution, type: 'resolution', uid: 'resolution-item' },
+  ].filter(item => item && (item.id !== 'none')); // Only show active items
+  // Actually, wait. User wants to SEE the selection.
+  // If I just add it, it will show up.
+  // But wait, `resolution` object structure might be different?
+  // It has `width`, `height`, `label`, `id`.
+  // Standard items have `id`, `label`, `image`, `prompt`.
+  // Resolution doesn't have an image usually.
+  // Workspace component expects an image or icon?
+  // Let's check Workspace component.
 
 
 
