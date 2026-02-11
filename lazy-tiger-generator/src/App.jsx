@@ -902,15 +902,14 @@ export default function App() {
       objectDescriptions.push(desc);
     });
 
-    // D. Empty Space (Minimalist Check) - REMOVED per user request (Empty canvas should be ignored)
-    /*
-    if (colorStats['__empty__']) {
+    // D. Empty Space (Minimalist Check)
+    // Only apply if we have identified objects, otherwise it's just an empty canvas we want to ignore
+    if (objectDescriptions.length > 0 && colorStats['__empty__']) {
       const emptyRatio = colorStats['__empty__'].count / totalSamples;
       if (emptyRatio > 0.75) {
         objectDescriptions.push("The composition features significant negative space");
       }
     }
-    */
 
     if (objectDescriptions.length === 0) return "";
     return objectDescriptions.join(". ") + ".";
