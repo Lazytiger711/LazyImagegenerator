@@ -135,7 +135,7 @@ export const ANGLES = [
         id: 'eye_level', label: 'angles.eye_level.label', sub: 'Eye Level', description: 'angles.eye_level.desc', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: MoveVertical
     },
     {
-        id: 'low_angle', label: 'angles.low_angle.label', sub: 'Low Angle', description: 'angles.low_angle.desc', prompt: 'low angle shot, looking up from below, imposing presence, dramatic perspective, majestic, powerful stance', icon: MoveVertical,
+        id: 'low_angle', label: 'angles.low_angle.label', sub: 'Low Angle', description: 'angles.low_angle.desc', prompt: 'low angle shot, looking up from below, camera placed low looking up', icon: MoveVertical,
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'extreme_low', label: 'variants.extreme_low', prompt: 'extreme low angle, worm\'s eye view, ground level shot' },
