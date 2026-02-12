@@ -1110,7 +1110,7 @@ export default function App() {
             .map(s => `**${s.label}**\n${s.content}`)
             .join('\n\n');
 
-          instructionPrefix = `**System Instruction:**\nCreate a detailed image prompt based on the following structured keywords. Prioritize visual style first, then strictly follow the camera angle/shot type.\n\n`;
+          instructionPrefix = `**System Instruction:**\nTransform the following keywords into a rich, cohesive visual description. Ensure the 'Visual Style' dominates the overall aesthetic, while the 'Camera Angle' directs the viewer's perspective. Harmonize conflicting elements naturally.\n\n`;
           setFinalPrompt(instructionPrefix + generatedText);
         }
 
