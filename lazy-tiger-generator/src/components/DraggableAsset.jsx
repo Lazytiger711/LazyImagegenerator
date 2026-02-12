@@ -33,7 +33,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
             {...listeners}
             {...attributes}
             onClick={() => !disabled && onClick && onClick()}
-            {/* Fixed dimensions for consistency */}
+
             className={`snap-center flex-shrink-0 w-40 h-56 flex flex-col items-center justify-center p-0 rounded-xl border shadow-sm transition-all select-none relative
                 ${disabled
                     ? 'bg-white opacity-40 grayscale cursor-not-allowed border-gray-100'
