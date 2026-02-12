@@ -103,7 +103,6 @@ export const FACING_DIRECTIONS = [
         icon: '/icons/facing/profile-right.png'
     },
     {
-    {
         id: 'facing_back_3_4_left',
         label: 'facing.facing_back_3_4_left.label',
         sub: 'Back 3/4 L',
