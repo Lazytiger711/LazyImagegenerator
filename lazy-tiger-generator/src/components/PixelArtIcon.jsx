@@ -145,11 +145,7 @@ const PixelArtIcon = ({ type, name, className, ...props }) => {
         case 'cyberpunk': return (<svg {...svgProps}><rect x="0" y="0" width="256" height="256" fill="#111827" /><g transform="translate(132, 128) scale(1.1)"><TigerHead x={0} y={0} /></g><g transform="translate(124, 128) scale(1.1)" opacity="0.5"><TigerHead x={0} y={0} /></g><path d="M0 0 L256 256" stroke="#EC4899" strokeWidth="2" opacity="0.5" /><path d="M256 0 L0 256" stroke="#06B6D4" strokeWidth="2" opacity="0.5" /><text x="128" y="240" fontSize="20" textAnchor="middle" fill="#00FF00" fontFamily="monospace">GLITCH</text></svg>);
 
         // Resolution Icons
-        case '1:1': return (<svg {...svgProps}><rect x="48" y="48" width="160" height="160" fill="none" stroke="#4B5563" strokeWidth="12" rx="8" /><text x="128" y="145" textAnchor="middle" fontSize="48" fill="#4B5563" fontFamily="sans-serif" fontWeight="bold">1:1</text></svg>);
-        case '16:9': return (<svg {...svgProps}><rect x="28" y="78" width="200" height="100" fill="none" stroke="#4B5563" strokeWidth="12" rx="8" /><text x="128" y="140" textAnchor="middle" fontSize="40" fill="#4B5563" fontFamily="sans-serif" fontWeight="bold">16:9</text></svg>);
-        case '9:16': return (<svg {...svgProps}><rect x="78" y="28" width="100" height="200" fill="none" stroke="#4B5563" strokeWidth="12" rx="8" /><text x="128" y="140" textAnchor="middle" fontSize="40" fill="#4B5563" fontFamily="sans-serif" fontWeight="bold">9:16</text></svg>);
-        case '4:3': return (<svg {...svgProps}><rect x="38" y="58" width="180" height="140" fill="none" stroke="#4B5563" strokeWidth="12" rx="8" /><text x="128" y="140" textAnchor="middle" fontSize="40" fill="#4B5563" fontFamily="sans-serif" fontWeight="bold">4:3</text></svg>);
-        case '3:4': return (<svg {...svgProps}><rect x="58" y="38" width="140" height="180" fill="none" stroke="#4B5563" strokeWidth="12" rx="8" /><text x="128" y="140" textAnchor="middle" fontSize="40" fill="#4B5563" fontFamily="sans-serif" fontWeight="bold">3:4</text></svg>);
+
 
         default: return null;
     }
