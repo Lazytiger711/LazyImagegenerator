@@ -246,6 +246,11 @@ export const LIGHTING = [
     { id: 'dramatic', label: 'lighting.dramatic.label', sub: 'Dramatic', description: 'lighting.dramatic.desc', prompt: 'dramatic lighting, chiaroscuro, high contrast, heavy shadows, cinematic lighting, moody atmosphere', icon: Zap },
     { id: 'cinematic', label: 'lighting.cinematic.label', sub: 'Cinematic', description: 'lighting.cinematic.desc', prompt: 'cinematic lighting, teal and orange, anamorphic lens flares, atmospheric, volumatric lighting, movie scene', icon: Zap },
     { id: 'rembrandt', label: 'lighting.rembrandt.label', sub: 'Rembrandt', description: 'lighting.rembrandt.desc', prompt: 'rembrandt lighting, triangle of light on cheek, classical portrait lighting, artistic shadows', icon: Zap },
+    { id: 'backlight', label: 'lighting.backlight.label', sub: 'Rim Light', description: 'lighting.backlight.desc', prompt: 'strong rim light, backlight outlining silhouette, glowing edge light, subject separated from background', icon: Zap },
+    { id: 'low_key', label: 'lighting.low_key.label', sub: 'Low Key', description: 'lighting.low_key.desc', prompt: 'low-key lighting, deep shadows, high contrast, minimal fill light, dramatic chiaroscuro', icon: Zap },
+    { id: 'high_key', label: 'lighting.high_key.label', sub: 'High Key', description: 'lighting.high_key.desc', prompt: 'high-key lighting, soft even illumination, minimal shadows, bright clean studio light', icon: Zap },
+    { id: 'film_noir', label: 'lighting.film_noir.label', sub: 'Noir', description: 'lighting.film_noir.desc', prompt: 'film noir lighting, venetian blind shadows, hard side light, dramatic contrast, moody atmosphere', icon: Zap },
+    { id: 'golden_hour', label: 'lighting.golden_hour.label', sub: 'Golden Hour', description: 'lighting.golden_hour.desc', prompt: 'golden hour lighting, warm sunset glow, soft directional sunlight, long shadows', icon: Zap },
 ];
 
 export const RESOLUTIONS = [

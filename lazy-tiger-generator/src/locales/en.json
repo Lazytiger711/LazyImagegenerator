@@ -335,6 +335,26 @@
         "rembrandt": {
             "label": "Rembrandt",
             "desc": "Classical portrait lighting"
+        },
+        "backlight": {
+            "label": "Rim Light",
+            "desc": "Strong outline light"
+        },
+        "low_key": {
+            "label": "Low Key",
+            "desc": "Deep shadows & drama"
+        },
+        "high_key": {
+            "label": "High Key",
+            "desc": "Bright & shadowless"
+        },
+        "film_noir": {
+            "label": "Noir",
+            "desc": "Venetian blind shadows"
+        },
+        "golden_hour": {
+            "label": "Golden Hour",
+            "desc": "Warm sunset glow"
         }
     },
     "resolutions": {

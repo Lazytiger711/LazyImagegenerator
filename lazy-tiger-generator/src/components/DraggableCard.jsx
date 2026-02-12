@@ -48,6 +48,15 @@ export default function DraggableCard({ item, id, onRemove, onClick }) {
             <div className="absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-gray-100 rounded-full">
                 <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">{item.type}</span>
             </div>
+
+            {/* Hover Tooltip (Description) */}
+            {item.description && (
+                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-gray-900/90 text-white text-[10px] p-2 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 text-center backdrop-blur-sm">
+                    {t(item.description)}
+                    {/* Arrow */}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900/90"></div>
+                </div>
+            )}
         </div>
     );
 }

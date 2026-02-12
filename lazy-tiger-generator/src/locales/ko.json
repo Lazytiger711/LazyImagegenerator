@@ -378,6 +378,26 @@
         "rembrandt": {
             "label": "렘브란트",
             "desc": "고전적인 인물 조명"
+        },
+        "backlight": {
+            "label": "백라이트 (Rim Light)",
+            "desc": "피사체 윤곽 강조"
+        },
+        "low_key": {
+            "label": "로우키 (Low Key)",
+            "desc": "어둡고 강렬한 대비"
+        },
+        "high_key": {
+            "label": "하이키 (High Key)",
+            "desc": "밝고 화사한 조명"
+        },
+        "film_noir": {
+            "label": "필름 누아르",
+            "desc": "블라인드 그림자 효과"
+        },
+        "golden_hour": {
+            "label": "골든 아워",
+            "desc": "따뜻한 노을빛"
         }
     },
     "resolutions": {
