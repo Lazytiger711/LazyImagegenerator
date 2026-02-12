@@ -143,7 +143,7 @@ export const ANGLES = [
         ]
     },
     {
-        id: 'high_angle', label: 'angles.high_angle.label', sub: 'High Angle', description: 'angles.high_angle.desc', prompt: 'high angle shot, looking down from above, diminishing perspective, subject appears smaller, cute animation angle', icon: MoveVertical,
+        id: 'high_angle', label: 'angles.high_angle.label', sub: 'High Angle', description: 'angles.high_angle.desc', prompt: 'high angle shot, looking down from above, camera placed high looking down', icon: MoveVertical,
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'birds_eye', label: 'variants.birds_eye', prompt: 'bird\'s eye view, aerial photography, drone shot, wide overview from sky, vast scale' },
@@ -151,10 +151,10 @@ export const ANGLES = [
         ]
     },
     {
-        id: 'top_down', label: 'angles.top_down.label', sub: 'Top Down', description: 'angles.top_down.desc', prompt: 'top-down view, 90 degree angle, flat lay, map view, satellite view, directly from above, graphic composition', icon: MoveVertical
+        id: 'top_down', label: 'angles.top_down.label', sub: 'Top Down', description: 'angles.top_down.desc', prompt: 'top-down view, 90 degree angle, directly from above, wide environmental view, map view style, distance from subject', icon: MoveVertical
     },
     {
-        id: 'isometric', label: 'angles.isometric.label', sub: 'Isometric', description: 'angles.isometric.desc', prompt: 'isometric view, 45 degree angle, axonometric perspective, game art style, technical illustration, no perspective distortion, even proportions', icon: MoveVertical
+        id: 'isometric', label: 'angles.isometric.label', sub: 'Isometric', description: 'angles.isometric.desc', prompt: 'isometric view, 45 degree angle, orthographic projection, detailed environment, game map style, wide shot composition', icon: MoveVertical
     },
     {
         id: 'dutch_angle', label: 'angles.dutch_angle.label', sub: 'Dutch Angle', description: 'angles.dutch_angle.desc', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: MoveVertical
@@ -189,7 +189,7 @@ export const SHOT_TYPES = [
         id: 'selfie', label: 'shots.selfie.label', sub: 'Selfie', description: 'shots.selfie.desc', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: Camera
     },
     {
-        id: 'over_the_shoulder', label: 'shots.over_the_shoulder.label', sub: 'OTS', description: 'shots.over_the_shoulder.desc', prompt: 'over-the-shoulder shot, view from behind subject, cinematic dialogue angle, foreground shoulder blurred', icon: Camera
+        id: 'over_the_shoulder', label: 'shots.over_the_shoulder.label', sub: 'OTS', description: 'shots.over_the_shoulder.desc', prompt: 'over-the-shoulder shot, view from behind a person looking at main subject, foreground silhouette of shoulder and head, depth of field, focus on background subject', icon: Camera
     },
     {
         id: 'first_person', label: 'shots.first_person.label', sub: 'POV', description: 'shots.first_person.desc', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: Eye
