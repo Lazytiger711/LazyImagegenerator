@@ -552,8 +552,7 @@
     },
     "variants": {
         "standard": "기본 (Standard)",
-        "extreme_low": "극단적 (Extreme)",
-        "slight_low": "약간 (Slight)",
+        "bugs_view": "벅스 뷰 (Bug's View)",
         "birds_eye": "버드 아이 (Bird's Eye)",
         "extreme_high": "극단적 (Extreme)",
         "extreme_cu": "익스트림 (Extreme CU)",

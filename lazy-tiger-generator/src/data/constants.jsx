@@ -147,7 +147,7 @@ export const ANGLES = [
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'extreme_low', label: 'variants.extreme_low', prompt: 'extreme low angle, worm\'s eye view, ground level shot' },
-            { id: 'slight_low', label: 'variants.slight_low', prompt: 'slightly low angle, subtle upward tilt' }
+            { id: 'bugs_view', label: 'variants.bugs_view', prompt: 'bug\'s eye view, microscopic perspective looking up, giant world perspective, massive scale from ground' }
         ]
     },
     {

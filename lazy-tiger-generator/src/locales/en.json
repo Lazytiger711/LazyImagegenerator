@@ -509,8 +509,7 @@
     },
     "variants": {
         "standard": "Standard",
-        "extreme_low": "Extreme",
-        "slight_low": "Slight",
+        "bugs_view": "Bug's View",
         "birds_eye": "Bird's Eye",
         "extreme_high": "Extreme",
         "extreme_cu": "Extreme CU",
