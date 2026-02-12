@@ -103,20 +103,29 @@ export const FACING_DIRECTIONS = [
         icon: '/icons/facing/profile-right.png'
     },
     {
+    {
         id: 'facing_back_3_4_left',
         label: 'facing.facing_back_3_4_left.label',
         sub: 'Back 3/4 L',
         description: 'facing.facing_back_3_4_left.desc',
-        prompt: 'body facing away from camera, back visible, head turned left looking over left shoulder, three-quarter rear view, left side of face partially visible, glancing back towards left, back shoulder stance, rear angle with left head turn',
-        icon: '/icons/facing/back-3-4-left.png'
+        prompt: 'Three-quarter rear view from left, body facing away from camera with back fully visible, shoulders angled slightly, head facing forward away from camera, face not visible, back-of-head only. Pose: relaxed back-shoulder stance. Low chance of eye contact.',
+        icon: '/icons/facing/back-3-4-left.png',
+        variants: [
+            { id: 'standard', label: 'variants.standard', prompt: '' },
+            { id: 'looking_back', label: 'variants.looking_back', prompt: 'Three-quarter rear view from left, body facing away from camera with back fully visible, shoulders angled slightly, head turned left looking over the left shoulder, only the left side of the face partially visible. Pose: relaxed back-shoulder stance. Low chance of eye contact.' }
+        ]
     },
     {
         id: 'facing_back_3_4_right',
         label: 'facing.facing_back_3_4_right.label',
         sub: 'Back 3/4 R',
         description: 'facing.facing_back_3_4_right.desc',
-        prompt: 'body facing away from camera, back visible, head turned right looking over right shoulder, three-quarter rear view, right side of face partially visible, glancing back towards right, back shoulder stance, rear angle with right head turn',
-        icon: '/icons/facing/back-3-4-right.png'
+        prompt: 'Three-quarter rear view from right, body facing away from camera with back fully visible, shoulders angled slightly, head facing forward away from camera, face not visible, back-of-head only. Pose: relaxed back-shoulder stance. No eye contact.',
+        icon: '/icons/facing/back-3-4-right.png',
+        variants: [
+            { id: 'standard', label: 'variants.standard', prompt: '' },
+            { id: 'looking_back', label: 'variants.looking_back', prompt: 'Three-quarter rear view from right, body facing away from camera with back fully visible, shoulders angled slightly, head turned right looking over the right shoulder, only the right side of the face partially visible. Pose: relaxed back-shoulder stance. Low chance of eye contact.' }
+        ]
     },
     {
         id: 'facing_back',

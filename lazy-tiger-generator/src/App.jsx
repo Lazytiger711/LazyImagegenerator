@@ -1059,7 +1059,20 @@ export default function App() {
           // Combine Subject + Context + Facing + Dynamic Modifiers
           let subjectContent = fullSubject;
 
-          const facingModifier = (subjectType === 'character' && effectiveFacing.id !== 'none') ? effectiveFacing.prompt : "";
+          let facingModifier = "";
+          if (subjectType === 'character' && effectiveFacing.id !== 'none') {
+            // Check for variants (e.g., Back 3/4 Looking Back vs Standard)
+            if (effectiveFacing.variantId && effectiveFacing.variantId !== 'standard' && effectiveFacing.variants) {
+              const v = effectiveFacing.variants.find(v => v.id === effectiveFacing.variantId);
+              if (v && v.prompt) {
+                facingModifier = v.prompt; // Use variant prompt directly if available
+              } else {
+                facingModifier = effectiveFacing.prompt; // Fallback to base
+              }
+            } else {
+              facingModifier = effectiveFacing.prompt; // Use base prompt
+            }
+          }
           if (facingModifier) subjectContent += `, ${facingModifier}`;
 
           // Dynamic Pose Injection for Characters
