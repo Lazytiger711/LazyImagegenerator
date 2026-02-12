@@ -91,7 +91,7 @@ export const FACING_DIRECTIONS = [
         label: 'facing.facing_left.label',
         sub: 'Profile L',
         description: 'facing.facing_left.desc',
-        prompt: 'full body profile facing left, head turned 90 degrees left showing left side of face only, complete side view, left shoulder forward, right side of body hidden, pure profile stance, perpendicular to camera, side silhouette',
+        prompt: 'Full-body strict left profile, exact left-facing profile (no three-quarter), head rotated so only the left side of the face is visible, shoulders and hips aligned perpendicular to camera, straight upright posture, right side fully hidden from view. Camera: medium-long shot, orthographic/neutral perspective, no foreshortening. Expression: neutral.',
         icon: '/icons/facing/profile-left.png'
     },
     {
@@ -99,7 +99,7 @@ export const FACING_DIRECTIONS = [
         label: 'facing.facing_right.label',
         sub: 'Profile R',
         description: 'facing.facing_right.desc',
-        prompt: 'full body profile facing right, head turned 90 degrees right showing right side of face only, complete side view, right shoulder forward, left side of body hidden, pure profile stance, perpendicular to camera, side silhouette',
+        prompt: 'Full-body strict right profile, exact right-facing profile (no three-quarter), head rotated so only the right side of the face is visible, shoulders and hips aligned perpendicular to camera, straight upright posture, left side fully hidden from view. Camera: medium-long shot, orthographic/neutral perspective, no foreshortening. Expression: neutral.',
         icon: '/icons/facing/profile-right.png'
     },
     {
