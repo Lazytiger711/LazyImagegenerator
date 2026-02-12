@@ -1075,12 +1075,7 @@ export default function App() {
           }
           if (facingModifier) subjectContent += `, ${facingModifier}`;
 
-          // Dynamic Pose Injection for Characters
-          const isDynamicAngle = ['low_angle', 'high_angle', 'dutch_angle', 'birds_eye'].includes(effectiveAngle.id);
-          const isDynamicComp = ['diagonal', 'leading_lines'].includes(effectiveComp.id);
-          if (subjectType === 'character' && (isDynamicAngle || isDynamicComp) && !subjectContent.toLowerCase().includes('dynamic') && !subjectContent.toLowerCase().includes('action')) {
-            subjectContent += `, dynamic pose, action shot`;
-          }
+
 
           // 4. COMPOSITION
           const compositionContent = effectiveComp.id !== 'none' ? effectiveComp.prompt : "";
