@@ -1216,30 +1216,31 @@ export default function App() {
     setTimeout(() => setShowToast(false), 2000);
   };
 
-  const uploadImageToSupabase = async (dataUrl) => {
+  // --- Helper: Upload Image to Supabase ---
+  const uploadImageToSupabase = async (imageDataUrl) => {
     try {
       // 1. Convert Data URL to Blob
-      const res = await fetch(dataUrl);
-      const blob = await res.blob();
+      const response = await fetch(imageDataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "generated-image.png", { type: "image/png" });
 
-      // 2. Generate Unique Filename
+      // 2. Upload to 'images' bucket (Note: Case-sensitive!)
       const timestamp = Date.now();
       const randomString = Math.random().toString(36).substring(2, 15);
       const fileName = `generated_${timestamp}_${randomString}.png`;
 
-      // 3. Upload to 'images' bucket
       const { data, error } = await supabase.storage
-        .from('images')
-        .upload(fileName, blob, {
+        .from('images') // Reverted to lowercase 'images'
+        .upload(fileName, file, {
           contentType: 'image/png',
           upsert: false
         });
 
       if (error) throw error;
 
-      // 4. Get Public URL
+      // 3. Get Public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('images')
+        .from('images') // Reverted to lowercase 'images'
         .getPublicUrl(fileName);
 
       return publicUrl;

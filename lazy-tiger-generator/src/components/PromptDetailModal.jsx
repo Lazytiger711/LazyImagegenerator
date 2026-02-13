@@ -135,7 +135,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                         </div>
 
                         {/* Fixed Bottom Action */}
-                        <div className="p-6 bg-white border-t border-gray-200">
+                        <div className="p-6 bg-white border-t border-gray-200 space-y-3">
                             <button
                                 onClick={handleUsePrompt}
                                 className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
@@ -143,6 +143,40 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                 <Sparkles size={20} className="mr-2" />
                                 {t('modal.use_this')}
                             </button>
+
+                            {/* Delete Button (Only for uploaded prompts, not samples) */}
+                            {!prompt.id.toString().startsWith('sample-') && (
+                                <button
+                                    onClick={async () => {
+                                        const password = window.prompt("비밀번호를 입력하세요 (관리자 키: lazytiger_admin)");
+                                        if (!password) return;
+
+                                        try {
+                                            // Call the RPC function
+                                            const { data, error } = await import('../lib/supabaseClient').then(m => m.supabase.rpc('delete_prompt_verified', {
+                                                p_id: prompt.id,
+                                                p_password: password
+                                            }));
+
+                                            if (error) throw error;
+
+                                            if (data === true) {
+                                                alert("삭제되었습니다.");
+                                                onClose();
+                                                window.location.reload(); // Refresh to update list
+                                            } else {
+                                                alert("비밀번호가 일치하지 않습니다.");
+                                            }
+                                        } catch (err) {
+                                            console.error("Delete failed:", err);
+                                            alert("삭제 중 오류가 발생했습니다.");
+                                        }
+                                    }}
+                                    className="w-full py-2.5 bg-gray-100 text-gray-400 font-bold rounded-xl hover:bg-gray-200 hover:text-red-500 transition-all flex items-center justify-center text-sm"
+                                >
+                                    게시물 삭제하기
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
