@@ -6,6 +6,7 @@ import { X, Image as ImageIcon, Loader2, Upload } from 'lucide-react';
 export default function CreatePostModal({ onClose, onPostCreated }) {
     const { t } = useTranslation();
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [password, setPassword] = useState('');
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
