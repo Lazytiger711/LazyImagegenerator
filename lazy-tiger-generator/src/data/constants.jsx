@@ -138,12 +138,11 @@ export const FACING_DIRECTIONS = [
 
 export const ANGLES = [
 
-
     {
-        id: 'eye_level', label: 'angles.eye_level.label', sub: 'Eye Level', description: 'angles.eye_level.desc', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: MoveVertical
+        id: 'eye_level', label: 'angles.eye_level.label', sub: 'Eye Level', description: 'angles.eye_level.desc', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: '/icons/angles/eye_level.png'
     },
     {
-        id: 'low_angle', label: 'angles.low_angle.label', sub: 'Low Angle', description: 'angles.low_angle.desc', prompt: 'low angle shot, looking up from below, camera placed low looking up', icon: MoveVertical,
+        id: 'low_angle', label: 'angles.low_angle.label', sub: 'Low Angle', description: 'angles.low_angle.desc', prompt: 'low angle shot, looking up from below, camera placed low looking up', icon: '/icons/angles/low_angle.png',
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'extreme_low', label: 'variants.extreme_low', prompt: 'extreme low angle, worm\'s eye view, ground level shot' },
@@ -151,7 +150,7 @@ export const ANGLES = [
         ]
     },
     {
-        id: 'high_angle', label: 'angles.high_angle.label', sub: 'High Angle', description: 'angles.high_angle.desc', prompt: 'high angle shot, looking down from above, camera placed high looking down', icon: MoveVertical,
+        id: 'high_angle', label: 'angles.high_angle.label', sub: 'High Angle', description: 'angles.high_angle.desc', prompt: 'high angle shot, looking down from above, camera placed high looking down', icon: '/icons/angles/high_angle.png',
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'birds_eye', label: 'variants.birds_eye', prompt: 'bird\'s eye view, aerial photography, drone shot, wide overview from sky, vast scale' },
@@ -159,20 +158,20 @@ export const ANGLES = [
         ]
     },
     {
-        id: 'top_down', label: 'angles.top_down.label', sub: 'Top Down', description: 'angles.top_down.desc', prompt: 'top-down view, 90 degree angle, directly from above, wide environmental view, map view style, distance from subject', icon: MoveVertical
+        id: 'top_down', label: 'angles.top_down.label', sub: 'Top Down', description: 'angles.top_down.desc', prompt: 'top-down view, 90 degree angle, directly from above, wide environmental view, map view style, distance from subject', icon: '/icons/angles/top_down.png'
     },
     {
-        id: 'isometric', label: 'angles.isometric.label', sub: 'Isometric', description: 'angles.isometric.desc', prompt: 'isometric view, 45 degree angle, orthographic projection, detailed environment, game map style, wide shot composition', icon: MoveVertical
+        id: 'isometric', label: 'angles.isometric.label', sub: 'Isometric', description: 'angles.isometric.desc', prompt: 'isometric view, 45 degree angle, orthographic projection, detailed environment, game map style, wide shot composition', icon: '/icons/angles/isometric.png'
     },
     {
-        id: 'dutch_angle', label: 'angles.dutch_angle.label', sub: 'Dutch Angle', description: 'angles.dutch_angle.desc', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: MoveVertical
+        id: 'dutch_angle', label: 'angles.dutch_angle.label', sub: 'Dutch Angle', description: 'angles.dutch_angle.desc', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: '/icons/angles/dutch_angle.png'
     }
 ];
 
 export const SHOT_TYPES = [
 
     {
-        id: 'close_up', label: 'shots.close_up.label', sub: 'Close Up', description: 'shots.close_up.desc', prompt: 'close-up shot, focus on face, detailed eyes, intense expression, portrait photography, clear facial features', icon: Camera,
+        id: 'close_up', label: 'shots.close_up.label', sub: 'Close Up', description: 'shots.close_up.desc', prompt: 'close-up shot, focus on face, detailed eyes, intense expression, portrait photography, clear facial features', icon: '/icons/shots/close_up.png',
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'extreme_cu', label: 'variants.extreme_cu', prompt: 'extreme close-up shot, macro photography, highly detailed texture, focus on specific details' },
@@ -180,13 +179,13 @@ export const SHOT_TYPES = [
         ]
     },
     {
-        id: 'bust_shot', label: 'shots.bust_shot.label', sub: 'Bust Shot', description: 'shots.bust_shot.desc', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: Camera
+        id: 'bust_shot', label: 'shots.bust_shot.label', sub: 'Bust Shot', description: 'shots.bust_shot.desc', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: '/icons/shots/bust_shot.png'
     },
     {
-        id: 'medium_shot', label: 'shots.medium_shot.label', sub: 'Medium Shot', description: 'shots.medium_shot.desc', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: Camera
+        id: 'medium_shot', label: 'shots.medium_shot.label', sub: 'Medium Shot', description: 'shots.medium_shot.desc', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: '/icons/shots/medium_shot.png'
     },
     {
-        id: 'full_shot', label: 'shots.full_shot.label', sub: 'Full Shot', description: 'shots.full_shot.desc', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: Camera,
+        id: 'full_shot', label: 'shots.full_shot.label', sub: 'Full Shot', description: 'shots.full_shot.desc', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: '/icons/shots/full_shot.png',
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'wide', label: 'variants.wide', prompt: 'wide angle full shot, broad view, environmental context' },
@@ -194,13 +193,13 @@ export const SHOT_TYPES = [
         ]
     },
     {
-        id: 'selfie', label: 'shots.selfie.label', sub: 'Selfie', description: 'shots.selfie.desc', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: Camera
+        id: 'selfie', label: 'shots.selfie.label', sub: 'Selfie', description: 'shots.selfie.desc', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: '/icons/shots/selfie.png'
     },
     {
-        id: 'over_the_shoulder', label: 'shots.over_the_shoulder.label', sub: 'OTS', description: 'shots.over_the_shoulder.desc', prompt: 'over-the-shoulder shot, view from behind a person looking at main subject, foreground silhouette of shoulder and head, depth of field, focus on background subject', icon: Camera
+        id: 'over_the_shoulder', label: 'shots.over_the_shoulder.label', sub: 'OTS', description: 'shots.over_the_shoulder.desc', prompt: 'over-the-shoulder shot, view from behind a person looking at main subject, foreground silhouette of shoulder and head, depth of field, focus on background subject', icon: '/icons/shots/over_the_shoulder.png'
     },
     {
-        id: 'first_person', label: 'shots.first_person.label', sub: 'POV', description: 'shots.first_person.desc', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: Eye
+        id: 'first_person', label: 'shots.first_person.label', sub: 'POV', description: 'shots.first_person.desc', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: '/icons/shots/first_person.png'
     },
 ];
 
@@ -240,17 +239,17 @@ export const STYLES = [
 
 export const LIGHTING = [
 
-    { id: 'natural', label: 'lighting.natural.label', sub: 'Natural', description: 'lighting.natural.desc', prompt: 'natural lighting, sunlight, soft shadows, golden hour, warm tone, outdoor lighting', icon: Zap },
-    { id: 'studio', label: 'lighting.studio.label', sub: 'Studio', description: 'lighting.studio.desc', prompt: 'studio lighting, softbox, rim light, professional lighting, clean background, sharp details', icon: Zap },
-    { id: 'neon', label: 'lighting.neon.label', sub: 'Neon', description: 'lighting.neon.desc', prompt: 'neon lighting, cyberpunk lighting, vibrant colors, glowing lights, night atmosphere, synthwave', icon: Zap },
-    { id: 'dramatic', label: 'lighting.dramatic.label', sub: 'Dramatic', description: 'lighting.dramatic.desc', prompt: 'dramatic lighting, chiaroscuro, high contrast, heavy shadows, cinematic lighting, moody atmosphere', icon: Zap },
-    { id: 'cinematic', label: 'lighting.cinematic.label', sub: 'Cinematic', description: 'lighting.cinematic.desc', prompt: 'cinematic lighting, teal and orange, anamorphic lens flares, atmospheric, volumatric lighting, movie scene', icon: Zap },
-    { id: 'rembrandt', label: 'lighting.rembrandt.label', sub: 'Rembrandt', description: 'lighting.rembrandt.desc', prompt: 'rembrandt lighting, triangle of light on cheek, classical portrait lighting, artistic shadows', icon: Zap },
-    { id: 'backlight', label: 'lighting.backlight.label', sub: 'Rim Light', description: 'lighting.backlight.desc', prompt: 'strong rim light, backlight outlining silhouette, glowing edge light, subject separated from background', icon: Zap },
-    { id: 'low_key', label: 'lighting.low_key.label', sub: 'Low Key', description: 'lighting.low_key.desc', prompt: 'low-key lighting, deep shadows, high contrast, minimal fill light, dramatic chiaroscuro', icon: Zap },
-    { id: 'high_key', label: 'lighting.high_key.label', sub: 'High Key', description: 'lighting.high_key.desc', prompt: 'high-key lighting, soft even illumination, minimal shadows, bright clean studio light', icon: Zap },
-    { id: 'film_noir', label: 'lighting.film_noir.label', sub: 'Noir', description: 'lighting.film_noir.desc', prompt: 'film noir lighting, venetian blind shadows, hard side light, dramatic contrast, moody atmosphere', icon: Zap },
-    { id: 'golden_hour', label: 'lighting.golden_hour.label', sub: 'Golden Hour', description: 'lighting.golden_hour.desc', prompt: 'golden hour lighting, warm sunset glow, soft directional sunlight, long shadows', icon: Zap },
+    { id: 'natural', label: 'lighting.natural.label', sub: 'Natural', description: 'lighting.natural.desc', prompt: 'natural lighting, sunlight, soft shadows, golden hour, warm tone, outdoor lighting', icon: '/icons/lighting/natural.png' },
+    { id: 'studio', label: 'lighting.studio.label', sub: 'Studio', description: 'lighting.studio.desc', prompt: 'studio lighting, softbox, rim light, professional lighting, clean background, sharp details', icon: '/icons/lighting/studio.png' },
+    { id: 'neon', label: 'lighting.neon.label', sub: 'Neon', description: 'lighting.neon.desc', prompt: 'neon lighting, cyberpunk lighting, vibrant colors, glowing lights, night atmosphere, synthwave', icon: '/icons/lighting/neon.png' },
+    { id: 'dramatic', label: 'lighting.dramatic.label', sub: 'Dramatic', description: 'lighting.dramatic.desc', prompt: 'dramatic lighting, chiaroscuro, high contrast, heavy shadows, cinematic lighting, moody atmosphere', icon: '/icons/lighting/dramatic.png' },
+    { id: 'cinematic', label: 'lighting.cinematic.label', sub: 'Cinematic', description: 'lighting.cinematic.desc', prompt: 'cinematic lighting, teal and orange, anamorphic lens flares, atmospheric, volumatric lighting, movie scene', icon: '/icons/lighting/cinematic.png' },
+    { id: 'rembrandt', label: 'lighting.rembrandt.label', sub: 'Rembrandt', description: 'lighting.rembrandt.desc', prompt: 'rembrandt lighting, triangle of light on cheek, classical portrait lighting, artistic shadows', icon: '/icons/lighting/rembrandt.png' },
+    { id: 'backlight', label: 'lighting.backlight.label', sub: 'Rim Light', description: 'lighting.backlight.desc', prompt: 'strong rim light, backlight outlining silhouette, glowing edge light, subject separated from background', icon: '/icons/lighting/dramatic.png' },
+    { id: 'low_key', label: 'lighting.low_key.label', sub: 'Low Key', description: 'lighting.low_key.desc', prompt: 'low-key lighting, deep shadows, high contrast, minimal fill light, dramatic chiaroscuro', icon: '/icons/lighting/dramatic.png' },
+    { id: 'high_key', label: 'lighting.high_key.label', sub: 'High Key', description: 'lighting.high_key.desc', prompt: 'high-key lighting, soft even illumination, minimal shadows, bright clean studio light', icon: '/icons/lighting/studio.png' },
+    { id: 'film_noir', label: 'lighting.film_noir.label', sub: 'Noir', description: 'lighting.film_noir.desc', prompt: 'film noir lighting, venetian blind shadows, hard side light, dramatic contrast, moody atmosphere', icon: '/icons/lighting/dramatic.png' },
+    { id: 'golden_hour', label: 'lighting.golden_hour.label', sub: 'Golden Hour', description: 'lighting.golden_hour.desc', prompt: 'golden hour lighting, warm sunset glow, soft directional sunlight, long shadows', icon: '/icons/lighting/natural.png' },
 ];
 
 export const RESOLUTIONS = [

@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
-import { Globe, TrendingUp, Clock, ArrowRight, Loader2, User, Plus, BookOpen } from 'lucide-react';
+import { Globe, TrendingUp, Clock, Loader2, User, BookOpen, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PromptDetailModal from '../components/PromptDetailModal';
 import CreatePostModal from '../components/CreatePostModal';
 import BottomNav from '../components/BottomNav';
+
+const ITEMS_PER_PAGE = 12;
 
 const SAMPLE_PROMPTS = [
     {
@@ -51,13 +53,28 @@ export default function DiscoverPage() {
     const [selectedPrompt, setSelectedPrompt] = useState(null);
     const [showCreatePost, setShowCreatePost] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [sortBy, setSortBy] = useState('popular'); // 'popular' | 'recent'
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const observer = useRef();
 
+    const lastPromptElementRef = useCallback(node => {
+        if (loading || loadingMore) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, loadingMore, hasMore]);
 
-
-    const fetchPublicPrompts = useCallback(async () => {
+    const fetchPublicPrompts = useCallback(async (pageNum = 0, isNewSort = false) => {
         try {
-            setLoading(true);
+            if (pageNum === 0) setLoading(true);
+            else setLoadingMore(true);
+
             let query = supabase
                 .from('prompts')
                 .select('*')
@@ -69,25 +86,42 @@ export default function DiscoverPage() {
                 query = query.order('created_at', { ascending: false });
             }
 
-            const { data, error } = await query.limit(12);
+            const from = pageNum * ITEMS_PER_PAGE;
+            const to = from + ITEMS_PER_PAGE - 1;
+
+            const { data, error } = await query.range(from, to);
 
             if (error) throw error;
 
-            // If no data, use sample prompts
-            setPrompts(data && data.length > 0 ? data : SAMPLE_PROMPTS);
+            if (data && data.length > 0) {
+                setPrompts(prev => (pageNum === 0 || isNewSort ? data : [...prev, ...data]));
+                setHasMore(data.length === ITEMS_PER_PAGE);
+            } else {
+                if (pageNum === 0) setPrompts(SAMPLE_PROMPTS);
+                setHasMore(false);
+            }
         } catch (error) {
             console.error('Error fetching prompts:', error);
-            // On error, show sample prompts
-            setPrompts(SAMPLE_PROMPTS);
+            if (pageNum === 0) setPrompts(SAMPLE_PROMPTS);
         } finally {
             setLoading(false);
+            setLoadingMore(false);
         }
     }, [sortBy]);
 
+    // Reset page when sorting changes
     useEffect(() => {
-        fetchPublicPrompts();
-    }, [fetchPublicPrompts]);
+        setPage(0);
+        setHasMore(true);
+        fetchPublicPrompts(0, true);
+    }, [sortBy]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // Fetch more when page increments
+    useEffect(() => {
+        if (page > 0) {
+            fetchPublicPrompts(page);
+        }
+    }, [page, fetchPublicPrompts]);
 
 
     return (
@@ -99,144 +133,128 @@ export default function DiscoverPage() {
                     backgroundImage: 'url(/community-bg.jpg)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
+                    filter: 'grayscale(30%)'
                 }}
             />
             <div className="fixed inset-0 z-0 bg-gradient-to-b from-white/90 via-white/80 to-white/90" />
 
-            {/* Content */}
-            <div className="relative z-10">
-                {/* Header */}
-                <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-20 shadow-sm">
-                    <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                        <div className="flex items-center space-x-2">
-                            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center shadow-md overflow-hidden">
-                                <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
-                            </div>
-                            <span className="text-xl font-bold">
-                                Lazy <span className="text-orange-500">Image Generator</span>
-                            </span>
-                        </div>
+            <div className="relative z-10 max-w-7xl mx-auto px-4 pb-24 pt-20 custom-scrollbar">
+
+                {/* Header Section with Guide Link */}
+                <div className="flex justify-between items-center mb-6 bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/50">
+                    <div className="flex space-x-2 bg-gray-200/50 p-1 rounded-xl">
                         <button
-                            onClick={() => navigate('/guide')}
-                            className="p-2 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-full transition-colors flex items-center gap-2 px-3"
-                            title={t('discover.nav_guide')}
+                            onClick={() => setSortBy('popular')}
+                            className={`px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center ${sortBy === 'popular'
+                                ? 'bg-white text-orange-600 shadow-sm scale-105'
+                                : 'text-gray-500 hover:text-gray-700'
+                                }`}
                         >
-                            <BookOpen size={20} />
-                            <span className="text-xs font-bold hidden sm:inline">{t('discover.nav_guide')}</span>
+                            <TrendingUp size={16} className="mr-1.5" />
+                            {t('discover.sort_popular')}
+                        </button>
+                        <button
+                            onClick={() => setSortBy('recent')}
+                            className={`px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center ${sortBy === 'recent'
+                                ? 'bg-white text-orange-600 shadow-sm scale-105'
+                                : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                        >
+                            <Clock size={16} className="mr-1.5" />
+                            {t('discover.sort_recent')}
                         </button>
                     </div>
-                </header>
 
-                {/* Sort Options - Minimal */}
-                <section className="max-w-7xl mx-auto px-4 py-6">
-                    <div className="flex justify-center items-center space-x-4">
-                        <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
-                            <button
-                                onClick={() => setSortBy('popular')}
-                                className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${sortBy === 'popular'
-                                    ? 'bg-orange-500 text-white shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
-                                    }`}
-                            >
-                                <TrendingUp size={16} className="mr-1.5" />
-                                {t('discover.sort_popular')}
-                            </button>
-                            <button
-                                onClick={() => setSortBy('recent')}
-                                className={`px-4 py-2 rounded-md text-sm font-bold transition-all flex items-center ${sortBy === 'recent'
-                                    ? 'bg-blue-500 text-white shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
-                                    }`}
-                            >
-                                <Clock size={16} className="mr-1.5" />
-                                {t('discover.sort_recent')}
-                            </button>
-                        </div>
-                    </div>
-                </section>
+                    <button
+                        onClick={() => navigate('/guide')}
+                        className="px-4 py-2 bg-white text-orange-500 font-bold rounded-xl shadow-sm hover:bg-orange-50 border border-orange-100 transition-all flex items-center text-sm"
+                    >
+                        <BookOpen size={18} className="mr-1.5" />
+                        Guide
+                    </button>
+                </div>
 
-                {/* Prompts Grid */}
-                <section className="max-w-7xl mx-auto px-4 pb-20">
-                    {loading ? (
-                        <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                            <Loader2 size={48} className="animate-spin mb-4 text-orange-500" />
-                            <p className="text-lg">{t('discover.loading')}</p>
-                        </div>
-                    ) : prompts.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-64 text-gray-400 border-2 border-dashed border-gray-200 rounded-3xl bg-white">
-                            <Globe size={64} className="mb-4 opacity-20" />
-                            <p className="text-xl font-medium mb-2">{t('discover.no_prompts_title')}</p>
-                            <p className="text-sm mb-6">{t('discover.no_prompts_desc')}</p>
-                            <button
-                                onClick={() => navigate('/create')}
-                                className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors"
+                {/* Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    {prompts.map((prompt, index) => {
+                        const Card = (
+                            <div
+                                onClick={() => setSelectedPrompt(prompt)}
+                                className="cursor-pointer group relative aspect-[3/4] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-1 bg-white"
                             >
-                                {t('discover.create_prompt')}
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {prompts.map((prompt) => (
-                                <div
-                                    key={prompt.id}
-                                    onClick={() => setSelectedPrompt(prompt)}
-                                    className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer group overflow-hidden border border-gray-100"
-                                >
-                                    {/* Image - Larger, more prominent */}
-                                    {prompt.image_url ? (
-                                        <div className="relative overflow-hidden bg-gray-100 aspect-square">
-                                            <img
-                                                src={prompt.image_url}
-                                                alt={prompt.title || prompt.settings?.subject || 'Generated image'}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                        </div>
-                                    ) : (
-                                        <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                            <span className="text-gray-400">No Image</span>
-                                        </div>
-                                    )}
-
-                                    {/* Simple Info */}
-                                    <div className="p-4">
-                                        <h3 className="font-bold text-gray-800 mb-1 line-clamp-2 text-sm">
-                                            {prompt.title || prompt.settings?.subject || t('discover.no_title')}
-                                        </h3>
-                                        <p className="text-xs text-gray-500 flex items-center">
-                                            <User size={12} className="mr-1" />
-                                            {prompt.username || prompt.user_id || t('discover.anonymous')}
-                                        </p>
+                                <img
+                                    src={prompt.image_url || '/placeholder-image.jpg'}
+                                    alt={prompt.title}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                                    <p className="text-white font-bold truncate text-lg">{prompt.title || prompt.settings?.subject || t('discover.no_title')}</p>
+                                    <div className="flex justify-between items-center text-gray-300 text-xs mt-1">
+                                        <span className="flex items-center"><User size={12} className="mr-1" /> {prompt.username || 'Anonymous'}</span>
+                                        <span className="flex items-center"><Eye size={12} className="mr-1" /> {prompt.view_count || 0}</span>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                </section>
+                            </div>
+                        );
 
-                {/* Prompt Detail Modal */}
-                {selectedPrompt && (
-                    <PromptDetailModal
-                        prompt={selectedPrompt}
-                        onClose={() => setSelectedPrompt(null)}
-                    />
+                        if (prompts.length === index + 1) {
+                            return <div ref={lastPromptElementRef} key={prompt.id}>{Card}</div>;
+                        } else {
+                            return <div key={prompt.id}>{Card}</div>;
+                        }
+                    })}
+                </div>
+
+                {/* Loading More Indicator */}
+                {loadingMore && (
+                    <div className="flex justify-center py-8">
+                        <Loader2 className="animate-spin text-orange-500 w-8 h-8" />
+                    </div>
                 )}
 
-                {/* Create Post Modal */}
-                {showCreatePost && (
-                    <CreatePostModal
-                        onClose={() => setShowCreatePost(false)}
-                        onPostCreated={() => {
-                            fetchPublicPrompts();
-                            setShowCreatePost(false);
-                        }}
-                    />
+                {/* End of results message */}
+                {!hasMore && prompts.length > 0 && (
+                    <div className="text-center py-8 text-gray-400 text-sm">
+                        No more posts to load
+                    </div>
+                )}
+
+                {/* Empty State */}
+                {!loading && prompts.length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                        <Globe size={48} className="mb-4 opacity-50" />
+                        <p>No prompts found yet.</p>
+                    </div>
+                )}
+
+                {/* Initial Loading State */}
+                {loading && page === 0 && (
+                    <div className="flex justify-center py-20">
+                        <Loader2 className="animate-spin text-orange-500 w-12 h-12" />
+                    </div>
                 )}
             </div>
 
-            {/* Bottom Navigation */}
-            <BottomNav onNewPost={() => setShowCreatePost(true)} />
+            {/* Bottom Nav */}
+            <BottomNav />
+
+            {/* Modals */}
+            {selectedPrompt && (
+                <PromptDetailModal
+                    prompt={selectedPrompt}
+                    onClose={() => setSelectedPrompt(null)}
+                />
+            )}
+            {showCreatePost && (
+                <CreatePostModal
+                    onClose={() => setShowCreatePost(false)}
+                    onPostCreated={() => {
+                        setPage(0);
+                        fetchPublicPrompts(0, true);
+                    }}
+                />
+            )}
         </div>
     );
 }
