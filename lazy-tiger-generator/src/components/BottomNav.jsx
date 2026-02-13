@@ -19,7 +19,7 @@ export default function BottomNav({ onNewPost }) {
         {
             id: 'post',
             label: 'Post',
-            icon: SimplePolaroidIcon,
+            icon: Plus,
             action: onNewPost, // Custom action
             highlight: true // Special styling
         },
