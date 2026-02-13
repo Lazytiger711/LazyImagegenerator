@@ -10,7 +10,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
     if (!prompt) return null;
 
     const handleUsePrompt = () => {
-        if (prompt.id.startsWith('sample-')) {
+        if (prompt?.id?.toString().startsWith('sample-')) {
             navigate('/create');
         } else {
             navigate(`/create?prompt=${prompt.id}`);
@@ -145,7 +145,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                             </button>
 
                             {/* Delete Button (Only for uploaded prompts, not samples) */}
-                            {!prompt.id.toString().startsWith('sample-') && (
+                            {prompt?.id && !prompt.id.toString().startsWith('sample-') && (
                                 <button
                                     onClick={async () => {
                                         const password = window.prompt("비밀번호를 입력하세요 (관리자 키: lazytiger_admin)");

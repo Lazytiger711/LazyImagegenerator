@@ -111,6 +111,7 @@ export default function App() {
 
     // 1. Conflict Logic
     Object.values(selections).forEach(selection => {
+      if (!selection) return; // Safety check
       const conflicts = CONFLICTS[selection.id];
       if (conflicts) {
         conflicts.forEach(c => disabled.add(c));
@@ -118,7 +119,7 @@ export default function App() {
     });
 
     // 2. Meme Template Locking Logic
-    if (selections.meme.id !== 'none') {
+    if (selections?.meme && selections.meme.id !== 'none') {
       // Lock these 4 categories when a meme is active
       ['shot', 'angle', 'composition', 'facing'].forEach(cat => locked.add(cat));
     }
