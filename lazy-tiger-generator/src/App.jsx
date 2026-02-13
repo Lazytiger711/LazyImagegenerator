@@ -1216,12 +1216,51 @@ export default function App() {
     setTimeout(() => setShowToast(false), 2000);
   };
 
+  const uploadImageToSupabase = async (dataUrl) => {
+    try {
+      // 1. Convert Data URL to Blob
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+
+      // 2. Generate Unique Filename
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 15);
+      const fileName = `generated_${timestamp}_${randomString}.png`;
+
+      // 3. Upload to 'images' bucket
+      const { data, error } = await supabase.storage
+        .from('images')
+        .upload(fileName, blob, {
+          contentType: 'image/png',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      // 4. Get Public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(fileName);
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return null;
+    }
+  };
+
   const handleSaveToSupabase = async () => {
     if (!finalPrompt) return; // Use finalPrompt
 
     try {
-      setToastMsg("갤러리에 저장 중...");
+      setToastMsg("이미지 업로드 및 저장 중...");
       setShowToast(true);
+
+      // Upload Image if exists
+      let publicImageUrl = null;
+      if (generatedImage) {
+        publicImageUrl = await uploadImageToSupabase(generatedImage);
+      }
 
       const { error } = await supabase
         .from('prompts')
@@ -1229,6 +1268,7 @@ export default function App() {
           {
             prompt_text: finalPrompt, // Use finalPrompt
             is_public: isPublic, // Add public flag
+            image_url: publicImageUrl, // Save Image URL
             settings: {
               shot: selections.shot,
               angle: selections.angle,
@@ -1244,7 +1284,7 @@ export default function App() {
       if (error) throw error;
 
       // Track save to gallery
-      trackEvent('prompt_save', { is_public: isPublic });
+      trackEvent('prompt_save', { is_public: isPublic, has_image: !!publicImageUrl });
 
       setToastMsg(isPublic ? "갤러리에 공개되었습니다!" : "갤러리에 저장되었습니다!");
       setTimeout(() => setShowToast(false), 2000);

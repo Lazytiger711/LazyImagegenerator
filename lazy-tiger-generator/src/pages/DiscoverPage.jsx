@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
-import { Globe, TrendingUp, Clock, ArrowRight, Loader2, User } from 'lucide-react';
+import { Globe, TrendingUp, Clock, ArrowRight, Loader2, User, Plus, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PromptDetailModal from '../components/PromptDetailModal';
+import CreatePostModal from '../components/CreatePostModal';
 import BottomNav from '../components/BottomNav';
 
 const SAMPLE_PROMPTS = [
@@ -44,12 +45,13 @@ const SAMPLE_PROMPTS = [
 ];
 
 export default function DiscoverPage() {
-    const [prompts, setPrompts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [sortBy, setSortBy] = useState('popular'); // 'popular' | 'recent'
-    const [selectedPrompt, setSelectedPrompt] = useState(null);
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const [prompts, setPrompts] = useState([]);
+    const [selectedPrompt, setSelectedPrompt] = useState(null);
+    const [showCreatePost, setShowCreatePost] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [sortBy, setSortBy] = useState('popular'); // 'popular' | 'recent'
 
 
 
@@ -116,11 +118,12 @@ export default function DiscoverPage() {
                             </span>
                         </div>
                         <button
-                            onClick={() => navigate('/create')}
-                            className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform flex items-center"
+                            onClick={() => navigate('/guide')}
+                            className="p-2 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-full transition-colors flex items-center gap-2 px-3"
+                            title={t('discover.nav_guide')}
                         >
-                            {t('discover.start')}
-                            <ArrowRight size={18} className="ml-2" />
+                            <BookOpen size={20} />
+                            <span className="text-xs font-bold hidden sm:inline">{t('discover.nav_guide')}</span>
                         </button>
                     </div>
                 </header>
@@ -185,7 +188,7 @@ export default function DiscoverPage() {
                                         <div className="relative overflow-hidden bg-gray-100 aspect-square">
                                             <img
                                                 src={prompt.image_url}
-                                                alt={prompt.settings?.subject || 'Generated image'}
+                                                alt={prompt.title || prompt.settings?.subject || 'Generated image'}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -199,7 +202,7 @@ export default function DiscoverPage() {
                                     {/* Simple Info */}
                                     <div className="p-4">
                                         <h3 className="font-bold text-gray-800 mb-1 line-clamp-2 text-sm">
-                                            {prompt.settings?.subject || t('discover.no_title')}
+                                            {prompt.title || prompt.settings?.subject || t('discover.no_title')}
                                         </h3>
                                         <p className="text-xs text-gray-500 flex items-center">
                                             <User size={12} className="mr-1" />
@@ -219,10 +222,21 @@ export default function DiscoverPage() {
                         onClose={() => setSelectedPrompt(null)}
                     />
                 )}
+
+                {/* Create Post Modal */}
+                {showCreatePost && (
+                    <CreatePostModal
+                        onClose={() => setShowCreatePost(false)}
+                        onPostCreated={() => {
+                            fetchPublicPrompts();
+                            setShowCreatePost(false);
+                        }}
+                    />
+                )}
             </div>
 
             {/* Bottom Navigation */}
-            <BottomNav />
+            <BottomNav onNewPost={() => setShowCreatePost(true)} />
         </div>
     );
 }

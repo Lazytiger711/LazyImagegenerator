@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Compass, Sparkles, BookOpen } from 'lucide-react';
+import { Compass, Sparkles, Image, Plus } from 'lucide-react';
+import SimplePolaroidIcon from './SimplePolaroidIcon';
 
-export default function BottomNav() {
+export default function BottomNav({ onNewPost }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
@@ -16,20 +17,22 @@ export default function BottomNav() {
             path: '/',
         },
         {
+            id: 'post',
+            label: 'Post',
+            icon: SimplePolaroidIcon,
+            action: onNewPost, // Custom action
+            highlight: true // Special styling
+        },
+        {
             id: 'create',
             label: t('discover.nav_create'),
             icon: Sparkles,
             path: '/create',
-        },
-        {
-            id: 'guide',
-            label: t('discover.nav_guide'),
-            icon: BookOpen,
-            path: '/guide',
-        },
+        }
     ];
 
     const isActive = (path) => {
+        if (!path) return false;
         if (path === '/') {
             return location.pathname === '/';
         }
@@ -44,12 +47,24 @@ export default function BottomNav() {
                         const Icon = tab.icon;
                         const active = isActive(tab.path);
 
+                        if (tab.highlight) {
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={tab.action}
+                                    className="flex flex-col items-center justify-center p-2 rounded-full bg-orange-500 text-white shadow-lg hover:bg-orange-600 hover:scale-105 transition-all -mt-4 mb-1"
+                                >
+                                    <Icon size={28} strokeWidth={2.5} />
+                                </button>
+                            );
+                        }
+
                         return (
                             <button
                                 key={tab.id}
                                 onClick={() => navigate(tab.path)}
                                 className={`
-                  flex flex-col items-center justify-center py-2 px-4 rounded-xl transition-all min-w-[70px]
+                  flex flex-col items-center justify-center py-2 px-4 rounded-xl transition-all min-w-[60px]
                   ${active
                                         ? 'text-orange-600 bg-orange-50'
                                         : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
@@ -61,7 +76,7 @@ export default function BottomNav() {
                                     className={`mb-1 transition-transform ${active ? 'scale-110' : ''}`}
                                     strokeWidth={active ? 2.5 : 2}
                                 />
-                                <span className={`text-xs font-bold ${active ? 'text-orange-600' : 'text-gray-600'}`}>
+                                <span className={`text-[10px] font-bold ${active ? 'text-orange-600' : 'text-gray-600'}`}>
                                     {tab.label}
                                 </span>
 
@@ -78,7 +93,7 @@ export default function BottomNav() {
             <style>{`
         /* Safe area for iOS devices */
         .safe-area-bottom {
-          padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
         }
       `}</style>
         </nav>

@@ -34,18 +34,18 @@ export default function PromptDetailModal({ prompt, onClose }) {
                     </button>
                 </div>
 
-                {/* Content - 2 Tier Layout */}
-                <div className="flex flex-col">
-                    {/* Top Section: Image + Info */}
-                    <div className="grid md:grid-cols-2 gap-6 p-6 border-b border-gray-200">
-                        {/* Left: Image */}
-                        <div className="space-y-4">
+                {/* Content - 2 Column Layout */}
+                <div className="flex flex-col md:flex-row h-[80vh]">
+                    {/* Left Column: Image + Info (Scrollable) */}
+                    <div className="w-full md:w-1/2 flex flex-col border-b md:border-b-0 md:border-r border-gray-200 overflow-y-auto">
+                        {/* Image Section */}
+                        <div className="p-6 pb-0">
                             {prompt.image_url ? (
-                                <div className="rounded-2xl overflow-hidden shadow-lg">
+                                <div className="rounded-2xl overflow-hidden shadow-lg bg-gray-100">
                                     <img
                                         src={prompt.image_url}
                                         alt={prompt.settings?.subject || 'Generated image'}
-                                        className="w-full h-auto"
+                                        className="w-full h-auto object-contain max-h-[50vh] mx-auto"
                                     />
                                 </div>
                             ) : (
@@ -55,91 +55,95 @@ export default function PromptDetailModal({ prompt, onClose }) {
                             )}
                         </div>
 
-                        {/* Right: Info */}
-                        <div className="space-y-4">
+                        {/* Info Section (Below Image) */}
+                        <div className="p-6 space-y-4">
                             {/* Title & User */}
                             <div>
                                 <h3 className="text-2xl font-bold text-gray-800 mb-2">
                                     {prompt.settings?.subject || t('discover.no_title')}
                                 </h3>
-                                <p className="text-gray-600 flex items-center mb-3">
-                                    <User size={16} className="mr-2" />
-                                    by {prompt.username || prompt.user_id || t('discover.anonymous')}
-                                </p>
+                                <div className="flex items-center justify-between">
+                                    <p className="text-gray-600 flex items-center">
+                                        <User size={16} className="mr-2" />
+                                        by {prompt.username || prompt.user_id || t('discover.anonymous')}
+                                    </p>
+                                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                                        <span className="flex items-center">
+                                            <Calendar size={12} className="mr-1" />
+                                            {new Date(prompt.created_at).toLocaleDateString()}
+                                        </span>
+                                        {prompt.view_count > 0 && (
+                                            <span className="flex items-center">
+                                                <Eye size={12} className="mr-1" />
+                                                {prompt.view_count}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                                 {prompt.settings?.context && (
-                                    <p className="text-gray-600 text-sm mb-4">
+                                    <p className="text-gray-600 text-sm mt-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
                                         {prompt.settings.context}
                                     </p>
                                 )}
                             </div>
 
-                            {/* Meta Info */}
-                            <div className="flex items-center gap-4 text-sm text-gray-500">
-                                <span className="flex items-center">
-                                    <Calendar size={14} className="mr-1" />
-                                    {new Date(prompt.created_at).toLocaleDateString()}
-                                </span>
-                                {prompt.view_count > 0 && (
-                                    <span className="flex items-center">
-                                        <Eye size={14} className="mr-1" />
-                                        {prompt.view_count} views
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* Card Composition Tags */}
+                            {/* Card Attributes */}
                             {prompt.settings && (
-                                <div className="border-t border-gray-200 pt-4">
-                                    <h4 className="text-sm font-bold text-gray-700 mb-3">{t('modal.card_combo')}</h4>
-                                    <div className="grid grid-cols-2 gap-2">
+                                <div className="pt-2">
+                                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{t('modal.card_combo')}</h4>
+                                    <div className="flex flex-wrap gap-2">
                                         {prompt.settings.shot && (
-                                            <div className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium">
+                                            <div className="bg-blue-50 text-blue-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-blue-100">
                                                 🎬 {prompt.settings.shot.label || prompt.settings.shot}
                                             </div>
                                         )}
                                         {prompt.settings.angle && (
-                                            <div className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium">
+                                            <div className="bg-green-50 text-green-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-green-100">
                                                 📐 {prompt.settings.angle.label || prompt.settings.angle}
                                             </div>
                                         )}
                                         {prompt.settings.style && (
-                                            <div className="bg-purple-50 text-purple-700 px-3 py-2 rounded-lg text-sm font-medium">
+                                            <div className="bg-purple-50 text-purple-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-purple-100">
                                                 🎨 {prompt.settings.style.label || prompt.settings.style}
                                             </div>
                                         )}
                                         {prompt.settings.composition && (
-                                            <div className="bg-orange-50 text-orange-700 px-3 py-2 rounded-lg text-sm font-medium">
+                                            <div className="bg-orange-50 text-orange-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-orange-100">
                                                 📏 {prompt.settings.composition.label || prompt.settings.composition}
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             )}
-
                         </div>
                     </div>
 
-                    {/* Bottom Section: Full Prompt */}
-                    <div className="p-6 bg-gray-50 border-b border-gray-200">
-                        <h4 className="text-sm font-bold text-gray-700 mb-3">{t('modal.generated_prompt')}</h4>
-                        <div className="bg-gray-900 rounded-xl overflow-hidden">
-                            <div className="p-4 max-h-60 overflow-y-auto">
-                                <pre className="text-orange-400 text-sm font-mono leading-relaxed whitespace-pre-wrap">
-                                    {prompt.prompt_text}
-                                </pre>
+                    {/* Right Column: Prompt + Action (Scrollable) */}
+                    <div className="w-full md:w-1/2 flex flex-col bg-gray-50/50 h-full">
+                        <div className="flex-1 overflow-y-auto p-6">
+                            <h4 className="flex items-center text-sm font-bold text-gray-700 mb-4">
+                                <Sparkles size={16} className="mr-2 text-orange-500" />
+                                {t('modal.generated_prompt')}
+                            </h4>
+                            <div className="bg-gray-900 rounded-xl overflow-hidden shadow-inner border border-gray-800">
+                                <div className="p-5">
+                                    <pre className="text-orange-300 text-sm font-mono leading-relaxed whitespace-pre-wrap font-medium">
+                                        {prompt.prompt_text}
+                                    </pre>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* CTA Button Section */}
-                    <div className="p-6 bg-white">
-                        <button
-                            onClick={handleUsePrompt}
-                            className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center"
-                        >
-                            <Sparkles size={20} className="mr-2" />
-                            {t('modal.use_this')}
-                        </button>
+                        {/* Fixed Bottom Action */}
+                        <div className="p-6 bg-white border-t border-gray-200">
+                            <button
+                                onClick={handleUsePrompt}
+                                className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
+                            >
+                                <Sparkles size={20} className="mr-2" />
+                                {t('modal.use_this')}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
