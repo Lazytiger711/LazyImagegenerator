@@ -17,6 +17,37 @@ export default function PromptDetailModal({ prompt, onClose }) {
         }
     };
 
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [editTitle, setEditTitle] = React.useState(prompt.title || prompt.settings?.subject || '');
+    const [editDescription, setEditDescription] = React.useState(prompt.description || prompt.settings?.context || '');
+
+    const handleSaveEdit = async () => {
+        const password = window.prompt("비밀번호를 입력하세요");
+        if (!password) return;
+
+        try {
+            const { data, error } = await import('../lib/supabaseClient').then(m => m.supabase.rpc('update_prompt_verified', {
+                p_id: prompt.id,
+                p_password: password,
+                p_title: editTitle,
+                p_description: editDescription
+            }));
+
+            if (error) throw error;
+
+            if (data === true) {
+                alert("수정되었습니다.");
+                setIsEditing(false);
+                window.location.reload();
+            } else {
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+        } catch (err) {
+            console.error("Update failed:", err);
+            alert("수정 중 오류가 발생했습니다.");
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
             <div
@@ -58,37 +89,64 @@ export default function PromptDetailModal({ prompt, onClose }) {
                         {/* Info Section (Below Image) */}
                         <div className="p-6 space-y-4">
                             {/* Title & User */}
+                            {/* Title & User */}
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                                    {prompt.settings?.subject || t('discover.no_title')}
-                                </h3>
-                                <div className="flex items-center justify-between">
-                                    <p className="text-gray-600 flex items-center">
-                                        <User size={16} className="mr-2" />
-                                        by {prompt.username || prompt.user_id || t('discover.anonymous')}
-                                    </p>
-                                    <div className="flex items-center gap-3 text-xs text-gray-500">
-                                        <span className="flex items-center">
-                                            <Calendar size={12} className="mr-1" />
-                                            {new Date(prompt.created_at).toLocaleDateString()}
-                                        </span>
-                                        {prompt.view_count > 0 && (
-                                            <span className="flex items-center">
-                                                <Eye size={12} className="mr-1" />
-                                                {prompt.view_count}
-                                            </span>
-                                        )}
+                                {isEditing ? (
+                                    <div className="mb-4 space-y-3">
+                                        <input
+                                            type="text"
+                                            value={editTitle}
+                                            onChange={(e) => setEditTitle(e.target.value)}
+                                            className="w-full text-xl font-bold text-gray-800 border-b-2 border-orange-200 focus:border-orange-500 outline-none py-1 transition-colors"
+                                            placeholder="제목을 입력하세요"
+                                        />
+                                        <div className="flex items-center justify-between opacity-50 pointer-events-none">
+                                            <p className="text-gray-600 flex items-center">
+                                                <User size={16} className="mr-2" />
+                                                by {prompt.username || prompt.user_id || t('discover.anonymous')}
+                                            </p>
+                                        </div>
+                                        <textarea
+                                            value={editDescription}
+                                            onChange={(e) => setEditDescription(e.target.value)}
+                                            className="w-full text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200 focus:border-orange-500 outline-none resize-none h-24 transition-colors"
+                                            placeholder="설명을 입력하세요"
+                                        />
                                     </div>
-                                </div>
-                                {prompt.settings?.context && (
-                                    <p className="text-gray-600 text-sm mt-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        {prompt.settings.context}
-                                    </p>
+                                ) : (
+                                    <>
+                                        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                                            {prompt.title || prompt.settings?.subject || t('discover.no_title')}
+                                        </h3>
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-gray-600 flex items-center">
+                                                <User size={16} className="mr-2" />
+                                                by {prompt.username || prompt.user_id || t('discover.anonymous')}
+                                            </p>
+                                            <div className="flex items-center gap-3 text-xs text-gray-500">
+                                                <span className="flex items-center">
+                                                    <Calendar size={12} className="mr-1" />
+                                                    {new Date(prompt.created_at).toLocaleDateString()}
+                                                </span>
+                                                {prompt.view_count > 0 && (
+                                                    <span className="flex items-center">
+                                                        <Eye size={12} className="mr-1" />
+                                                        {prompt.view_count}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {(prompt.description || prompt.settings?.context) && (
+                                            <p className="text-gray-600 text-sm mt-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                                {prompt.description || prompt.settings.context}
+                                            </p>
+                                        )}
+                                    </>
                                 )}
                             </div>
 
-                            {/* Card Attributes */}
-                            {prompt.settings && (
+                            {/* Card Attributes - Hide in Edit Mode or Keep? Keep for reference */}
+                            {prompt.settings && !isEditing && (
                                 <div className="pt-2">
                                     <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{t('modal.card_combo')}</h4>
                                     <div className="flex flex-wrap gap-2">
@@ -136,46 +194,72 @@ export default function PromptDetailModal({ prompt, onClose }) {
 
                         {/* Fixed Bottom Action */}
                         <div className="p-6 bg-white border-t border-gray-200 space-y-3">
-                            <button
-                                onClick={handleUsePrompt}
-                                className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
-                            >
-                                <Sparkles size={20} className="mr-2" />
-                                {t('modal.use_this')}
-                            </button>
+                            {!isEditing ? (
+                                <>
+                                    <button
+                                        onClick={handleUsePrompt}
+                                        className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
+                                    >
+                                        <Sparkles size={20} className="mr-2" />
+                                        {t('modal.use_this')}
+                                    </button>
 
-                            {/* Delete Button (Only for uploaded prompts, not samples) */}
-                            {prompt?.id && !prompt.id.toString().startsWith('sample-') && (
-                                <button
-                                    onClick={async () => {
-                                        const password = window.prompt("비밀번호를 입력하세요 (관리자 키: lazytiger_admin)");
-                                        if (!password) return;
+                                    {/* Action Buttons for Uploaded Prompts */}
+                                    {prompt?.id && !prompt.id.toString().startsWith('sample-') && (
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => setIsEditing(true)}
+                                                className="flex-1 py-2.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center text-sm"
+                                            >
+                                                게시물 수정
+                                            </button>
+                                            <button
+                                                onClick={async () => {
+                                                    const password = window.prompt("비밀번호를 입력하세요");
+                                                    if (!password) return;
 
-                                        try {
-                                            // Call the RPC function
-                                            const { data, error } = await import('../lib/supabaseClient').then(m => m.supabase.rpc('delete_prompt_verified', {
-                                                p_id: prompt.id,
-                                                p_password: password
-                                            }));
+                                                    try {
+                                                        const { data, error } = await import('../lib/supabaseClient').then(m => m.supabase.rpc('delete_prompt_verified', {
+                                                            p_id: prompt.id,
+                                                            p_password: password
+                                                        }));
 
-                                            if (error) throw error;
+                                                        if (error) throw error;
 
-                                            if (data === true) {
-                                                alert("삭제되었습니다.");
-                                                onClose();
-                                                window.location.reload(); // Refresh to update list
-                                            } else {
-                                                alert("비밀번호가 일치하지 않습니다.");
-                                            }
-                                        } catch (err) {
-                                            console.error("Delete failed:", err);
-                                            alert("삭제 중 오류가 발생했습니다.");
-                                        }
-                                    }}
-                                    className="w-full py-2.5 bg-gray-100 text-gray-400 font-bold rounded-xl hover:bg-gray-200 hover:text-red-500 transition-all flex items-center justify-center text-sm"
-                                >
-                                    게시물 삭제하기
-                                </button>
+                                                        if (data === true) {
+                                                            alert("삭제되었습니다.");
+                                                            onClose();
+                                                            window.location.reload();
+                                                        } else {
+                                                            alert("비밀번호가 일치하지 않습니다.");
+                                                        }
+                                                    } catch (err) {
+                                                        console.error("Delete failed:", err);
+                                                        alert("삭제 중 오류가 발생했습니다.");
+                                                    }
+                                                }}
+                                                className="flex-1 py-2.5 bg-gray-100 text-gray-400 font-bold rounded-xl hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center text-sm"
+                                            >
+                                                삭제
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="space-y-2">
+                                    <button
+                                        onClick={handleSaveEdit}
+                                        className="w-full py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-all shadow-md"
+                                    >
+                                        저장하기
+                                    </button>
+                                    <button
+                                        onClick={() => setIsEditing(false)}
+                                        className="w-full py-3 bg-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-300 transition-all"
+                                    >
+                                        취소
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>
