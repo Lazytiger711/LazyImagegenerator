@@ -136,9 +136,9 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                                 )}
                                             </div>
                                         </div>
-                                        {(prompt.description || prompt.settings?.context) && (
+                                        {(prompt.settings?.context) && (
                                             <p className="text-gray-600 text-sm mt-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                                {prompt.description || prompt.settings.context}
+                                                {prompt.settings.context}
                                             </p>
                                         )}
                                     </>
