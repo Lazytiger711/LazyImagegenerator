@@ -53,6 +53,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
                                 src={item.icon}
                                 alt={item.label}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                style={{ objectPosition: item.imagePosition || 'center' }}
                             />
                         )}
                         <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent ${isSelected ? 'opacity-80' : 'opacity-60 group-hover:opacity-70'}`} />

@@ -179,10 +179,10 @@ export const SHOT_TYPES = [
         ]
     },
     {
-        id: 'bust_shot', label: 'shots.bust_shot.label', sub: 'Bust Shot', description: 'shots.bust_shot.desc', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: '/icons/shots/bust_shot.png'
+        id: 'bust_shot', label: 'shots.bust_shot.label', sub: 'Bust Shot', description: 'shots.bust_shot.desc', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: '/icons/shots/bust_shot.png', imagePosition: '25% center'
     },
     {
-        id: 'medium_shot', label: 'shots.medium_shot.label', sub: 'Medium Shot', description: 'shots.medium_shot.desc', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: '/icons/shots/medium_shot.png'
+        id: 'medium_shot', label: 'shots.medium_shot.label', sub: 'Medium Shot', description: 'shots.medium_shot.desc', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: '/icons/shots/medium_shot.png', imagePosition: '25% center'
     },
     {
         id: 'full_shot', label: 'shots.full_shot.label', sub: 'Full Shot', description: 'shots.full_shot.desc', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: '/icons/shots/full_shot.png',
