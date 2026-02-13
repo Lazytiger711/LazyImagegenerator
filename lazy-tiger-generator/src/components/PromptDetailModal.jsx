@@ -186,7 +186,9 @@ export default function PromptDetailModal({ prompt, onClose }) {
                             <div className="bg-gray-900 rounded-xl overflow-hidden shadow-inner border border-gray-800">
                                 <div className="p-5">
                                     <pre className="text-orange-300 text-sm font-mono leading-relaxed whitespace-pre-wrap font-medium">
-                                        {prompt.prompt_text}
+                                        {(prompt.prompt_text && prompt.prompt_text !== "Uploaded Image")
+                                            ? prompt.prompt_text
+                                            : (prompt.description || t('modal.no_prompt'))}
                                     </pre>
                                 </div>
                             </div>

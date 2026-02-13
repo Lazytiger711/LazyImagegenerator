@@ -70,7 +70,7 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                         image_url: publicUrl,
                         is_public: true,
                         settings: {}, // Empty settings for manual uploads
-                        prompt_text: "Uploaded Image" // Placeholder
+                        prompt_text: description || "Uploaded Image" // Use description as prompt text, fallback to placeholder
                     }
                 ]);
 
