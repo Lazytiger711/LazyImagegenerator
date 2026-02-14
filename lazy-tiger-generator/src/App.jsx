@@ -29,6 +29,7 @@ import Workspace from './components/Workspace';
 import FeedbackModal from './components/FeedbackModal'; // Import Feedback Modal
 import StepIndicator from './components/StepIndicator'; // Import Step Indicator
 import BottomNav from './components/BottomNav'; // Import Bottom Navigation
+import CreatePostModal from './components/CreatePostModal'; // Import Create Post Modal
 
 
 // --- Sortable Color Button Component ---
@@ -159,6 +160,7 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState("복사되었습니다!");
 
   const [showGallery, setShowGallery] = useState(false);
+  const [showCreatePost, setShowCreatePost] = useState(false); // New Post Modal State
   const [isPublic, setIsPublic] = useState(false); // Public share toggle
   const [showFeedback, setShowFeedback] = useState(false); // Feedback modal state
 
@@ -1988,7 +1990,20 @@ export default function App() {
       </div>
 
       {/* Bottom Navigation */}
-      <BottomNav />
+      <BottomNav onNewPost={() => setShowCreatePost(true)} />
+
+      {/* Create Post Modal */}
+      {showCreatePost && (
+        <CreatePostModal
+          onClose={() => setShowCreatePost(false)}
+          onPostCreated={() => {
+            // Optional: Refresh gallery or notify
+            setToastMsg("게시물이 등록되었습니다!");
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 2000);
+          }}
+        />
+      )}
     </div >
   );
 }

@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, CheckCircle2, Wand2 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
+import CreatePostModal from '../components/CreatePostModal';
 
 export default function GuidePage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [showCreatePost, setShowCreatePost] = React.useState(false);
 
     return (
         <div className="min-h-screen bg-neutral-50 font-sans text-gray-900 selection:bg-orange-200">
@@ -174,7 +176,14 @@ export default function GuidePage() {
             </footer>
 
             {/* Bottom Navigation */}
-            <BottomNav />
+            <BottomNav onNewPost={() => setShowCreatePost(true)} />
+
+            {/* Create Post Modal */}
+            {showCreatePost && (
+                <CreatePostModal
+                    onClose={() => setShowCreatePost(false)}
+                />
+            )}
         </div>
     );
 }

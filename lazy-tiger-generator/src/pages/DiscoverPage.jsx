@@ -237,7 +237,7 @@ export default function DiscoverPage() {
             </div>
 
             {/* Bottom Nav */}
-            <BottomNav />
+            <BottomNav onNewPost={() => setShowCreatePost(true)} />
 
             {/* Modals */}
             {selectedPrompt && (
