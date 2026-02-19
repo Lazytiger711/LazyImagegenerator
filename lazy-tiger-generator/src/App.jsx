@@ -395,6 +395,10 @@ export default function App() {
                   cursorRef.current.style.display = 'none';
                 }
               }}
+              paletteColors={paletteColors}
+              setSelectedColor={setSelectedColor}
+              handlePaletteDragEnd={handlePaletteDragEnd}
+              handleAddObject={handleAddObject}
             />
           </div>
 

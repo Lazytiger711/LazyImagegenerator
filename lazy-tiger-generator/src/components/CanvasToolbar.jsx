@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Brush, Stamp, Trash2, Grid, Plus } from 'lucide-react';
+import { Brush, Stamp, Trash2, Grid, Plus, Eraser } from 'lucide-react';
 import { DndContext, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableColorButton } from './SortableColorButton';
@@ -24,9 +24,14 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
 }) {
     const { t } = useTranslation();
 
+    // Separate eraser from the rest of palette colors
+    const eraserItem = paletteColors.find(p => p.id === 'erase');
+    const paletteWithoutEraser = paletteColors.filter(p => p.id !== 'erase');
+    const canAddMore = paletteWithoutEraser.filter(p => !INITIAL_PALETTE.find(ip => ip.id === p.id) || p.id === 'bg' || p.id === 'subject').length - INITIAL_PALETTE.filter(p => p.id !== 'erase').length < EXTRA_COLORS.length;
+
     return (
         <div className="w-full max-w-5xl mb-4 bg-white p-3 rounded-2xl shadow-sm border border-orange-100 flex flex-col">
-            <div className="w-full flex items-center justify-between">
+            <div className="w-full flex items-center justify-between flex-wrap gap-2">
                 {/* Left: Tools */}
                 <div className="flex items-center space-x-2">
                     <div className="flex bg-gray-100 rounded-lg p-1">
@@ -55,7 +60,7 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
                         <input
                             type="range"
                             min="5"
-                            max="200" // Increased to 200
+                            max="200"
                             value={brushSize}
                             onChange={(e) => setBrushSize(parseInt(e.target.value))}
                             className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
@@ -82,25 +87,24 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
                     </button>
                 </div>
 
-                {/* Right Side: Colors */}
-                <div className="flex items-center space-x-2">
-                    {/* Drag-and-Drop Sortable Palette */}
+                {/* Right Side: Colors (Desktop only — mobile palette is below canvas) */}
+                <div className="hidden md:flex items-center space-x-2">
+                    {/* Drag-and-Drop Sortable Palette (eraser excluded) */}
                     <DndContext
                         onDragEnd={handlePaletteDragEnd}
                         sensors={useSensors(
                             useSensor(PointerSensor, {
-                                activationConstraint: {
-                                    distance: 5, // Require 5px movement to activate drag
-                                },
+                                activationConstraint: { distance: 5 },
                             })
                         )}
                     >
                         <SortableContext
-                            items={paletteColors.map((p) => p.id)}
+                            items={paletteWithoutEraser.map((p) => p.id)}
                             strategy={horizontalListSortingStrategy}
                         >
+                            {/* Palette + Add button inside, all overlapping */}
                             <div className="flex -space-x-2 bg-gray-50 py-2 pl-4 pr-3 rounded-xl border border-gray-100 overflow-visible isolation-auto">
-                                {paletteColors.map((p) => (
+                                {paletteWithoutEraser.map((p) => (
                                     <SortableColorButton
                                         key={p.id}
                                         colorItem={p}
@@ -108,24 +112,38 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
                                         onClick={() => setSelectedColor(p)}
                                     />
                                 ))}
+                                {/* Add Object Button — inside the overlapping palette */}
+                                {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
+                                    <button
+                                        onClick={handleAddObject}
+                                        className="w-9 h-10 rounded-lg shadow-sm border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-300 transition-colors bg-white z-10 relative shrink-0"
+                                        title={t('tools.add_object')}
+                                    >
+                                        <Plus size={16} />
+                                    </button>
+                                )}
                             </div>
                         </SortableContext>
                     </DndContext>
 
-                    {/* Add Object Button */}
-                    {paletteColors.length - INITIAL_PALETTE.length < EXTRA_COLORS.length && (
+                    {/* Eraser — separated, square shape, no overlap */}
+                    {eraserItem && (
                         <button
-                            onClick={handleAddObject}
-                            className="w-8 h-8 rounded-full border border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-orange-500 hover:border-orange-300 transition-colors bg-white"
-                            title={t('tools.add_object')}
+                            onClick={() => setSelectedColor(eraserItem)}
+                            className={`w-9 h-10 rounded-lg border-2 flex items-center justify-center transition-all shrink-0
+                                ${selectedColor.id === 'erase'
+                                    ? 'bg-gray-200 border-gray-500 text-gray-700 shadow-md scale-105'
+                                    : 'bg-gray-50 border-gray-200 text-gray-400 hover:bg-gray-100 hover:border-gray-400'
+                                }`}
+                            title={t('tools.eraser', 'Eraser')}
                         >
-                            <Plus size={16} />
+                            <Eraser size={16} />
                         </button>
                     )}
                 </div>
             </div>
 
-            {/* Stamp Selector (Visible only in Stamp Mode, Moved to bottom row) */}
+            {/* Stamp Selector (Visible only in Stamp Mode) */}
             {toolMode === 'stamp' && (
                 <div className="w-full mt-2 pt-2 border-t border-gray-100 flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-hide">
                     <span className="text-[10px] font-bold text-gray-400 shrink-0">{t('tools.stamps_label')}</span>
