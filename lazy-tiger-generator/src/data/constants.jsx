@@ -412,24 +412,40 @@ export const MEME_TEMPLATES = [
 // Value: Array of option IDs that should be disabled when Key is selected
 export const CONFLICTS = {
     // Shot Selection Conflicts
-    // Shot Selection Conflicts
     'close_up': ['long_shot'], // Simplify: Close up conflicts with Long Shot
-    'selfie': ['back_view', 'facing_back', 'facing_back_3_4_left', 'facing_back_3_4_right'],
+
+    // Selfie Conflicts: A selfie MUST perform a front-facing action. 
+    // It is physically impossible to take a selfie while facing away or in profile without a mirror (which we don't assume).
+    'selfie': [
+        'back_view',
+        'facing_back',
+        'facing_back_3_4_left',
+        'facing_back_3_4_right',
+        'facing_left',
+        'facing_right',
+        'facing_front_3_4_left', // Even 3/4 might be weird for a standard selfie, usually looked directly at.
+        'facing_front_3_4_right'
+    ],
 
     // Angle Selection Conflicts
-    // High Angle (includes birds_eye) conflicts with Close Up generally? Maybe not.
-    // Let's keep it simple.
-    'top_down': ['extreme_close_up', 'close_up', 'bust_shot', 'selfie'],
+    // Top Down is a map view. It conflicts with intimate close-ups or selfies.
+    'top_down': ['extreme_close_up', 'close_up', 'tight_cu', 'selfie', 'bust_shot'],
 
     // Composition Conflicts
     'negative_space': ['extreme_close_up'],
 
-    // Facing Conflicts
+    // Facing Conflicts (Reverse check for Selfie)
     'facing_back': ['selfie'],
     'facing_back_3_4_left': ['selfie'],
     'facing_back_3_4_right': ['selfie'],
+    'facing_left': ['selfie'],
+    'facing_right': ['selfie'],
 
-    // Pixel Art style limitations (No complex lighting or tilted angles)
-    'pixel_8bit': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon'],
-    'pixel_16bit': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon']
+    // Style Limitations: Pixel Art & Flat Styles
+    // these 2D styles clash with 3D/Photorealistic lighting and camera angles.
+    'pixel_8bit': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon', 'film_noir', 'bokeh'],
+    'pixel_16bit': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon', 'film_noir', 'bokeh'],
+    'american_comic': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon', 'film_noir', 'bokeh'], // Comic style is flat ink
+    'flat_illustration': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon', 'film_noir', 'bokeh'], // General flat styles
+    'pop_art': ['dutch_angle', 'cinematic', 'rembrandt', 'dramatic', 'studio', 'neon', 'film_noir', 'bokeh']
 };

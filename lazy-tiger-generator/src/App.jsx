@@ -1046,7 +1046,17 @@ export default function App() {
           // --- MODE: STANDARD GENERATION ---
 
           // 1. VISUAL STYLE
-          const styleContent = selections.style.id !== 'none' ? selections.style.prompt : "";
+          let styleContent = selections.style.id !== 'none' ? selections.style.prompt : "";
+
+          // --- CONFLICT RESOLUTION: FULL SHOT vs MACRO DETAILS ---
+          // If a Full/Wide/Long shot is selected, remove "macro" or "close-up" keywords from style
+          // that would otherwise force the AI to crop the image.
+          if (effectiveShot.id === 'full_shot' || effectiveShot.id === 'long_shot' || (effectiveShot.variants && effectiveShot.variantId && ['wide', 'long_shot'].includes(effectiveShot.variantId))) {
+            styleContent = styleContent.replace(/, macro lens detail/gi, "")
+              .replace(/, visible pores/gi, "")
+              .replace(/, close up/gi, "")
+              .replace(/, extreme close-up/gi, "");
+          }
 
           // 2. CAMERA ANGLE (Strict Conflict Resolution)
           if (effectiveShot.id === 'selfie') {
