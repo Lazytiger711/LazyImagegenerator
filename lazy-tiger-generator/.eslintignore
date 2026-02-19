@@ -1,0 +1,9 @@
+# Backups
+백업/
+backup/
+_backup/
+
+# Build
+dist/
+build/
+node_modules/

@@ -1,21 +1,39 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { X, Trash2, Wand2, Loader2, Calendar, Globe, Clock, TrendingUp } from 'lucide-react';
+
+const ITEMS_PER_PAGE = 12;
 
 export default function Gallery({ onClose, onLoad }) {
     const [prompts, setPrompts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [galleryMode, setGalleryMode] = useState('my'); // 'my' | 'explore'
     const [sortBy, setSortBy] = useState('recent'); // 'recent' | 'popular'
 
-    // Fetch prompts from Supabase
-    useEffect(() => {
-        fetchPrompts();
-    }, [fetchPrompts]);
+    // Pagination State
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const observer = useRef();
 
-    const fetchPrompts = useCallback(async () => {
+    // Infinite Scroll Observer
+    const lastPromptElementRef = useCallback(node => {
+        if (loading || loadingMore) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, loadingMore, hasMore]);
+
+    // Fetch prompts from Supabase
+    const fetchPrompts = useCallback(async (pageNum = 0, isNewFilter = false) => {
         try {
-            setLoading(true);
+            if (pageNum === 0) setLoading(true);
+            else setLoadingMore(true);
+
             let query = supabase.from('prompts').select('*');
 
             // Filter by mode
@@ -30,16 +48,42 @@ export default function Gallery({ onClose, onLoad }) {
                 query = query.order('created_at', { ascending: false });
             }
 
-            const { data, error } = await query;
+            // Pagination Range
+            const from = pageNum * ITEMS_PER_PAGE;
+            const to = from + ITEMS_PER_PAGE - 1;
+
+            const { data, error } = await query.range(from, to);
 
             if (error) throw error;
-            setPrompts(data || []);
+
+            if (data && data.length > 0) {
+                setPrompts(prev => (pageNum === 0 || isNewFilter ? data : [...prev, ...data]));
+                setHasMore(data.length === ITEMS_PER_PAGE);
+            } else {
+                if (pageNum === 0) setPrompts([]); // Empty state
+                setHasMore(false);
+            }
         } catch (error) {
             console.error('Error fetching prompts:', error);
         } finally {
             setLoading(false);
+            setLoadingMore(false);
         }
     }, [galleryMode, sortBy]);
+
+    // Reset and fetch on filter change
+    useEffect(() => {
+        setPage(0);
+        setHasMore(true);
+        fetchPrompts(0, true);
+    }, [galleryMode, sortBy]); // Fetch only when filters change
+
+    // Fetch more on page increment
+    useEffect(() => {
+        if (page > 0) {
+            fetchPrompts(page);
+        }
+    }, [page]);
 
     const handleDelete = async (id, e) => {
         e.stopPropagation(); // Prevent triggering onLoad
@@ -65,7 +109,7 @@ export default function Gallery({ onClose, onLoad }) {
             <div className="bg-white w-full max-w-4xl max-h-[85vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
 
                 {/* Header */}
-                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10 shrink-0">
                     <div>
                         <h2 className="text-2xl font-bold text-gray-800 flex items-center">
                             <span className="bg-orange-100 p-2 rounded-lg mr-3 text-orange-600">
@@ -86,7 +130,7 @@ export default function Gallery({ onClose, onLoad }) {
                 </div>
 
                 {/* Tab Toggle + Sort */}
-                <div className="px-6 py-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                <div className="px-6 py-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center shrink-0">
                     {/* Mode Toggle */}
                     <div className="flex bg-white rounded-lg p-1 border border-gray-200">
                         <button
@@ -139,8 +183,8 @@ export default function Gallery({ onClose, onLoad }) {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
-                    {loading ? (
+                <div className="flex-1 overflow-y-auto p-6 bg-gray-50 custom-scrollbar">
+                    {loading && page === 0 ? (
                         <div className="flex flex-col items-center justify-center h-64 text-gray-400">
                             <Loader2 size={32} className="animate-spin mb-3 text-orange-500" />
                             <p>불러오는 중...</p>
@@ -156,48 +200,66 @@ export default function Gallery({ onClose, onLoad }) {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {prompts.map((item) => (
-                                <div
-                                    key={item.id}
-                                    onClick={() => onLoad(item.settings)}
-                                    className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-orange-300 transition-all cursor-pointer group relative"
-                                >
-                                    <div className="flex justify-between items-start mb-3">
-                                        <div className="flex items-center space-x-2">
-                                            <span className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-full border border-orange-100">
-                                                {new Date(item.created_at).toLocaleDateString()}
-                                            </span>
-                                            {galleryMode === 'explore' && item.view_count > 0 && (
-                                                <span className="text-xs text-gray-400 flex items-center">
-                                                    👁️ {item.view_count}
+                            {prompts.map((item, index) => {
+                                const isLast = prompts.length === index + 1;
+                                return (
+                                    <div
+                                        key={item.id}
+                                        ref={isLast ? lastPromptElementRef : null}
+                                        onClick={() => onLoad(item.settings)}
+                                        className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-orange-300 transition-all cursor-pointer group relative"
+                                    >
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-full border border-orange-100">
+                                                    {new Date(item.created_at).toLocaleDateString()}
                                                 </span>
+                                                {galleryMode === 'explore' && item.view_count > 0 && (
+                                                    <span className="text-xs text-gray-400 flex items-center">
+                                                        👁️ {item.view_count}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            {galleryMode === 'my' && (
+                                                <button
+                                                    onClick={(e) => handleDelete(item.id, e)}
+                                                    className="text-gray-300 hover:text-red-500 transition-colors p-1"
+                                                    title="삭제"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
                                             )}
                                         </div>
-                                        {galleryMode === 'my' && (
-                                            <button
-                                                onClick={(e) => handleDelete(item.id, e)}
-                                                className="text-gray-300 hover:text-red-500 transition-colors p-1"
-                                                title="삭제"
-                                            >
-                                                <Trash2 size={16} />
-                                            </button>
-                                        )}
-                                    </div>
 
-                                    <h3 className="font-bold text-gray-800 mb-2 line-clamp-1">
-                                        {item.settings.subject || "제목 없음"}
-                                    </h3>
+                                        <h3 className="font-bold text-gray-800 mb-2 line-clamp-1">
+                                            {item.settings.subject || "제목 없음"}
+                                        </h3>
 
-                                    <div className="bg-gray-50 p-3 rounded-xl text-xs text-gray-600 font-mono mb-4 line-clamp-3 border border-gray-100 leading-relaxed">
-                                        {item.prompt_text}
-                                    </div>
+                                        <div className="bg-gray-50 p-3 rounded-xl text-xs text-gray-600 font-mono mb-4 line-clamp-3 border border-gray-100 leading-relaxed">
+                                            {item.prompt_text}
+                                        </div>
 
-                                    <div className="flex items-center text-orange-600 text-sm font-bold group-hover:underline">
-                                        <Wand2 size={14} className="mr-1.5" />
-                                        불러오기
+                                        <div className="flex items-center text-orange-600 text-sm font-bold group-hover:underline">
+                                            <Wand2 size={14} className="mr-1.5" />
+                                            불러오기
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {/* Load More Spinner */}
+                    {loadingMore && (
+                        <div className="flex justify-center py-6">
+                            <Loader2 className="animate-spin text-orange-500 w-6 h-6" />
+                        </div>
+                    )}
+
+                    {/* End Message */}
+                    {!hasMore && prompts.length > 0 && (
+                        <div className="text-center py-6 text-gray-400 text-xs">
+                            모든 프롬프트를 불러왔습니다.
                         </div>
                     )}
                 </div>
