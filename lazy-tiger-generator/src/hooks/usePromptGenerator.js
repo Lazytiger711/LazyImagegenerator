@@ -464,7 +464,7 @@ export const usePromptGenerator = ({
                         { label: '4. COMPOSITION', content: compositionContent },
                         { label: '5. LIGHTING', content: lightingContent },
                         { label: '6. TECHNICAL', content: technicalContent },
-                        { label: '7. LAYOUT GUIDE', content: layoutContent }
+                        { label: '7. COMPOSITION HINT (optional, follow if it fits naturally)', content: layoutContent }
                     ];
 
                     generatedText = sections
@@ -472,7 +472,7 @@ export const usePromptGenerator = ({
                         .map(s => `**${s.label}**\n${s.content}`)
                         .join('\n\n');
 
-                    instructionPrefix = `**System Instruction:**\nYou are generating an image description. Follow these sections in order of priority.\nCRITICAL: The 'LAYOUT GUIDE' section describes the exact position of objects — you MUST honor this placement strictly. All other elements (style, lighting, camera angle) should serve this composition, not override it.\n\n`;
+                    instructionPrefix = `**System Instruction:**\nYou are generating an image description. Use all sections below as creative guidance. The 'LAYOUT GUIDE' section is a soft compositional hint — try to follow it where it naturally fits, but do not let it override aspect ratio, resolution, or other explicit technical requirements.\n\n`;
                     setFinalPrompt(instructionPrefix + generatedText);
                 }
 
