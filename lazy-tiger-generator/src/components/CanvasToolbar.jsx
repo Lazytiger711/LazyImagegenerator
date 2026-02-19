@@ -99,7 +99,7 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
                             items={paletteColors.map((p) => p.id)}
                             strategy={horizontalListSortingStrategy}
                         >
-                            <div className="flex space-x-1.5 bg-gray-50 p-2 px-3 rounded-xl border border-gray-100 overflow-visible isolation-auto">
+                            <div className="flex -space-x-2 bg-gray-50 py-2 pl-4 pr-3 rounded-xl border border-gray-100 overflow-visible isolation-auto">
                                 {paletteColors.map((p) => (
                                     <SortableColorButton
                                         key={p.id}

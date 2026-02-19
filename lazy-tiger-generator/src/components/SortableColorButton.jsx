@@ -41,7 +41,7 @@ export function SortableColorButton({ colorItem, isSelected, onClick }) {
             onClick={handleClick}
             className={`
         w-9 h-10 rounded-lg shadow-sm border-2 border-white flex items-center justify-center transition-all relative cursor-grab active:cursor-grabbing
-        ${isSelected ? 'ring-2 ring-orange-500 z-30 scale-110 shadow-lg -translate-y-1' : 'hover:scale-105 hover:-translate-y-1 hover:z-40 hover:shadow-md'}
+        ${isSelected ? 'ring-2 ring-orange-500 z-30 scale-110 shadow-lg -translate-y-1' : 'z-10 hover:scale-105 hover:-translate-y-1 hover:z-40 hover:shadow-md'}
       `}
             title={colorItem.label}
         >
