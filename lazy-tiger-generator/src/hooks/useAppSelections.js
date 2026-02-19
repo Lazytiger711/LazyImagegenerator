@@ -46,7 +46,7 @@ export function useAppSelections({ trackEvent }) {
             case 'style': return { id: 'none', label: 'common.none', variantId: null };
             case 'facing': return { id: 'none', label: 'common.none', variantId: null };
             case 'meme': return { id: 'none', label: 'common.none' };
-            default: return null;
+            default: return { id: 'none', label: 'common.none' }; // safe fallback instead of null
         }
     }, []);
 
@@ -147,13 +147,14 @@ export function useAppSelections({ trackEvent }) {
     const handleRemoveItem = useCallback((uid) => {
         // Find the type of the item to remove
         const itemToRemove = workspaceItems.find(i => i.uid === uid || i.id === uid);
-        if (!itemToRemove) return;
+        if (!itemToRemove || !itemToRemove.type) return; // guard: type must exist
 
         // Reset that specific selection to None
         const type = itemToRemove.type;
+        const noneItem = getNoneItem(type);
         setSelections(prev => ({
             ...prev,
-            [type]: getNoneItem(type)
+            [type]: noneItem
         }));
     }, [workspaceItems, getNoneItem]);
 
