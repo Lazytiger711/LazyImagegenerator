@@ -136,7 +136,7 @@ const DrawingArea = React.memo(function DrawingArea({
                             items={paletteWithoutEraser.map(p => p.id)}
                             strategy={horizontalListSortingStrategy}
                         >
-                            <div className="flex -space-x-2 bg-gray-50 py-2 pl-4 pr-3 rounded-xl border border-gray-100 overflow-x-auto isolation-auto flex-1">
+                            <div className="flex -space-x-2 bg-gray-50 py-2 pl-4 pr-3 rounded-xl border border-gray-100 isolation-auto flex-1" style={{ touchAction: 'none' }}>
                                 {paletteWithoutEraser.map((p) => (
                                     <SortableColorButton
                                         key={p.id}
