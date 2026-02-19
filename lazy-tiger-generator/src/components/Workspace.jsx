@@ -3,7 +3,7 @@ import DraggableCard from './DraggableCard';
 import { Plus, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export default function Workspace({ items, onRemove }) {
+export default function Workspace({ items, onRemove, onClearAll }) {
     const { t } = useTranslation();
 
     return (
@@ -14,8 +14,18 @@ export default function Workspace({ items, onRemove }) {
                     <h2 className="text-2xl font-black text-gray-800">{t('workspace.title')}</h2>
                     <p className="text-sm text-gray-500">{t('workspace.desc')}</p>
                 </div>
-                <div className="text-xs font-mono bg-gray-200 px-3 py-1 rounded-full text-gray-600">
-                    {items.length} {t('workspace.items_selected')}
+                <div className="flex items-center gap-2">
+                    {items.length > 0 && (
+                        <button
+                            onClick={onClearAll}
+                            className="text-xs font-semibold text-red-400 hover:text-red-600 hover:bg-red-50 px-3 py-1 rounded-full border border-red-200 hover:border-red-300 transition-all"
+                        >
+                            {t('workspace.clear_all', '전체 취소')}
+                        </button>
+                    )}
+                    <div className="text-xs font-mono bg-gray-200 px-3 py-1 rounded-full text-gray-600">
+                        {items.length} {t('workspace.items_selected')}
+                    </div>
                 </div>
             </div>
 

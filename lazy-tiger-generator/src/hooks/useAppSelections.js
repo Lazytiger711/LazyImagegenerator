@@ -143,7 +143,7 @@ export function useAppSelections({ trackEvent }) {
         { ...selections.resolution, type: 'resolution', uid: 'resolution-item' },
     ].filter(item => item && (item.id !== 'none'));
 
-    // Handle removal of an item from workspace
+    // Handle removal of an item from workspace — use type directly from workspaceItems snapshot
     const handleRemoveItem = useCallback((uid) => {
         // Find the type of the item to remove
         const itemToRemove = workspaceItems.find(i => i.uid === uid || i.id === uid);
@@ -157,6 +157,20 @@ export function useAppSelections({ trackEvent }) {
             [type]: noneItem
         }));
     }, [workspaceItems, getNoneItem]);
+
+    // Clear all selections at once
+    const handleClearAll = useCallback(() => {
+        setSelections(prev => ({
+            ...prev,
+            shot: { id: 'none', label: 'common.none', variantId: null },
+            angle: { id: 'none', label: 'common.none', variantId: null },
+            facing: { id: 'none', label: 'common.none', variantId: null },
+            composition: { id: 'none', label: 'common.none', variantId: null },
+            style: { id: 'none', label: 'common.none', variantId: null },
+            lighting: { id: 'none', label: 'common.none', variantId: null },
+            meme: { id: 'none', label: 'common.none' },
+        }));
+    }, []);
 
     // Handle palette color reordering via drag-and-drop
     const handlePaletteDragEnd = useCallback((event) => {
@@ -199,6 +213,7 @@ export function useAppSelections({ trackEvent }) {
         setSelectedColor,
         handleAssetClick,
         handleRemoveItem,
+        handleClearAll,
         handlePaletteDragEnd,
         handleAddObject,
         getNoneItem,

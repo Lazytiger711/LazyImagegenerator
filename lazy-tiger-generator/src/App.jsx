@@ -47,6 +47,7 @@ export default function App() {
     selectedColor, setSelectedColor,
     handleAssetClick,
     handleRemoveItem,
+    handleClearAll,
     handlePaletteDragEnd,
     handleAddObject,
     getNoneItem,
@@ -335,7 +336,7 @@ export default function App() {
             </p>
             {/* Wrapper to control size if needed, but flex-1 with padding works well to isolate it */}
             <div className="border-2 border-dashed border-gray-200 rounded-3xl bg-gray-100/50 min-h-[120px]">
-              <Workspace items={workspaceItems} onRemove={handleRemoveItem} />
+              <Workspace items={workspaceItems} onRemove={handleRemoveItem} onClearAll={handleClearAll} />
             </div>
           </div>
 
