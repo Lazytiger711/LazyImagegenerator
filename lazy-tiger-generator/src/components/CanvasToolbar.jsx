@@ -25,7 +25,7 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
     const { t } = useTranslation();
 
     return (
-        <div className="w-full max-w-5xl mb-4 bg-white p-2 rounded-2xl shadow-sm border border-orange-100 flex flex-col">
+        <div className="w-full max-w-5xl mb-4 bg-white p-3 rounded-2xl shadow-sm border border-orange-100 flex flex-col">
             <div className="w-full flex items-center justify-between">
                 {/* Left: Tools */}
                 <div className="flex items-center space-x-2">
@@ -99,7 +99,7 @@ const CanvasToolbar = React.memo(function CanvasToolbar({
                             items={paletteColors.map((p) => p.id)}
                             strategy={horizontalListSortingStrategy}
                         >
-                            <div className="flex -space-x-3 bg-gray-50 p-2 pl-4 rounded-xl border border-gray-100 overflow-visible isolation-auto">
+                            <div className="flex space-x-1.5 bg-gray-50 p-2 px-3 rounded-xl border border-gray-100 overflow-visible isolation-auto">
                                 {paletteColors.map((p) => (
                                     <SortableColorButton
                                         key={p.id}
