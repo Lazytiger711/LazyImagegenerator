@@ -173,31 +173,48 @@ export const usePromptGenerator = ({
             const centerX = stats.sumX / stats.count;
             const centerY = stats.sumY / stats.count;
 
-            // 5x5 Grid Position
-            const col = Math.floor((centerX / width) * 5);
-            const row = Math.floor((centerY / height) * 5);
+            // Quadrant-based position (natural language for LLMs)
+            const normX = centerX / width;
+            const normY = centerY / height;
 
-            const hPos = ["far-left", "left", "center", "right", "far-right"][Math.min(col, 4)];
-            const vPos = ["top", "upper-middle", "middle", "lower-middle", "bottom"][Math.min(row, 4)];
+            // Horizontal zone
+            let hZone;
+            if (normX < 0.25) hZone = "far-left";
+            else if (normX < 0.45) hZone = "left";
+            else if (normX < 0.55) hZone = "center";
+            else if (normX < 0.75) hZone = "right";
+            else hZone = "far-right";
+
+            // Vertical zone
+            let vZone;
+            if (normY < 0.25) vZone = "upper";
+            else if (normY < 0.45) vZone = "upper-middle";
+            else if (normY < 0.55) vZone = "middle";
+            else if (normY < 0.75) vZone = "lower-middle";
+            else vZone = "lower";
+
+            // Natural language quadrant description
+            let posDesc = "";
+            if (vZone === "middle" && hZone === "center") {
+                posDesc = "centered in the frame";
+            } else if (hZone === "center") {
+                posDesc = `in the ${vZone} portion of the frame`;
+            } else if (vZone === "middle") {
+                posDesc = `in the ${hZone} portion of the frame`;
+            } else {
+                posDesc = `in the ${vZone}-${hZone} area of the frame`;
+            }
 
             // Size Dominance
             const coverageRatio = stats.count / totalSamples;
             const coveragePercent = Math.round(coverageRatio * 100);
-            let sizeStr = "";
-            let dominanceStr = "";
+            let sizeStr;
+            if (coverageRatio > 0.6) sizeStr = "dominant (roughly 3/4 of the canvas)";
+            else if (coverageRatio > 0.35) sizeStr = "large (roughly half the canvas)";
+            else if (coverageRatio > 0.15) sizeStr = "medium-sized (roughly 1/4 of the canvas)";
+            else sizeStr = "small";
 
-            if (coverageRatio > 0.6) { sizeStr = "massive"; dominanceStr = "dominating the composition"; }
-            else if (coverageRatio > 0.35) { sizeStr = "large"; dominanceStr = "prominently featured"; }
-            else if (coverageRatio > 0.15) { sizeStr = "medium-sized"; dominanceStr = "clearly clear"; } // "clearly clear" -> "clearly visible" typo fix? "clearly defined"
-            else { sizeStr = "small"; dominanceStr = "subtly placed"; }
-
-            if (coverageRatio > 0.15) dominanceStr = "clearly defined"; // Fix typo
-
-            let posDesc = "";
-            if (vPos === "middle" && hPos === "center") posDesc = "centered in the frame";
-            else posDesc = `positioned at the ${vPos}-${hPos}`;
-
-            objectDescriptions.push(`The ${getLabel(mainSubject)} is a ${sizeStr} subject, ${posDesc} (${dominanceStr}, occupying ${coveragePercent}% of view)`);
+            objectDescriptions.push(`Place the MAIN SUBJECT (${getLabel(mainSubject)}) ${posDesc} — ${sizeStr}, occupying about ${coveragePercent}% of the frame`);
         }
 
         // Describe Other Objects
@@ -220,16 +237,30 @@ export const usePromptGenerator = ({
                     desc = `The ${getLabel(obj)} is in the background, behind the ${getLabel(mainSubject)}`;
                 }
             } else {
-                const col = Math.floor((centerX / width) * 5);
-                const row = Math.floor((centerY / height) * 5);
-                const hPos = ["far-left", "left", "center", "right", "far-right"][Math.min(col, 4)];
-                const vPos = ["top", "upper-middle", "middle", "lower-middle", "bottom"][Math.min(row, 4)];
+                const normX2 = centerX / width;
+                const normY2 = centerY / height;
 
-                let loc = "";
-                if (vPos === "middle" && hPos === "center") loc = "in the absolute center";
-                else loc = `in the ${vPos}-${hPos} area`;
+                let hZone2;
+                if (normX2 < 0.25) hZone2 = "far-left";
+                else if (normX2 < 0.45) hZone2 = "left";
+                else if (normX2 < 0.55) hZone2 = "center";
+                else if (normX2 < 0.75) hZone2 = "right";
+                else hZone2 = "far-right";
 
-                desc = `The ${getLabel(obj)} is positioned ${loc}`;
+                let vZone2;
+                if (normY2 < 0.25) vZone2 = "upper";
+                else if (normY2 < 0.45) vZone2 = "upper-middle";
+                else if (normY2 < 0.55) vZone2 = "middle";
+                else if (normY2 < 0.75) vZone2 = "lower-middle";
+                else vZone2 = "lower";
+
+                let loc2;
+                if (vZone2 === "middle" && hZone2 === "center") loc2 = "in the absolute center of the frame";
+                else if (hZone2 === "center") loc2 = `in the ${vZone2} portion of the frame`;
+                else if (vZone2 === "middle") loc2 = `in the ${hZone2} portion of the frame`;
+                else loc2 = `in the ${vZone2}-${hZone2} area of the frame`;
+
+                desc = `Place ${getLabel(obj)} ${loc2}`;
             }
             objectDescriptions.push(desc);
         });
@@ -441,7 +472,7 @@ export const usePromptGenerator = ({
                         .map(s => `**${s.label}**\n${s.content}`)
                         .join('\n\n');
 
-                    instructionPrefix = `**System Instruction:**\nTransform the following keywords into a rich, cohesive visual description. Ensure the 'Visual Style' dominates the overall aesthetic, while the 'Camera Angle' directs the viewer's perspective. Harmonize conflicting elements naturally.\n\n`;
+                    instructionPrefix = `**System Instruction:**\nYou are generating an image description. Follow these sections in order of priority.\nCRITICAL: The 'LAYOUT GUIDE' section describes the exact position of objects — you MUST honor this placement strictly. All other elements (style, lighting, camera angle) should serve this composition, not override it.\n\n`;
                     setFinalPrompt(instructionPrefix + generatedText);
                 }
 
