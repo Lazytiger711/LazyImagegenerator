@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Check, X, Copy, Download, Share2, Compass, MessageSquare } from 'lucide-react';
 
-export default function ResultOverlay({
+const ResultOverlay = React.memo(function ResultOverlay({
     showResult,
     setShowResult,
     generatedImage,
@@ -126,4 +126,6 @@ export default function ResultOverlay({
         </div>,
         document.body
     );
-}
+});
+
+export default ResultOverlay;

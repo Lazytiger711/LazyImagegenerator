@@ -4,7 +4,7 @@ import { Zap, RefreshCw, Wand2 } from 'lucide-react';
 import CompositionGuides from './CompositionGuides';
 import { STAMPS } from '../data/constants';
 
-export default function DrawingArea({
+const DrawingArea = React.memo(function DrawingArea({
     gridRef,
     canvasRef,
     cursorRef,
@@ -152,4 +152,6 @@ export default function DrawingArea({
             </div>
         </div>
     );
-}
+});
+
+export default DrawingArea;

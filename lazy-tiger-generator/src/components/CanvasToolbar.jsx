@@ -6,7 +6,7 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import { SortableColorButton } from './SortableColorButton';
 import { STAMPS, INITIAL_PALETTE, EXTRA_COLORS } from '../data/constants';
 
-export default function CanvasToolbar({
+const CanvasToolbar = React.memo(function CanvasToolbar({
     toolMode,
     setToolMode,
     brushSize,
@@ -143,4 +143,6 @@ export default function CanvasToolbar({
             )}
         </div>
     );
-}
+});
+
+export default CanvasToolbar;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Box, Zap } from 'lucide-react';
 
-export default function MontageInputs({
+const MontageInputs = React.memo(function MontageInputs({
     subjectType,
     setSubjectType,
     subjectText,
@@ -90,4 +90,6 @@ export default function MontageInputs({
             </div>
         </div>
     );
-}
+});
+
+export default MontageInputs;
