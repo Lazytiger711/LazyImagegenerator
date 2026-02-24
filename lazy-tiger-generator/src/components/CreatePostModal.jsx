@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
 import { X, Image as ImageIcon, Loader2, Upload } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 export default function CreatePostModal({ onClose, onPostCreated }) {
     const { t } = useTranslation();
@@ -13,6 +14,7 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
     const [imagePreview, setImagePreview] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const fileInputRef = useRef(null);
+    const { trackEvent } = useAnalytics();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -84,6 +86,8 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                 origin: { y: 0.6 },
                 colors: ['#ff4500', '#ffa500', '#ff6347']
             });
+
+            trackEvent('post_create', { has_description: !!description });
 
             if (onPostCreated) onPostCreated();
             onClose();
