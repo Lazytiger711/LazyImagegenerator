@@ -202,22 +202,22 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                     <div className="flex flex-wrap gap-2">
                                         {prompt.settings.shot && (
                                             <div className="bg-blue-50 text-blue-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-blue-100">
-                                                🎬 {prompt.settings.shot.label || prompt.settings.shot}
+                                                🎬 {prompt.settings.shot.label ? t(prompt.settings.shot.label) : prompt.settings.shot}
                                             </div>
                                         )}
                                         {prompt.settings.angle && (
                                             <div className="bg-green-50 text-green-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-green-100">
-                                                📐 {prompt.settings.angle.label || prompt.settings.angle}
+                                                📐 {prompt.settings.angle.label ? t(prompt.settings.angle.label) : prompt.settings.angle}
                                             </div>
                                         )}
                                         {prompt.settings.style && (
                                             <div className="bg-purple-50 text-purple-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-purple-100">
-                                                🎨 {prompt.settings.style.label || prompt.settings.style}
+                                                🎨 {prompt.settings.style.label ? t(prompt.settings.style.label) : prompt.settings.style}
                                             </div>
                                         )}
                                         {prompt.settings.composition && (
                                             <div className="bg-orange-50 text-orange-700 px-2.5 py-1.5 rounded-md text-xs font-medium border border-orange-100">
-                                                📏 {prompt.settings.composition.label || prompt.settings.composition}
+                                                📏 {prompt.settings.composition.label ? t(prompt.settings.composition.label) : prompt.settings.composition}
                                             </div>
                                         )}
                                     </div>
