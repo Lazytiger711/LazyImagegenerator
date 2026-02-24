@@ -33,6 +33,7 @@
         "start": "시작하기",
         "sort_popular": "인기순",
         "sort_recent": "최신순",
+        "sort_likes": "좋아요순",
         "loading": "프롬프트를 불러오는 중...",
         "no_prompts_title": "아직 공개된 프롬프트가 없습니다",
         "no_prompts_desc": "첫 번째로 멋진 프롬프트를 공유해보세요!",

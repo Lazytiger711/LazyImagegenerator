@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
-import { Globe, TrendingUp, Clock, Loader2, User, BookOpen, Eye } from 'lucide-react';
+import { Globe, TrendingUp, Clock, Loader2, User, BookOpen, Eye, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PromptDetailModal from '../components/PromptDetailModal';
 import CreatePostModal from '../components/CreatePostModal';
@@ -82,6 +82,8 @@ export default function DiscoverPage() {
 
             if (sortBy === 'popular') {
                 query = query.order('view_count', { ascending: false });
+            } else if (sortBy === 'likes') {
+                query = query.order('likes_count', { ascending: false });
             } else {
                 query = query.order('created_at', { ascending: false });
             }
@@ -163,6 +165,16 @@ export default function DiscoverPage() {
                             <Clock size={16} className="mr-1.5" />
                             {t('discover.sort_recent')}
                         </button>
+                        <button
+                            onClick={() => setSortBy('likes')}
+                            className={`px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center ${sortBy === 'likes'
+                                ? 'bg-white text-orange-600 shadow-sm scale-105'
+                                : 'text-gray-500 hover:text-gray-700'
+                                }`}
+                        >
+                            <Heart size={16} className="mr-1.5" />
+                            {t('discover.sort_likes') || 'Likes'}
+                        </button>
                     </div>
 
                     <button
@@ -192,7 +204,10 @@ export default function DiscoverPage() {
                                     <p className="text-white font-bold truncate text-lg">{prompt.title || prompt.settings?.subject || t('discover.no_title')}</p>
                                     <div className="flex justify-between items-center text-gray-300 text-xs mt-1">
                                         <span className="flex items-center"><User size={12} className="mr-1" /> {prompt.username || 'Anonymous'}</span>
-                                        <span className="flex items-center"><Eye size={12} className="mr-1" /> {prompt.view_count || 0}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="flex items-center"><Heart size={12} className="mr-1 text-red-400 fill-red-400" /> {prompt.likes_count || 0}</span>
+                                            <span className="flex items-center"><Eye size={12} className="mr-1" /> {prompt.view_count || 0}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

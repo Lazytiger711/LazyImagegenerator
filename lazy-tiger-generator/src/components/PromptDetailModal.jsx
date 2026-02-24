@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Sparkles, Eye, Calendar, User } from 'lucide-react';
+import { X, Sparkles, Eye, Calendar, User, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function PromptDetailModal({ prompt, onClose }) {
@@ -20,6 +20,50 @@ export default function PromptDetailModal({ prompt, onClose }) {
     const [isEditing, setIsEditing] = React.useState(false);
     const [editTitle, setEditTitle] = React.useState(prompt.title || prompt.settings?.subject || '');
     const [editDescription, setEditDescription] = React.useState(prompt.description || prompt.settings?.context || '');
+
+    // Like logic
+    const [likesCount, setLikesCount] = React.useState(prompt.likes_count || 0);
+    const [isLiked, setIsLiked] = React.useState(false);
+
+    React.useEffect(() => {
+        if (prompt?.id) {
+            const likedPosts = JSON.parse(localStorage.getItem('liked_posts') || '[]');
+            setIsLiked(likedPosts.includes(prompt.id));
+
+            // View count logic
+            const isDevMode = localStorage.getItem('dev_mode') === 'true';
+            if (!isDevMode && !prompt.id.toString().startsWith('sample-')) {
+                import('../lib/supabaseClient').then(m => {
+                    m.supabase.rpc('increment_view_count', { p_id: prompt.id })
+                        .catch(err => console.error("View count increment failed:", err));
+                });
+            }
+        }
+    }, [prompt?.id]);
+
+    const handleLike = async () => {
+        if (isLiked || !prompt?.id || prompt.id.toString().startsWith('sample-')) return;
+
+        try {
+            const { error } = await import('../lib/supabaseClient').then(m => m.supabase.rpc('increment_likes', {
+                p_id: prompt.id
+            }));
+
+            if (error) throw error;
+
+            // Update local state
+            setLikesCount(prev => prev + 1);
+            setIsLiked(true);
+
+            // Update localStorage
+            const likedPosts = JSON.parse(localStorage.getItem('liked_posts') || '[]');
+            likedPosts.push(prompt.id);
+            localStorage.setItem('liked_posts', JSON.stringify(likedPosts));
+
+        } catch (err) {
+            console.error("Like failed:", err);
+        }
+    };
 
     const handleSaveEdit = async () => {
         const password = window.prompt("비밀번호를 입력하세요");
@@ -128,6 +172,12 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                                     <Calendar size={12} className="mr-1" />
                                                     {new Date(prompt.created_at).toLocaleDateString()}
                                                 </span>
+                                                {likesCount > 0 && (
+                                                    <span className="flex items-center">
+                                                        <Heart size={12} className="mr-1 text-red-400 fill-red-400" />
+                                                        {likesCount}
+                                                    </span>
+                                                )}
                                                 {prompt.view_count > 0 && (
                                                     <span className="flex items-center">
                                                         <Eye size={12} className="mr-1" />
@@ -198,13 +248,28 @@ export default function PromptDetailModal({ prompt, onClose }) {
                         <div className="p-6 bg-white border-t border-gray-200 space-y-3">
                             {!isEditing ? (
                                 <>
-                                    <button
-                                        onClick={handleUsePrompt}
-                                        className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
-                                    >
-                                        <Sparkles size={20} className="mr-2" />
-                                        {t('modal.use_this')}
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handleUsePrompt}
+                                            className="flex-[2] py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
+                                        >
+                                            <Sparkles size={20} className="mr-2" />
+                                            {t('modal.use_this')}
+                                        </button>
+                                        {!prompt.id?.toString().startsWith('sample-') && (
+                                            <button
+                                                onClick={handleLike}
+                                                disabled={isLiked}
+                                                className={`flex-1 py-3.5 rounded-xl border-2 transition-all flex items-center justify-center font-bold ${isLiked
+                                                    ? 'bg-red-50 border-red-200 text-red-500'
+                                                    : 'bg-white border-gray-200 text-gray-400 hover:border-red-200 hover:text-red-400'
+                                                    }`}
+                                            >
+                                                <Heart size={20} className={`mr-2 ${isLiked ? 'fill-red-500' : ''}`} />
+                                                {likesCount}
+                                            </button>
+                                        )}
+                                    </div>
 
                                     {/* Action Buttons for Uploaded Prompts */}
                                     {prompt?.id && !prompt.id.toString().startsWith('sample-') && (

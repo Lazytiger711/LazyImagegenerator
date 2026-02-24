@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
 import { X, Image as ImageIcon, Loader2, Upload } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 export default function CreatePostModal({ onClose, onPostCreated }) {
     const { t } = useTranslation();
@@ -75,6 +76,14 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                 ]);
 
             if (error) throw error;
+
+            // Trigger celebration!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4500', '#ffa500', '#ff6347']
+            });
 
             if (onPostCreated) onPostCreated();
             onClose();

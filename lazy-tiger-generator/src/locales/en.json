@@ -33,6 +33,7 @@
         "start": "Get Started",
         "sort_popular": "Popular",
         "sort_recent": "Recent",
+        "sort_likes": "Likes",
         "loading": "Loading prompts...",
         "no_prompts_title": "No public prompts yet",
         "no_prompts_desc": "Be the first to share an amazing prompt!",
