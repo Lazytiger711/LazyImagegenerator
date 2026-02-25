@@ -96,7 +96,13 @@
         "generate_prompt": "프롬프트 생성",
         "generating": "생성 중...",
         "complete": "생성 완료",
-        "copied": "프롬프트가 복사되었습니다!"
+        "copied": "프롬프트가 복사되었습니다!",
+        "final_prompt": "최종 프롬프트",
+        "open_gemini": "제미나이(Gemini)로 열기"
+    },
+    "actions": {
+        "share_link": "링크 공유",
+        "save_gallery": "갤러리에 저장"
     },
     "workspace": {
         "title": "스튜디오 (Studio)",

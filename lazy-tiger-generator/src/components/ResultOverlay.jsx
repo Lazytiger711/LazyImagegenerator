@@ -34,7 +34,7 @@ const ResultOverlay = React.memo(function ResultOverlay({
             onClick={() => setShowResult(false)} // Close on background click
         >
             <div
-                className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col animate-slide-up"
+                className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-w-[calc(100vw-2rem)] sm:max-w-lg max-h-[90vh] flex flex-col animate-slide-up"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside content
                 ref={resultRef}
             >
@@ -59,7 +59,7 @@ const ResultOverlay = React.memo(function ResultOverlay({
                     <div className="mb-6">
                         <h4 className="text-sm font-bold text-gray-500 mb-2 uppercase tracking-wider">{t('status.final_prompt')}</h4>
                         <div className="bg-gray-100 p-4 rounded-xl border border-gray-200 relative group">
-                            <p className="font-mono text-sm text-gray-800 whitespace-pre-wrap break-words leading-relaxed">
+                            <p className="font-mono text-sm text-gray-800 whitespace-pre-wrap break-words overflow-hidden w-full leading-relaxed">
                                 {finalPrompt}
                             </p>
                             <button

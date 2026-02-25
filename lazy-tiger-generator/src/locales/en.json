@@ -96,7 +96,13 @@
         "generate_prompt": "Generate Prompt",
         "generating": "Generating...",
         "complete": "Generation Complete",
-        "copied": "Prompt copied!"
+        "copied": "Prompt copied!",
+        "final_prompt": "Final Prompt",
+        "open_gemini": "Open with Gemini"
+    },
+    "actions": {
+        "share_link": "Share Link",
+        "save_gallery": "Save to Gallery"
     },
     "workspace": {
         "title": "Studio",
