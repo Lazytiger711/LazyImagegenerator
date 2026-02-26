@@ -1,4 +1,5 @@
-figma.showUI(__html__, { width: 500, height: 750, themeColors: true });
+// Standard mobile aspect ratio (e.g., modern smartphone, 400x850 or 390x844 iPhone 14)
+figma.showUI(__html__, { width: 400, height: 850, themeColors: true });
 
 figma.ui.onmessage = async (msg) => {
     if (msg.type === 'copy-prompt') {
