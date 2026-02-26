@@ -5,8 +5,13 @@ import { ArrowLeft, BookOpen, CheckCircle2, Wand2 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 import CreatePostModal from '../components/CreatePostModal';
 
-const iconUrls = import.meta.glob('../assets/icons/**/*.png', { eager: true, import: 'default' });
-const getGuideIcon = (path) => iconUrls[`../assets${path}`] || path;
+// Removed import.meta.glob to load icons via external URL and prevent Figma inline bloat
+const getGuideIcon = (path) => {
+    if (typeof path === 'string' && path.startsWith('/icons/')) {
+        return `https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/assets${path}`;
+    }
+    return path;
+};
 
 export default function GuidePage() {
     const navigate = useNavigate();

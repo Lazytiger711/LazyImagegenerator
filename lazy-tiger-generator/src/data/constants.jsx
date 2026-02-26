@@ -1,10 +1,10 @@
 import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Monitor, Instagram, Smartphone, Eraser, Grid, User, Home, Smile, Star, Sparkles } from 'lucide-react';
 
-const iconUrls = import.meta.glob('../assets/icons/**/*.png', { eager: true, import: 'default' });
+// Removed import.meta.glob to prevent Vite from bundling icons
 const getIcon = (path) => {
     if (typeof path === 'string' && path.startsWith('/icons/')) {
-        const key = `../assets${path}`;
-        return iconUrls[key] || path;
+        // Fetch directly from GitHub to avoid base64 inlining in Figma
+        return `https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/assets${path}`;
     }
     return path;
 };

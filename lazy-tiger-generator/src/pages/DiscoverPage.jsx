@@ -15,7 +15,7 @@ const SAMPLE_PROMPTS = [
         created_at: new Date().toISOString(),
         view_count: 85,
         username: 'LazyTiger',
-        image_url: '/radioactive-princess.jpg',
+        image_url: 'https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/radioactive-princess.jpg',
         settings: {
             subject: 'Radioactive Princess',
             context: 'Summoning a demon in a futuristic laboratory',
@@ -33,7 +33,7 @@ const SAMPLE_PROMPTS = [
         created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
         view_count: 142,
         username: 'LazyTiger',
-        image_url: '/sample-cat-butterfly.jpg',
+        image_url: 'https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/sample-cat-butterfly.jpg',
         settings: {
             subject: 'A curious kitten',
             context: 'watching a yellow butterfly in a Van Gogh style garden',
@@ -132,7 +132,7 @@ export default function DiscoverPage() {
             <div
                 className="fixed inset-0 z-0 opacity-50"
                 style={{
-                    backgroundImage: 'url(/community-bg.jpg)',
+                    backgroundImage: 'url(https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/community-bg.jpg)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     filter: 'grayscale(30%)'
@@ -195,7 +195,7 @@ export default function DiscoverPage() {
                                 className="cursor-pointer group relative aspect-[3/4] rounded-xl overflow-hidden border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[8px_8px_0_0_rgba(0,0,0,1)] transition-all hover:-translate-y-2 hover:-translate-x-1 bg-white"
                             >
                                 <img
-                                    src={prompt.image_url || '/placeholder-image.jpg'}
+                                    src={prompt.image_url || 'https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/placeholder-image.jpg'}
                                     alt={prompt.title}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     loading="lazy"
