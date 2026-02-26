@@ -14,6 +14,33 @@ export function useSupabaseActions({
     trackEvent
 }) {
 
+    // --- Helper: Secure Clipboard Copy ---
+    const copyToClipboard = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return;
+            } catch (err) {
+                console.warn("Clipboard API failed, trying fallback...", err);
+            }
+        }
+
+        // Fallback for insecure context (e.g. local HTTP) or iframe
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "absolute";
+        textArea.style.left = "-999999px";
+        document.body.prepend(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+        } catch (error) {
+            console.error('Fallback copy failed', error);
+        } finally {
+            textArea.remove();
+        }
+    };
+
     // --- Helper: Upload Image to Supabase ---
     const uploadImageToSupabase = useCallback(async (imageDataUrl) => {
         try {
@@ -130,8 +157,8 @@ export function useSupabaseActions({
             // Generate shareable URL
             const shareUrl = `${window.location.origin}?prompt=${data[0].id}`;
 
-            // Copy to clipboard
-            await navigator.clipboard.writeText(shareUrl);
+            // Copy to clipboard with fallback
+            await copyToClipboard(shareUrl);
 
             // Track prompt share
             if (trackEvent) {
@@ -184,8 +211,8 @@ export function useSupabaseActions({
             setToastMsg("처리 중...");
             setShowToast(true);
 
-            // 1. Copy Text to Clipboard (Prioritize Text)
-            await navigator.clipboard.writeText(finalPrompt);
+            // 1. Copy Text to Clipboard (Prioritize Text with fallback)
+            await copyToClipboard(finalPrompt);
 
             // 2. Notify and Open
             setToastMsg("텍스트가 복사되었습니다! AI로 이동합니다.");
