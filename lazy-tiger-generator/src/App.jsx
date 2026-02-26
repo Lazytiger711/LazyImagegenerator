@@ -480,7 +480,7 @@ export default function App() {
           lockedCategories={lockedCategories}
           onAssetClick={handleAssetClick}
           currentSelections={selections}
-          className="!fixed !bottom-[85px] !left-3 !right-3 !w-auto !z-[100] !rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] border-4 border-black bg-white overflow-hidden"
+          className="!fixed !bottom-[80px] !left-0 !right-0 !mx-auto !w-[calc(100vw-24px)] !max-w-md !z-[100] !rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] border-4 border-black bg-white overflow-hidden"
         />
       </div>
 
