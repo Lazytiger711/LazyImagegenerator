@@ -29,8 +29,13 @@ import DrawingArea from './components/DrawingArea';
 
 import { sessionStorage } from './utils/storage';
 
-const iconUrls = import.meta.glob('./assets/icons/**/*.png', { eager: true, import: 'default' });
-const getAppIcon = (path) => iconUrls[`./assets${path}`] || path;
+// Removed import.meta.glob to load icons via external URL and prevent Figma inline bloat
+const getAppIcon = (path) => {
+  if (typeof path === 'string' && path.startsWith('/icons/')) {
+    return `https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/assets${path}`;
+  }
+  return path;
+};
 
 
 // --- Main Component ---
