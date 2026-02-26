@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { STAMPS } from '../data/constants';
+import { sessionStorage } from '../utils/storage';
 
 // Helper to track internal paths if needed (optional)
 // import { getStroke } from 'perfect-freehand'; 

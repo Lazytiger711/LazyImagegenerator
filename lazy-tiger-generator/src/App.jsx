@@ -27,6 +27,12 @@ import CanvasToolbar from './components/CanvasToolbar';
 import ResultOverlay from './components/ResultOverlay';
 import DrawingArea from './components/DrawingArea';
 
+import { sessionStorage } from './utils/storage';
+
+const iconUrls = import.meta.glob('./assets/icons/**/*.png', { eager: true, import: 'default' });
+const getAppIcon = (path) => iconUrls[`./assets${path}`] || path;
+
+
 // --- Main Component ---
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -126,10 +132,10 @@ export default function App() {
 
   // Step Indicator Configuration
   const STEPS = [
-    { id: 'type', label: 'common.step_type', icon: '/icons/type-icon.png' },
-    { id: 'pick', label: 'common.step_pick', icon: '/icons/pick-icon.png' },
-    { id: 'draw', label: 'common.step_draw', icon: '/icons/draw-icon.png' },
-    { id: 'generate', label: 'common.step_generate', icon: '/icons/generate-icon.png' },
+    { id: 'type', label: 'common.step_type', icon: getAppIcon('/icons/type-icon.png') },
+    { id: 'pick', label: 'common.step_pick', icon: getAppIcon('/icons/pick-icon.png') },
+    { id: 'draw', label: 'common.step_draw', icon: getAppIcon('/icons/draw-icon.png') },
+    { id: 'generate', label: 'common.step_generate', icon: getAppIcon('/icons/generate-icon.png') },
   ];
 
   // Load prompt from URL parameter (for sharing)

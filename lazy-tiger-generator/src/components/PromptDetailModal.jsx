@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Sparkles, Eye, Calendar, User, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { localStorage } from '../utils/storage';
 
 export default function PromptDetailModal({ prompt, onClose }) {
     const navigate = useNavigate();

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:figma": "vite build --config vite.figma.config.js && copy manifest.json dist\\manifest.json && copy figma\\code.js dist\\code.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -37,6 +38,7 @@
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-singlefile": "^2.3.0"
   }
 }

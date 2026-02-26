@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { localStorage } from '../utils/storage';
 
 export function useAnalytics() {
     const trackEvent = useCallback((eventName, eventParams = {}) => {

@@ -63,9 +63,34 @@ const ResultOverlay = React.memo(function ResultOverlay({
                                 {finalPrompt}
                             </p>
                             <button
-                                onClick={() => navigator.clipboard.writeText(finalPrompt)}
+                                onClick={() => {
+                                    // Default web clipboard
+                                    if (navigator.clipboard && window.isSecureContext) {
+                                        navigator.clipboard.writeText(finalPrompt);
+                                    } else {
+                                        // Fallback for Figma iframe (which lacks clipboard access often)
+                                        const textArea = document.createElement("textarea");
+                                        textArea.value = finalPrompt;
+                                        textArea.style.position = "absolute";
+                                        textArea.style.left = "-999999px";
+                                        document.body.prepend(textArea);
+                                        textArea.select();
+                                        try {
+                                            document.execCommand('copy');
+                                        } catch (error) {
+                                            console.error(error);
+                                        } finally {
+                                            textArea.remove();
+                                        }
+                                    }
+
+                                    // Post message to Figma to insert text and show toast
+                                    if (parent && parent.postMessage) {
+                                        parent.postMessage({ pluginMessage: { type: 'insert-text', text: finalPrompt } }, '*');
+                                    }
+                                }}
                                 className="absolute top-2 right-2 p-1.5 text-gray-400 hover:text-orange-600 hover:bg-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                                title="Copy Text"
+                                title="Copy & Insert text"
                             >
                                 <Copy size={16} />
                             </button>

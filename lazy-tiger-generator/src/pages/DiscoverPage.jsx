@@ -143,11 +143,11 @@ export default function DiscoverPage() {
             <div className="relative z-10 max-w-7xl mx-auto px-4 pb-24 pt-20 custom-scrollbar">
 
                 {/* Header Section with Guide Link */}
-                <div className="flex justify-between items-center mb-6 bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/50">
-                    <div className="flex space-x-2 bg-gray-200/50 p-1 rounded-xl">
+                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 mb-6 bg-white/80 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-sm border border-white/50">
+                    <div className="flex space-x-1 sm:space-x-2 bg-gray-200/50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto custom-scrollbar">
                         <button
                             onClick={() => setSortBy('popular')}
-                            className={`px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center ${sortBy === 'popular'
+                            className={`px-3 py-2 sm:px-4 rounded-lg font-bold text-sm transition-all flex items-center whitespace-nowrap shrink-0 ${sortBy === 'popular'
                                 ? 'bg-white text-orange-600 shadow-sm scale-105'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
@@ -157,7 +157,7 @@ export default function DiscoverPage() {
                         </button>
                         <button
                             onClick={() => setSortBy('recent')}
-                            className={`px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center ${sortBy === 'recent'
+                            className={`px-3 py-2 sm:px-4 rounded-lg font-bold text-sm transition-all flex items-center whitespace-nowrap shrink-0 ${sortBy === 'recent'
                                 ? 'bg-white text-orange-600 shadow-sm scale-105'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
@@ -167,7 +167,7 @@ export default function DiscoverPage() {
                         </button>
                         <button
                             onClick={() => setSortBy('likes')}
-                            className={`px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center ${sortBy === 'likes'
+                            className={`px-3 py-2 sm:px-4 rounded-lg font-bold text-sm transition-all flex items-center whitespace-nowrap shrink-0 ${sortBy === 'likes'
                                 ? 'bg-white text-orange-600 shadow-sm scale-105'
                                 : 'text-gray-500 hover:text-gray-700'
                                 }`}
@@ -179,7 +179,7 @@ export default function DiscoverPage() {
 
                     <button
                         onClick={() => navigate('/guide')}
-                        className="px-4 py-2 bg-white text-orange-500 font-bold rounded-xl shadow-sm hover:bg-orange-50 border border-orange-100 transition-all flex items-center text-sm"
+                        className="px-3 py-2 sm:px-4 bg-white text-orange-500 font-bold rounded-xl shadow-sm hover:bg-orange-50 border border-orange-100 transition-all flex items-center text-sm whitespace-nowrap shrink-0"
                     >
                         <BookOpen size={18} className="mr-1.5" />
                         Guide

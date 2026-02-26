@@ -1,0 +1,17 @@
+{
+    "name": "Lazy Tiger Generator",
+    "id": "1363749448833075249",
+    "api": "1.0.0",
+    "main": "code.js",
+    "ui": "index.html",
+    "editorType": [
+        "figma",
+        "figjam"
+    ],
+    "networkAccess": {
+        "allowedDomains": [
+            "*"
+        ],
+        "reasoning": "This plugin requires network access to fetch and save data to Supabase and external APIs."
+    }
+}

@@ -1,5 +1,15 @@
 import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Monitor, Instagram, Smartphone, Eraser, Grid, User, Home, Smile, Star, Sparkles } from 'lucide-react';
 
+const iconUrls = import.meta.glob('../assets/icons/**/*.png', { eager: true, import: 'default' });
+const getIcon = (path) => {
+    if (typeof path === 'string' && path.startsWith('/icons/')) {
+        const key = `../assets${path}`;
+        return iconUrls[key] || path;
+    }
+    return path;
+};
+
+
 export const STAMPS = [
     {
         id: 'face',
@@ -68,7 +78,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Front',
         description: 'facing.facing_front.desc',
         prompt: 'body facing camera straight on, head facing forward directly at viewer, frontal full-body stance, symmetrical shoulders squared to camera, direct eye contact, centered composition, forward-facing posture',
-        icon: '/icons/facing/front.png'
+        icon: getIcon('/icons/facing/front.png')
     },
     {
         id: 'facing_front_3_4_left',
@@ -76,7 +86,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Front 3/4 L',
         description: 'facing.facing_front_3_4_left.desc',
         prompt: 'body angled 45 degrees left, head and face turned slightly towards left, three-quarter frontal view, left shoulder slightly forward, partial left side visible, gazing left of camera, subtle left rotation',
-        icon: '/icons/facing/front-3-4-left.png'
+        icon: getIcon('/icons/facing/front-3-4-left.png')
     },
     {
         id: 'facing_front_3_4_right',
@@ -84,7 +94,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Front 3/4 R',
         description: 'facing.facing_front_3_4_right.desc',
         prompt: 'body angled 45 degrees right, head and face turned slightly towards right, three-quarter frontal view, right shoulder slightly forward, partial right side visible, gazing right of camera, subtle right rotation',
-        icon: '/icons/facing/front-3-4-right.png'
+        icon: getIcon('/icons/facing/front-3-4-right.png')
     },
     {
         id: 'facing_left',
@@ -92,7 +102,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Profile L',
         description: 'facing.facing_left.desc',
         prompt: 'Full-body strict left profile, exact left-facing profile (no three-quarter), head rotated so only the left side of the face is visible, shoulders and hips aligned perpendicular to camera, straight upright posture, right side fully hidden from view. Camera: medium-long shot, orthographic/neutral perspective, no foreshortening. Expression: neutral.',
-        icon: '/icons/facing/profile-left.png'
+        icon: getIcon('/icons/facing/profile-left.png')
     },
     {
         id: 'facing_right',
@@ -100,7 +110,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Profile R',
         description: 'facing.facing_right.desc',
         prompt: 'Full-body strict right profile, exact right-facing profile (no three-quarter), head rotated so only the right side of the face is visible, shoulders and hips aligned perpendicular to camera, straight upright posture, left side fully hidden from view. Camera: medium-long shot, orthographic/neutral perspective, no foreshortening. Expression: neutral.',
-        icon: '/icons/facing/profile-right.png'
+        icon: getIcon('/icons/facing/profile-right.png')
     },
     {
         id: 'facing_back_3_4_left',
@@ -108,7 +118,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Back 3/4 L',
         description: 'facing.facing_back_3_4_left.desc',
         prompt: 'Three-quarter rear view from left, body facing away from camera with back fully visible, shoulders angled slightly, head facing forward away from camera, face not visible, back-of-head only. Pose: relaxed back-shoulder stance. Low chance of eye contact.',
-        icon: '/icons/facing/back-3-4-left.png',
+        icon: getIcon('/icons/facing/back-3-4-left.png'),
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'looking_back', label: 'variants.looking_back', prompt: 'Three-quarter rear view from left, body facing away from camera with back fully visible, shoulders angled slightly, head turned left looking over the left shoulder, only the left side of the face partially visible. Pose: relaxed back-shoulder stance. Low chance of eye contact.' }
@@ -120,7 +130,7 @@ export const FACING_DIRECTIONS = [
         sub: 'Back 3/4 R',
         description: 'facing.facing_back_3_4_right.desc',
         prompt: 'Three-quarter rear view from right, body facing away from camera with back fully visible, shoulders angled slightly, head facing forward away from camera, face not visible, back-of-head only. Pose: relaxed back-shoulder stance. No eye contact.',
-        icon: '/icons/facing/back-3-4-right.png',
+        icon: getIcon('/icons/facing/back-3-4-right.png'),
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'looking_back', label: 'variants.looking_back', prompt: 'Three-quarter rear view from right, body facing away from camera with back fully visible, shoulders angled slightly, head turned right looking over the right shoulder, only the right side of the face partially visible. Pose: relaxed back-shoulder stance. Low chance of eye contact.' }
@@ -132,17 +142,17 @@ export const FACING_DIRECTIONS = [
         sub: 'Back',
         description: 'facing.facing_back.desc',
         prompt: 'full body facing away from camera completely, back of head and body visible, no face visible, rear view, looking away, back turned to viewer, posterior stance, complete rear angle, from behind',
-        icon: '/icons/facing/back.png'
+        icon: getIcon('/icons/facing/back.png')
     },
 ];
 
 export const ANGLES = [
 
     {
-        id: 'eye_level', label: 'angles.eye_level.label', sub: 'Eye Level', description: 'angles.eye_level.desc', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: '/icons/angles/eye_level.png'
+        id: 'eye_level', label: 'angles.eye_level.label', sub: 'Eye Level', description: 'angles.eye_level.desc', prompt: 'eye level shot, straight-on view, neutral perspective, face to face interaction, standard camera height', icon: getIcon('/icons/angles/eye_level.png')
     },
     {
-        id: 'low_angle', label: 'angles.low_angle.label', sub: 'Low Angle', description: 'angles.low_angle.desc', prompt: 'low angle shot, looking up from below, camera placed low looking up', icon: '/icons/angles/low_angle.png',
+        id: 'low_angle', label: 'angles.low_angle.label', sub: 'Low Angle', description: 'angles.low_angle.desc', prompt: 'low angle shot, looking up from below, camera placed low looking up', icon: getIcon('/icons/angles/low_angle.png'),
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'extreme_low', label: 'variants.extreme_low', prompt: 'extreme low angle, worm\'s eye view, ground level shot' },
@@ -150,7 +160,7 @@ export const ANGLES = [
         ]
     },
     {
-        id: 'high_angle', label: 'angles.high_angle.label', sub: 'High Angle', description: 'angles.high_angle.desc', prompt: 'high angle shot, looking down from above, camera placed high looking down', icon: '/icons/angles/high_angle.png',
+        id: 'high_angle', label: 'angles.high_angle.label', sub: 'High Angle', description: 'angles.high_angle.desc', prompt: 'high angle shot, looking down from above, camera placed high looking down', icon: getIcon('/icons/angles/high_angle.png'),
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'birds_eye', label: 'variants.birds_eye', prompt: 'bird\'s eye view, aerial photography, drone shot, wide overview from sky, vast scale' },
@@ -158,20 +168,20 @@ export const ANGLES = [
         ]
     },
     {
-        id: 'top_down', label: 'angles.top_down.label', sub: 'Top Down', description: 'angles.top_down.desc', prompt: 'top-down view, 90 degree angle, directly from above, wide environmental view, map view style, distance from subject', icon: '/icons/angles/top_down.png'
+        id: 'top_down', label: 'angles.top_down.label', sub: 'Top Down', description: 'angles.top_down.desc', prompt: 'top-down view, 90 degree angle, directly from above, wide environmental view, map view style, distance from subject', icon: getIcon('/icons/angles/top_down.png')
     },
     {
-        id: 'isometric', label: 'angles.isometric.label', sub: 'Isometric', description: 'angles.isometric.desc', prompt: 'isometric view, 45 degree angle, orthographic projection, detailed environment, game map style, wide shot composition', icon: '/icons/angles/isometric.png'
+        id: 'isometric', label: 'angles.isometric.label', sub: 'Isometric', description: 'angles.isometric.desc', prompt: 'isometric view, 45 degree angle, orthographic projection, detailed environment, game map style, wide shot composition', icon: getIcon('/icons/angles/isometric.png')
     },
     {
-        id: 'dutch_angle', label: 'angles.dutch_angle.label', sub: 'Dutch Angle', description: 'angles.dutch_angle.desc', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: '/icons/angles/dutch_angle.png'
+        id: 'dutch_angle', label: 'angles.dutch_angle.label', sub: 'Dutch Angle', description: 'angles.dutch_angle.desc', prompt: 'dutch angle, tilted camera, canted angle, diagonal horizon, dynamic energy, cinematic tension, dramatic tilt', icon: getIcon('/icons/angles/dutch_angle.png')
     }
 ];
 
 export const SHOT_TYPES = [
 
     {
-        id: 'close_up', label: 'shots.close_up.label', sub: 'Close Up', description: 'shots.close_up.desc', prompt: 'close-up shot, focus on face, detailed eyes, intense expression, portrait photography, clear facial features', icon: '/icons/shots/close_up.png',
+        id: 'close_up', label: 'shots.close_up.label', sub: 'Close Up', description: 'shots.close_up.desc', prompt: 'close-up shot, focus on face, detailed eyes, intense expression, portrait photography, clear facial features', icon: getIcon('/icons/shots/close_up.png'),
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'extreme_cu', label: 'variants.extreme_cu', prompt: 'extreme close-up shot, macro photography, highly detailed texture, focus on specific details' },
@@ -179,13 +189,13 @@ export const SHOT_TYPES = [
         ]
     },
     {
-        id: 'bust_shot', label: 'shots.bust_shot.label', sub: 'Bust Shot', description: 'shots.bust_shot.desc', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: '/icons/shots/bust_shot.png', imagePosition: '25% center'
+        id: 'bust_shot', label: 'shots.bust_shot.label', sub: 'Bust Shot', description: 'shots.bust_shot.desc', prompt: 'bust shot, portrait, focus on upper body, character portrait, head and shoulders', icon: getIcon('/icons/shots/bust_shot.png'), imagePosition: '25% center'
     },
     {
-        id: 'medium_shot', label: 'shots.medium_shot.label', sub: 'Medium Shot', description: 'shots.medium_shot.desc', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: '/icons/shots/medium_shot.png', imagePosition: '25% center'
+        id: 'medium_shot', label: 'shots.medium_shot.label', sub: 'Medium Shot', description: 'shots.medium_shot.desc', prompt: 'medium shot, waist up, upper body and gestures, mid-shot, standard portrait', icon: getIcon('/icons/shots/medium_shot.png'), imagePosition: '25% center'
     },
     {
-        id: 'full_shot', label: 'shots.full_shot.label', sub: 'Full Shot', description: 'shots.full_shot.desc', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: '/icons/shots/full_shot.png',
+        id: 'full_shot', label: 'shots.full_shot.label', sub: 'Full Shot', description: 'shots.full_shot.desc', prompt: 'full body shot, wide shot, viewing entire character, head to toe, standing pose, visible shoes', icon: getIcon('/icons/shots/full_shot.png'),
         variants: [
             { id: 'standard', label: 'variants.standard', prompt: '' },
             { id: 'wide', label: 'variants.wide', prompt: 'wide angle full shot, broad view, environmental context' },
@@ -193,13 +203,13 @@ export const SHOT_TYPES = [
         ]
     },
     {
-        id: 'selfie', label: 'shots.selfie.label', sub: 'Selfie', description: 'shots.selfie.desc', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: '/icons/shots/selfie.png'
+        id: 'selfie', label: 'shots.selfie.label', sub: 'Selfie', description: 'shots.selfie.desc', prompt: 'selfie angle, point of view (POV), holding camera, phone camera effect, fisheye lens, candid, close to camera', icon: getIcon('/icons/shots/selfie.png')
     },
     {
-        id: 'over_the_shoulder', label: 'shots.over_the_shoulder.label', sub: 'OTS', description: 'shots.over_the_shoulder.desc', prompt: 'over-the-shoulder shot, view from behind a person looking at main subject, foreground silhouette of shoulder and head, depth of field, focus on background subject', icon: '/icons/shots/over_the_shoulder.png'
+        id: 'over_the_shoulder', label: 'shots.over_the_shoulder.label', sub: 'OTS', description: 'shots.over_the_shoulder.desc', prompt: 'over-the-shoulder shot, view from behind a person looking at main subject, foreground silhouette of shoulder and head, depth of field, focus on background subject', icon: getIcon('/icons/shots/over_the_shoulder.png')
     },
     {
-        id: 'first_person', label: 'shots.first_person.label', sub: 'POV', description: 'shots.first_person.desc', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: '/icons/shots/first_person.png'
+        id: 'first_person', label: 'shots.first_person.label', sub: 'POV', description: 'shots.first_person.desc', prompt: 'first-person view, POV, seeing through eyes, immersive perspective, hands visible in frame', icon: getIcon('/icons/shots/first_person.png')
     },
 ];
 
@@ -217,39 +227,39 @@ export const COMPOSITIONS = [
 export const STYLES = [
 
 
-    { id: 'hyper_realistic', label: 'styles.hyper_realistic.label', sub: 'Hyper Real', prompt: 'hyper-realistic, highly detailed skin texture, visible pores, imperfections, 8k resolution, raw photography, sharp focus, volumetric lighting, ray tracing, incredibly lifelike, dslr, macro lens detail', neg: '--no plastic skin, smooth skin, cartoon, drawing, painting, blur, airbrushed', icon: '/icons/styles/realistic.png', displayStyle: 'full' },
-    { id: 'realistic', label: 'styles.realistic.label', sub: 'Photorealistic', prompt: 'photorealistic, raw photo, 8k uhd, dslr, high quality, fujifilm, grainy texture, masterpiece', neg: '--no pixel art, illustration, cartoon, drawing, painting', icon: '/icons/styles/realistic.png', displayStyle: 'full' },
-    { id: 'anime', label: 'styles.anime.label', sub: 'Anime', prompt: 'anime style, key visual, vibrant colors, studio ghibli inspired, high definition, detailed line art, 2d animation', neg: '--no photorealistic, 3d render, live action', icon: '/icons/styles/anime.png', displayStyle: 'full' },
-    { id: '3d_render', label: 'styles.3d_render.label', sub: '3D 렌더링', prompt: '3d render, octane render, unreal engine 5, ray tracing, clay material, high fidelity, 8k, blender style', neg: '--no 2d, sketch, flat, cartoon, low poly', icon: '/icons/styles/3d_render.png', displayStyle: 'full' },
-    { id: 'oil_painting', label: 'styles.oil_painting.label', sub: 'Van Gogh', prompt: 'vincent van gogh style, post-impressionist, swirling brushstrokes, impasto texture, vibrant colors, starry night inspired, thick oil paint, emotional expression', neg: '--no photo, digital art, pixel art, smooth', icon: '/icons/styles/van_gogh.png', displayStyle: 'full' },
-    { id: 'concept_art', label: 'styles.concept_art.label', sub: 'Concept Art', description: 'styles.concept_art.desc', prompt: 'digital concept art, speed painting, fantasy atmosphere, matte painting, highly detailed, sharp focus', neg: '--no photo, low quality, sketch', icon: '/icons/styles/concept_art.png', displayStyle: 'full' },
-    { id: 'cyberpunk', label: 'styles.cyberpunk.label', sub: 'Cyberpunk', description: 'styles.cyberpunk.desc', prompt: 'cyberpunk style, futuristic city, chromatic aberration, synthwave aesthetic, night time, glowing details', neg: '--no vintage, rustic, natural', icon: '/icons/styles/cyberpunk.png', displayStyle: 'full' },
-    { id: 'pixel_8bit', label: 'styles.pixel_8bit.label', sub: '8-bit', prompt: '8-bit pixel art, NES style, retro game asset, low resolution, limited palette, chunky pixels, arcade aesthetic, perfect pixel alignment, no anti-aliasing, hard edges', neg: '--no smooth, high resolution, anti-aliasing, vector, modern, blur, gradient, filtering', icon: '/icons/styles/pixel_8bit.png', displayStyle: 'center' },
-    { id: 'pixel_16bit', label: 'styles.pixel_16bit.label', sub: '16-bit', prompt: '16-bit pixel art, SNES style, retro RPG aesthetic, detailed pixel art, vibrant colors, dithering, game sprite, pixel perfect, hard edges', neg: '--no 3d, vector, smooth, blurry, anti-aliasing, noise, photo', icon: '/icons/styles/pixel_16bit.png', displayStyle: 'center' },
-    { id: 'chalk_art', label: 'styles.chalk_art.label', sub: 'Chalk', prompt: 'chalk art style, blackboard drawing, rough texture, dusty look, pastel colors on dark background, blackboard menu style, hand drawn', neg: '--no digital, glossy, sharp, photo', icon: '/icons/styles/chalk_art.png', displayStyle: 'full' },
-    { id: 'monet', label: 'styles.monet.label', sub: 'Monet', prompt: 'claude monet style, impressionism, dappled light, loose brushstrokes, plein air, atmospheric, pastel color palette, oil painting', neg: '--no sharp lines, digital, cartoon, dark', icon: '/icons/styles/monet.png', displayStyle: 'full' },
-    { id: 'american_comic', label: 'styles.american_comic.label', sub: 'Comic', prompt: 'american comic book style, marvel/dc style, bold outlines, halftones, dynamic action, speech bubbles vibe, ben-day dots, ink and color', neg: '--no manga, anime, photorealistic, 3d', icon: '/icons/styles/american_comic.png', displayStyle: 'full' },
-    { id: 'pop_art', label: 'styles.pop_art.label', sub: 'Pop Art', prompt: 'pop art style, andy warhol inspired, roy lichtenstein dots, bold solid colors, high contrast, repetitive patterns, commercial art aesthetic, silkscreen print', neg: '--no realistic, painterly, soft, muted', icon: '/icons/styles/pop_art.png', displayStyle: 'full' },
-    { id: 'watercolor', label: 'styles.watercolor.label', sub: 'Watercolor', prompt: 'watercolor painting, wet on wet, paper texture, soft edges, bleeding colors, artistic, dreamy, transparent layers', neg: '--no oil painting, acrylic, thick paint, digital, sharp', icon: '/icons/styles/watercolor.png', displayStyle: 'full' },
-    { id: 'oriental_painting', label: 'styles.oriental_painting.label', sub: 'Eastern', prompt: 'traditional eastern painting, ink wash painting, sumi-e style, rice paper texture, brush calligraphy strokes, minimal color, negative space, nature focus', neg: '--no western art, oil painting, heavy saturation, digital', icon: '/icons/styles/oriental_painting.png', displayStyle: 'full' },
-    { id: 'claymation', label: 'styles.claymation.label', sub: 'Clay', prompt: 'clay animation style, aardman style, plasticine texture, stop motion look, handmade, fingerprint details, soft lighting, miniature world', neg: '--no cgi, 2d, drawing, sharp', icon: '/icons/styles/claymation.png', displayStyle: 'full' },
-    { id: 'cubism', label: 'styles.cubism.label', sub: 'Cubism', prompt: 'cubism style, pablo picasso inspired, georges braque style, geometric abstraction, fragmented objects, multiple viewpoints, avant-garde, flat planes', neg: '--no realistic, smooth, 3d, photo', icon: '/icons/styles/cubism.png', displayStyle: 'full' },
-    { id: 'surrealism', label: 'styles.surrealism.label', sub: 'Surrealism', prompt: 'surrealism style, salvador dali inspired, rene magritte style, dreamlike atmosphere, melting objects, impossible geometry, subconscious imagery, bizarre combinations', neg: '--no realistic, logical, ordinary, photo', icon: '/icons/styles/surrealism.png', displayStyle: 'full' },
+    { id: 'hyper_realistic', label: 'styles.hyper_realistic.label', sub: 'Hyper Real', prompt: 'hyper-realistic, highly detailed skin texture, visible pores, imperfections, 8k resolution, raw photography, sharp focus, volumetric lighting, ray tracing, incredibly lifelike, dslr, macro lens detail', neg: '--no plastic skin, smooth skin, cartoon, drawing, painting, blur, airbrushed', icon: getIcon('/icons/styles/realistic.png'), displayStyle: 'full' },
+    { id: 'realistic', label: 'styles.realistic.label', sub: 'Photorealistic', prompt: 'photorealistic, raw photo, 8k uhd, dslr, high quality, fujifilm, grainy texture, masterpiece', neg: '--no pixel art, illustration, cartoon, drawing, painting', icon: getIcon('/icons/styles/realistic.png'), displayStyle: 'full' },
+    { id: 'anime', label: 'styles.anime.label', sub: 'Anime', prompt: 'anime style, key visual, vibrant colors, studio ghibli inspired, high definition, detailed line art, 2d animation', neg: '--no photorealistic, 3d render, live action', icon: getIcon('/icons/styles/anime.png'), displayStyle: 'full' },
+    { id: '3d_render', label: 'styles.3d_render.label', sub: '3D 렌더링', prompt: '3d render, octane render, unreal engine 5, ray tracing, clay material, high fidelity, 8k, blender style', neg: '--no 2d, sketch, flat, cartoon, low poly', icon: getIcon('/icons/styles/3d_render.png'), displayStyle: 'full' },
+    { id: 'oil_painting', label: 'styles.oil_painting.label', sub: 'Van Gogh', prompt: 'vincent van gogh style, post-impressionist, swirling brushstrokes, impasto texture, vibrant colors, starry night inspired, thick oil paint, emotional expression', neg: '--no photo, digital art, pixel art, smooth', icon: getIcon('/icons/styles/van_gogh.png'), displayStyle: 'full' },
+    { id: 'concept_art', label: 'styles.concept_art.label', sub: 'Concept Art', description: 'styles.concept_art.desc', prompt: 'digital concept art, speed painting, fantasy atmosphere, matte painting, highly detailed, sharp focus', neg: '--no photo, low quality, sketch', icon: getIcon('/icons/styles/concept_art.png'), displayStyle: 'full' },
+    { id: 'cyberpunk', label: 'styles.cyberpunk.label', sub: 'Cyberpunk', description: 'styles.cyberpunk.desc', prompt: 'cyberpunk style, futuristic city, chromatic aberration, synthwave aesthetic, night time, glowing details', neg: '--no vintage, rustic, natural', icon: getIcon('/icons/styles/cyberpunk.png'), displayStyle: 'full' },
+    { id: 'pixel_8bit', label: 'styles.pixel_8bit.label', sub: '8-bit', prompt: '8-bit pixel art, NES style, retro game asset, low resolution, limited palette, chunky pixels, arcade aesthetic, perfect pixel alignment, no anti-aliasing, hard edges', neg: '--no smooth, high resolution, anti-aliasing, vector, modern, blur, gradient, filtering', icon: getIcon('/icons/styles/pixel_8bit.png'), displayStyle: 'center' },
+    { id: 'pixel_16bit', label: 'styles.pixel_16bit.label', sub: '16-bit', prompt: '16-bit pixel art, SNES style, retro RPG aesthetic, detailed pixel art, vibrant colors, dithering, game sprite, pixel perfect, hard edges', neg: '--no 3d, vector, smooth, blurry, anti-aliasing, noise, photo', icon: getIcon('/icons/styles/pixel_16bit.png'), displayStyle: 'center' },
+    { id: 'chalk_art', label: 'styles.chalk_art.label', sub: 'Chalk', prompt: 'chalk art style, blackboard drawing, rough texture, dusty look, pastel colors on dark background, blackboard menu style, hand drawn', neg: '--no digital, glossy, sharp, photo', icon: getIcon('/icons/styles/chalk_art.png'), displayStyle: 'full' },
+    { id: 'monet', label: 'styles.monet.label', sub: 'Monet', prompt: 'claude monet style, impressionism, dappled light, loose brushstrokes, plein air, atmospheric, pastel color palette, oil painting', neg: '--no sharp lines, digital, cartoon, dark', icon: getIcon('/icons/styles/monet.png'), displayStyle: 'full' },
+    { id: 'american_comic', label: 'styles.american_comic.label', sub: 'Comic', prompt: 'american comic book style, marvel/dc style, bold outlines, halftones, dynamic action, speech bubbles vibe, ben-day dots, ink and color', neg: '--no manga, anime, photorealistic, 3d', icon: getIcon('/icons/styles/american_comic.png'), displayStyle: 'full' },
+    { id: 'pop_art', label: 'styles.pop_art.label', sub: 'Pop Art', prompt: 'pop art style, andy warhol inspired, roy lichtenstein dots, bold solid colors, high contrast, repetitive patterns, commercial art aesthetic, silkscreen print', neg: '--no realistic, painterly, soft, muted', icon: getIcon('/icons/styles/pop_art.png'), displayStyle: 'full' },
+    { id: 'watercolor', label: 'styles.watercolor.label', sub: 'Watercolor', prompt: 'watercolor painting, wet on wet, paper texture, soft edges, bleeding colors, artistic, dreamy, transparent layers', neg: '--no oil painting, acrylic, thick paint, digital, sharp', icon: getIcon('/icons/styles/watercolor.png'), displayStyle: 'full' },
+    { id: 'oriental_painting', label: 'styles.oriental_painting.label', sub: 'Eastern', prompt: 'traditional eastern painting, ink wash painting, sumi-e style, rice paper texture, brush calligraphy strokes, minimal color, negative space, nature focus', neg: '--no western art, oil painting, heavy saturation, digital', icon: getIcon('/icons/styles/oriental_painting.png'), displayStyle: 'full' },
+    { id: 'claymation', label: 'styles.claymation.label', sub: 'Clay', prompt: 'clay animation style, aardman style, plasticine texture, stop motion look, handmade, fingerprint details, soft lighting, miniature world', neg: '--no cgi, 2d, drawing, sharp', icon: getIcon('/icons/styles/claymation.png'), displayStyle: 'full' },
+    { id: 'cubism', label: 'styles.cubism.label', sub: 'Cubism', prompt: 'cubism style, pablo picasso inspired, georges braque style, geometric abstraction, fragmented objects, multiple viewpoints, avant-garde, flat planes', neg: '--no realistic, smooth, 3d, photo', icon: getIcon('/icons/styles/cubism.png'), displayStyle: 'full' },
+    { id: 'surrealism', label: 'styles.surrealism.label', sub: 'Surrealism', prompt: 'surrealism style, salvador dali inspired, rene magritte style, dreamlike atmosphere, melting objects, impossible geometry, subconscious imagery, bizarre combinations', neg: '--no realistic, logical, ordinary, photo', icon: getIcon('/icons/styles/surrealism.png'), displayStyle: 'full' },
 ];
 
 export const LIGHTING = [
 
-    { id: 'natural', label: 'lighting.natural.label', sub: 'Natural', description: 'lighting.natural.desc', prompt: 'natural lighting, sunlight, soft shadows, golden hour, warm tone, outdoor lighting', icon: '/icons/lighting/natural.png' },
-    { id: 'studio', label: 'lighting.studio.label', sub: 'Studio', description: 'lighting.studio.desc', prompt: 'studio lighting, softbox, rim light, professional lighting, clean background, sharp details', icon: '/icons/lighting/studio.png' },
-    { id: 'neon', label: 'lighting.neon.label', sub: 'Neon', description: 'lighting.neon.desc', prompt: 'neon lighting, cyberpunk lighting, vibrant colors, glowing lights, night atmosphere, synthwave', icon: '/icons/lighting/neon.png' },
-    { id: 'dramatic', label: 'lighting.dramatic.label', sub: 'Dramatic', description: 'lighting.dramatic.desc', prompt: 'dramatic lighting, chiaroscuro, high contrast, heavy shadows, cinematic lighting, moody atmosphere', icon: '/icons/lighting/dramatic.png' },
-    { id: 'cinematic', label: 'lighting.cinematic.label', sub: 'Cinematic', description: 'lighting.cinematic.desc', prompt: 'cinematic lighting, teal and orange, anamorphic lens flares, atmospheric, volumatric lighting, movie scene', icon: '/icons/lighting/cinematic.png' },
-    { id: 'rembrandt', label: 'lighting.rembrandt.label', sub: 'Rembrandt', description: 'lighting.rembrandt.desc', prompt: 'rembrandt lighting, triangle of light on cheek, classical portrait lighting, artistic shadows', icon: '/icons/lighting/rembrandt.png' },
-    { id: 'backlight', label: 'lighting.backlight.label', sub: 'Rim Light', description: 'lighting.backlight.desc', prompt: 'strong rim light, backlight outlining silhouette, glowing edge light, subject separated from background', icon: '/icons/lighting/backlight.png' },
-    { id: 'low_key', label: 'lighting.low_key.label', sub: 'Low Key', description: 'lighting.low_key.desc', prompt: 'low-key lighting, deep shadows, high contrast, minimal fill light, dramatic chiaroscuro', icon: '/icons/lighting/low_key.png' },
-    { id: 'high_key', label: 'lighting.high_key.label', sub: 'High Key', description: 'lighting.high_key.desc', prompt: 'high-key lighting, soft even illumination, minimal shadows, bright clean studio light', icon: '/icons/lighting/high_key.png' },
-    { id: 'film_noir', label: 'lighting.film_noir.label', sub: 'Noir', description: 'lighting.film_noir.desc', prompt: 'film noir lighting, venetian blind shadows, hard side light, dramatic contrast, moody atmosphere', icon: '/icons/lighting/film_noir.png' },
-    { id: 'golden_hour', label: 'lighting.golden_hour.label', sub: 'Golden Hour', description: 'lighting.golden_hour.desc', prompt: 'golden hour lighting, warm sunset glow, soft directional sunlight, long shadows', icon: '/icons/lighting/golden_hour.png' },
+    { id: 'natural', label: 'lighting.natural.label', sub: 'Natural', description: 'lighting.natural.desc', prompt: 'natural lighting, sunlight, soft shadows, golden hour, warm tone, outdoor lighting', icon: getIcon('/icons/lighting/natural.png') },
+    { id: 'studio', label: 'lighting.studio.label', sub: 'Studio', description: 'lighting.studio.desc', prompt: 'studio lighting, softbox, rim light, professional lighting, clean background, sharp details', icon: getIcon('/icons/lighting/studio.png') },
+    { id: 'neon', label: 'lighting.neon.label', sub: 'Neon', description: 'lighting.neon.desc', prompt: 'neon lighting, cyberpunk lighting, vibrant colors, glowing lights, night atmosphere, synthwave', icon: getIcon('/icons/lighting/neon.png') },
+    { id: 'dramatic', label: 'lighting.dramatic.label', sub: 'Dramatic', description: 'lighting.dramatic.desc', prompt: 'dramatic lighting, chiaroscuro, high contrast, heavy shadows, cinematic lighting, moody atmosphere', icon: getIcon('/icons/lighting/dramatic.png') },
+    { id: 'cinematic', label: 'lighting.cinematic.label', sub: 'Cinematic', description: 'lighting.cinematic.desc', prompt: 'cinematic lighting, teal and orange, anamorphic lens flares, atmospheric, volumatric lighting, movie scene', icon: getIcon('/icons/lighting/cinematic.png') },
+    { id: 'rembrandt', label: 'lighting.rembrandt.label', sub: 'Rembrandt', description: 'lighting.rembrandt.desc', prompt: 'rembrandt lighting, triangle of light on cheek, classical portrait lighting, artistic shadows', icon: getIcon('/icons/lighting/rembrandt.png') },
+    { id: 'backlight', label: 'lighting.backlight.label', sub: 'Rim Light', description: 'lighting.backlight.desc', prompt: 'strong rim light, backlight outlining silhouette, glowing edge light, subject separated from background', icon: getIcon('/icons/lighting/backlight.png') },
+    { id: 'low_key', label: 'lighting.low_key.label', sub: 'Low Key', description: 'lighting.low_key.desc', prompt: 'low-key lighting, deep shadows, high contrast, minimal fill light, dramatic chiaroscuro', icon: getIcon('/icons/lighting/low_key.png') },
+    { id: 'high_key', label: 'lighting.high_key.label', sub: 'High Key', description: 'lighting.high_key.desc', prompt: 'high-key lighting, soft even illumination, minimal shadows, bright clean studio light', icon: getIcon('/icons/lighting/high_key.png') },
+    { id: 'film_noir', label: 'lighting.film_noir.label', sub: 'Noir', description: 'lighting.film_noir.desc', prompt: 'film noir lighting, venetian blind shadows, hard side light, dramatic contrast, moody atmosphere', icon: getIcon('/icons/lighting/film_noir.png') },
+    { id: 'golden_hour', label: 'lighting.golden_hour.label', sub: 'Golden Hour', description: 'lighting.golden_hour.desc', prompt: 'golden hour lighting, warm sunset glow, soft directional sunlight, long shadows', icon: getIcon('/icons/lighting/golden_hour.png') },
 ];
 
 export const RESOLUTIONS = [
