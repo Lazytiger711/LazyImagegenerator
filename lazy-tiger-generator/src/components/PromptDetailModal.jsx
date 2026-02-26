@@ -96,17 +96,17 @@ export default function PromptDetailModal({ prompt, onClose }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
             <div
-                className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+                className="bg-white rounded-xl border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden max-w-5xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center z-10">
-                    <h2 className="text-xl font-bold text-gray-800">{t('modal.title')}</h2>
+                <div className="sticky top-0 bg-white border-b-4 border-black p-4 flex justify-between items-center z-10">
+                    <h2 className="text-xl font-black text-black uppercase tracking-tight">{t('modal.title')}</h2>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        className="p-2 bg-white border-2 border-transparent hover:border-black rounded-xl hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none transition-all"
                     >
-                        <X size={24} />
+                        <X size={24} className="text-black" />
                     </button>
                 </div>
 
@@ -117,7 +117,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                         {/* Image Section */}
                         <div className="p-6 pb-0">
                             {prompt.image_url ? (
-                                <div className="rounded-2xl overflow-hidden shadow-lg bg-gray-100">
+                                <div className="rounded-xl border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] overflow-hidden bg-white">
                                     <img
                                         src={prompt.image_url}
                                         alt={prompt.settings?.subject || 'Generated image'}
@@ -125,8 +125,8 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                     />
                                 </div>
                             ) : (
-                                <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl aspect-square flex items-center justify-center">
-                                    <span className="text-gray-400 text-lg">{t('modal.no_image')}</span>
+                                <div className="bg-gray-100 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-xl aspect-square flex items-center justify-center">
+                                    <span className="text-black font-bold text-lg">{t('modal.no_image')}</span>
                                 </div>
                             )}
                         </div>
@@ -246,13 +246,13 @@ export default function PromptDetailModal({ prompt, onClose }) {
                         </div>
 
                         {/* Fixed Bottom Action */}
-                        <div className="p-6 bg-white border-t border-gray-200 space-y-3">
+                        <div className="p-6 bg-white border-t-4 border-black space-y-3">
                             {!isEditing ? (
                                 <>
                                     <div className="flex gap-2">
                                         <button
                                             onClick={handleUsePrompt}
-                                            className="flex-[2] py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center text-lg"
+                                            className="flex-[2] py-3.5 bg-[#FF90E8] text-black border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none font-black rounded-xl transition-all flex items-center justify-center text-lg uppercase"
                                         >
                                             <Sparkles size={20} className="mr-2" />
                                             {t('modal.use_this')}
@@ -261,12 +261,12 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                             <button
                                                 onClick={handleLike}
                                                 disabled={isLiked}
-                                                className={`flex-1 py-3.5 rounded-xl border-2 transition-all flex items-center justify-center font-bold ${isLiked
-                                                    ? 'bg-red-50 border-red-200 text-red-500'
-                                                    : 'bg-white border-gray-200 text-gray-400 hover:border-red-200 hover:text-red-400'
+                                                className={`flex-1 py-3.5 rounded-xl border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center font-black ${isLiked
+                                                    ? 'bg-red-400 text-white'
+                                                    : 'bg-white text-black'
                                                     }`}
                                             >
-                                                <Heart size={20} className={`mr-2 ${isLiked ? 'fill-red-500' : ''}`} />
+                                                <Heart size={20} className={`mr-2 ${isLiked ? 'fill-white' : ''}`} />
                                                 {likesCount}
                                             </button>
                                         )}
@@ -277,7 +277,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => setIsEditing(true)}
-                                                className="flex-1 py-2.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center text-sm"
+                                                className="flex-1 py-2.5 bg-yellow-300 text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:relative hover:-top-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none font-bold rounded-xl transition-all flex items-center justify-center text-sm"
                                             >
                                                 게시물 수정
                                             </button>
@@ -306,7 +306,7 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                                         alert("삭제 중 오류가 발생했습니다.");
                                                     }
                                                 }}
-                                                className="flex-1 py-2.5 bg-gray-100 text-gray-400 font-bold rounded-xl hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center text-sm"
+                                                className="flex-1 py-2.5 bg-red-400 text-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:relative hover:-top-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none font-bold rounded-xl transition-all flex items-center justify-center text-sm"
                                             >
                                                 삭제
                                             </button>
@@ -317,13 +317,13 @@ export default function PromptDetailModal({ prompt, onClose }) {
                                 <div className="space-y-2">
                                     <button
                                         onClick={handleSaveEdit}
-                                        className="w-full py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-all shadow-md"
+                                        className="w-full py-3 bg-green-400 text-black border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none font-black rounded-xl transition-all uppercase"
                                     >
                                         저장하기
                                     </button>
                                     <button
                                         onClick={() => setIsEditing(false)}
-                                        className="w-full py-3 bg-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-300 transition-all"
+                                        className="w-full py-3 bg-white text-black border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none font-bold rounded-xl transition-all uppercase"
                                     >
                                         취소
                                     </button>

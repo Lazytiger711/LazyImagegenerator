@@ -5,6 +5,9 @@ import { ArrowLeft, BookOpen, CheckCircle2, Wand2 } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 import CreatePostModal from '../components/CreatePostModal';
 
+const iconUrls = import.meta.glob('../assets/icons/**/*.png', { eager: true, import: 'default' });
+const getGuideIcon = (path) => iconUrls[`../assets${path}`] || path;
+
 export default function GuidePage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -13,7 +16,7 @@ export default function GuidePage() {
     return (
         <div className="min-h-screen bg-neutral-50 font-sans text-gray-900 selection:bg-orange-200">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 py-4 sticky top-0 z-50">
+            <header className="bg-white border-b-4 border-black py-4 sticky top-0 z-50">
                 <div className="max-w-3xl mx-auto px-6 flex items-center justify-between">
                     <button
                         onClick={() => navigate('/')}
@@ -48,7 +51,7 @@ export default function GuidePage() {
 
                     <div className="space-y-8">
                         {/* Step 1: Type */}
-                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div className="bg-white rounded-xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] border-4 border-black overflow-hidden mb-8">
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
                                     <img src={getGuideIcon('/icons/type-icon.png')} alt="Type" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
@@ -66,7 +69,7 @@ export default function GuidePage() {
                         </div>
 
                         {/* Step 2: Pick */}
-                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div className="bg-white rounded-xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] border-4 border-black overflow-hidden mb-8">
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
                                     <img src={getGuideIcon('/icons/pick-icon.png')} alt="Pick" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
@@ -84,7 +87,7 @@ export default function GuidePage() {
                         </div>
 
                         {/* Step 3: Draw */}
-                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div className="bg-white rounded-xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] border-4 border-black overflow-hidden mb-8">
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
                                     <img src={getGuideIcon('/icons/draw-icon.png')} alt="Draw" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
@@ -102,7 +105,7 @@ export default function GuidePage() {
                         </div>
 
                         {/* Step 4: Generate */}
-                        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div className="bg-white rounded-xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] border-4 border-black overflow-hidden mb-8">
                             <div className="flex flex-col md:flex-row items-center">
                                 <div className="w-full md:w-1/3 p-8 flex items-center justify-center">
                                     <img src={getGuideIcon('/icons/generate-icon.png')} alt="Generate" className="w-48 h-48 md:w-60 md:h-60 object-contain drop-shadow-lg" />
@@ -122,7 +125,7 @@ export default function GuidePage() {
                 </section>
 
                 {/* Features Recap */}
-                <section className="bg-gray-900 text-white p-8 md:p-12 rounded-3xl mb-12">
+                <section className="bg-gray-900 text-white p-8 md:p-12 rounded-xl border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] mb-12">
                     <h2 className="text-2xl font-bold mb-8 flex items-center">
                         <span className="mr-3 text-yellow-400 text-2xl">⚡</span>
                         {t('guide.features_title')}
@@ -162,7 +165,7 @@ export default function GuidePage() {
                 <div className="text-center">
                     <button
                         onClick={() => navigate('/create')}
-                        className="inline-flex items-center justify-center px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-lg hover:bg-orange-700 transition-all shadow-lg hover:shadow-orange-200"
+                        className="inline-flex items-center justify-center px-8 py-4 bg-[#FF90E8] text-black border-4 border-black rounded-xl font-black uppercase text-lg hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
                     >
                         {t('guide.start_button')}
                         <Wand2 className="ml-2" size={20} />

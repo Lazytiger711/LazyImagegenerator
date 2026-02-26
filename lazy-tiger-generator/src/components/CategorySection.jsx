@@ -32,16 +32,16 @@ const CategorySection = ({ title, icon: CategoryIcon, items, type, isOpen, onTog
     };
 
     return (
-        <div className="border-b border-gray-100 last:border-0">
+        <div className="border-b-4 border-black last:border-b-0">
             <button
                 onClick={onToggle}
-                className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-colors group"
+                className="w-full flex items-center justify-between p-3 bg-white hover:bg-yellow-200 transition-colors group"
             >
                 <div className="flex flex-col items-start overflow-hidden">
-                    <div className="flex items-center text-gray-700 font-bold text-xs uppercase tracking-wider">
-                        <CategoryIcon size={14} className="mr-2 text-orange-500" />
+                    <div className="flex items-center text-black font-black text-xs uppercase tracking-wider">
+                        <CategoryIcon size={14} className="mr-2 text-black" />
                         {t(title)}
-                        {locked && <Lock size={12} className="ml-2 text-red-400" />}
+                        {locked && <Lock size={12} className="ml-2 text-red-500" />}
                     </div>
                     {/* Brief Description */}
                     <span className="text-[10px] text-gray-400 font-medium ml-6 mt-0.5 truncate max-w-[200px] group-hover:text-gray-500 transition-colors">
@@ -56,10 +56,10 @@ const CategorySection = ({ title, icon: CategoryIcon, items, type, isOpen, onTog
                     {/* Left Scroll Button */}
                     <button
                         onClick={(e) => { e.stopPropagation(); scroll('left'); }}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-6 h-12 bg-gray-800/80 text-white flex items-center justify-center rounded-r-lg opacity-0 group-hover/section:opacity-100 transition-opacity disabled:opacity-0"
+                        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-12 bg-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] text-black flex items-center justify-center opacity-0 group-hover/section:opacity-100 transition-all disabled:opacity-0 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none"
                         title="Scroll Left"
                     >
-                        <ChevronLeft size={16} />
+                        <ChevronLeft size={20} />
                     </button>
 
                     {/* Horizontal Scroll Container */}
@@ -86,10 +86,10 @@ const CategorySection = ({ title, icon: CategoryIcon, items, type, isOpen, onTog
                     {/* Right Scroll Button */}
                     <button
                         onClick={(e) => { e.stopPropagation(); scroll('right'); }}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-6 h-12 bg-gray-800/80 text-white flex items-center justify-center rounded-l-lg opacity-0 group-hover/section:opacity-100 transition-opacity"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-12 bg-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] text-black flex items-center justify-center opacity-0 group-hover/section:opacity-100 transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none"
                         title="Scroll Right"
                     >
-                        <ChevronRight size={16} />
+                        <ChevronRight size={20} />
                     </button>
                     {/* Sub-Selection (Variants) */}
                     {(() => {

@@ -337,21 +337,21 @@ export default function App() {
 
           {/* Middle Area: Workspace (Restored to Middle) */}
           <div className="shrink-0 relative flex flex-col p-4 pt-2">
-            <p className="text-xs text-center text-gray-400 mb-2 font-medium">
+            <p className="text-xs text-center text-gray-400 mb-2 font-black uppercase">
               {t('workspace.hint')}
             </p>
             {/* Wrapper to control size if needed, but flex-1 with padding works well to isolate it */}
-            <div className="border-2 border-dashed border-gray-200 rounded-3xl bg-gray-100/50 min-h-[120px]">
+            <div className="border-4 border-black border-dashed rounded-xl bg-[#c0f2a6] shadow-[4px_4px_0_0_rgba(0,0,0,1)] min-h-[120px]">
               <Workspace items={workspaceItems} onRemove={handleRemoveItem} onClearAll={handleClearAll} />
             </div>
           </div>
 
           {/* Bottom Area: Visual Mapping (Moved Down) */}
-          <div className="p-4 pt-0 shrink-0 bg-white/50 backdrop-blur-sm flex flex-col items-center pb-32 md:pb-6">
+          <div className="p-4 pt-0 shrink-0 bg-white flex flex-col items-center pb-32 md:pb-6">
 
             {/* Visual Mapping Header */}
             <div className="w-full max-w-5xl mb-3 flex items-center">
-              <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center mr-2 shadow-sm border border-orange-200">
+              <div className="w-8 h-8 rounded-lg bg-[#FF90E8] text-black flex items-center justify-center mr-2 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
                 <Grid size={18} />
               </div>
               <div>
@@ -481,7 +481,7 @@ export default function App() {
           lockedCategories={lockedCategories}
           onAssetClick={handleAssetClick}
           currentSelections={selections}
-          className="!fixed !bottom-[70px] !left-2 !right-2 !z-[100] !rounded-xl shadow-2xl border border-gray-200"
+          className="!fixed !bottom-[70px] !left-2 !right-2 !z-[100] !rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] border-4 border-black bg-white"
         />
       </div>
 

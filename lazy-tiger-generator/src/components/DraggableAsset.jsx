@@ -34,12 +34,12 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
             {...attributes}
             onClick={() => !disabled && onClick && onClick()}
 
-            className={`snap-center flex-shrink-0 w-40 h-56 flex flex-col items-center justify-center p-0 rounded-xl border shadow-sm transition-all select-none relative
+            className={`snap-center flex-shrink-0 w-40 h-56 flex flex-col items-center justify-center p-0 rounded-xl border-4 border-black transition-all select-none relative z-0
                 ${disabled
-                    ? 'bg-white opacity-40 grayscale cursor-not-allowed border-gray-100'
+                    ? 'bg-gray-100 opacity-50 grayscale cursor-not-allowed'
                     : isSelected
-                        ? 'bg-orange-100 border-orange-500 ring-4 ring-orange-200/50 shadow-lg scale-[1.02] z-10'
-                        : 'bg-white border-gray-200 hover:shadow-md cursor-grab active:cursor-grabbing hover:border-orange-300 group active:scale-95 cursor-pointer'
+                        ? 'bg-[#FF90E8] shadow-[4px_4px_0_0_rgba(0,0,0,1)] -translate-x-1 -translate-y-1 z-10'
+                        : 'bg-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:z-10 cursor-grab active:cursor-grabbing group active:translate-x-0 active:translate-y-0 active:shadow-none cursor-pointer'
                 }
                 `}
         >
@@ -79,11 +79,11 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
 
                 {/* Label & Subtitle */}
                 <div className={`relative z-10 text-center ${isFullBleed ? 'mt-auto w-full px-2 pb-2' : 'w-full px-1'}`}>
-                    <span className={`text-sm font-bold block mb-0.5 leading-tight line-clamp-1 ${isFullBleed ? 'text-white text-shadow-sm' : 'text-gray-700 group-hover:text-orange-600'}`}>
+                    <span className={`text-sm font-black block mb-0.5 leading-tight line-clamp-1 ${isFullBleed ? 'text-white text-[15px]' : 'text-black group-hover:text-gray-700'}`}>
                         {t(item.label)}
                     </span>
                     {item.sub && (
-                        <span className={`text-xs block mt-0.5 ${isFullBleed ? 'text-gray-200' : 'text-gray-400'}`}>
+                        <span className={`text-[11px] font-bold block mt-0.5 ${isFullBleed ? 'text-gray-200' : 'text-gray-600'}`}>
                             {item.sub}
                         </span>
                     )}

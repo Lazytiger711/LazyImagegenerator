@@ -143,13 +143,13 @@ export default function DiscoverPage() {
             <div className="relative z-10 max-w-7xl mx-auto px-4 pb-24 pt-20 custom-scrollbar">
 
                 {/* Header Section with Guide Link */}
-                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 mb-6 bg-white/80 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-sm border border-white/50">
-                    <div className="flex space-x-1 sm:space-x-2 bg-gray-200/50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto custom-scrollbar">
+                <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 mb-6 bg-white p-3 sm:p-4 rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] border-4 border-black">
+                    <div className="flex space-x-1 sm:space-x-2 bg-white p-1 w-full sm:w-auto overflow-x-auto custom-scrollbar">
                         <button
                             onClick={() => setSortBy('popular')}
-                            className={`px-3 py-2 sm:px-4 rounded-lg font-bold text-sm transition-all flex items-center whitespace-nowrap shrink-0 ${sortBy === 'popular'
-                                ? 'bg-white text-orange-600 shadow-sm scale-105'
-                                : 'text-gray-500 hover:text-gray-700'
+                            className={`px-3 py-2 sm:px-4 rounded-xl font-black text-sm uppercase transition-all flex items-center whitespace-nowrap shrink-0 border-2 border-transparent ${sortBy === 'popular'
+                                ? 'bg-[#FF90E8] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
+                                : 'text-black hover:bg-yellow-200 hover:border-black'
                                 }`}
                         >
                             <TrendingUp size={16} className="mr-1.5" />
@@ -157,9 +157,9 @@ export default function DiscoverPage() {
                         </button>
                         <button
                             onClick={() => setSortBy('recent')}
-                            className={`px-3 py-2 sm:px-4 rounded-lg font-bold text-sm transition-all flex items-center whitespace-nowrap shrink-0 ${sortBy === 'recent'
-                                ? 'bg-white text-orange-600 shadow-sm scale-105'
-                                : 'text-gray-500 hover:text-gray-700'
+                            className={`px-3 py-2 sm:px-4 rounded-xl font-black text-sm uppercase transition-all flex items-center whitespace-nowrap shrink-0 border-2 border-transparent ${sortBy === 'recent'
+                                ? 'bg-[#FF90E8] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
+                                : 'text-black hover:bg-yellow-200 hover:border-black'
                                 }`}
                         >
                             <Clock size={16} className="mr-1.5" />
@@ -167,9 +167,9 @@ export default function DiscoverPage() {
                         </button>
                         <button
                             onClick={() => setSortBy('likes')}
-                            className={`px-3 py-2 sm:px-4 rounded-lg font-bold text-sm transition-all flex items-center whitespace-nowrap shrink-0 ${sortBy === 'likes'
-                                ? 'bg-white text-orange-600 shadow-sm scale-105'
-                                : 'text-gray-500 hover:text-gray-700'
+                            className={`px-3 py-2 sm:px-4 rounded-xl font-black text-sm uppercase transition-all flex items-center whitespace-nowrap shrink-0 border-2 border-transparent ${sortBy === 'likes'
+                                ? 'bg-[#FF90E8] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
+                                : 'text-black hover:bg-yellow-200 hover:border-black'
                                 }`}
                         >
                             <Heart size={16} className="mr-1.5" />
@@ -179,7 +179,7 @@ export default function DiscoverPage() {
 
                     <button
                         onClick={() => navigate('/guide')}
-                        className="px-3 py-2 sm:px-4 bg-white text-orange-500 font-bold rounded-xl shadow-sm hover:bg-orange-50 border border-orange-100 transition-all flex items-center text-sm whitespace-nowrap shrink-0"
+                        className="px-3 py-2 sm:px-4 bg-white text-black font-black uppercase rounded-xl shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-[#c0f2a6] hover:-translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none border-2 border-black transition-all flex items-center text-sm whitespace-nowrap shrink-0"
                     >
                         <BookOpen size={18} className="mr-1.5" />
                         Guide
@@ -192,7 +192,7 @@ export default function DiscoverPage() {
                         const Card = (
                             <div
                                 onClick={() => setSelectedPrompt(prompt)}
-                                className="cursor-pointer group relative aspect-[3/4] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-1 bg-white"
+                                className="cursor-pointer group relative aspect-[3/4] rounded-xl overflow-hidden border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[8px_8px_0_0_rgba(0,0,0,1)] transition-all hover:-translate-y-2 hover:-translate-x-1 bg-white"
                             >
                                 <img
                                     src={prompt.image_url || '/placeholder-image.jpg'}

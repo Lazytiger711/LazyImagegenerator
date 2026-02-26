@@ -87,12 +87,12 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                 {/* Header (Always Visible) */}
                 <div
                     onClick={() => setIsMobileOpen(!isMobileOpen)}
-                    className="p-4 border-b border-gray-200 bg-orange-50/50 flex items-center justify-between cursor-pointer md:cursor-default h-14 shrink-0"
+                    className="p-4 border-b-4 border-black bg-[#FF90E8] flex items-center justify-between cursor-pointer md:cursor-default h-14 shrink-0"
                 >
                     <div className="flex items-center">
                         <div>
-                            <h2 className="font-black text-lg text-gray-800 flex items-center">
-                                <Grid size={20} className="mr-2 text-orange-600" />
+                            <h2 className="font-black text-lg text-black flex items-center">
+                                <Grid size={20} className="mr-2 text-black" />
                                 소품 상자
                             </h2>
                             <p className={`text-xs text-gray-500 mt-1 ${!isMobileOpen ? 'hidden md:block' : ''}`}>
@@ -104,8 +104,8 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                     <div className="flex items-center gap-2">
 
 
-                        <div className="md:hidden bg-white p-1 rounded-full shadow-sm">
-                            {isMobileOpen ? <ChevronDown size={20} className="text-gray-500" /> : <ChevronUp size={20} className="text-orange-500" />}
+                        <div className="md:hidden bg-white p-1 rounded-full border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                            {isMobileOpen ? <ChevronDown size={20} className="text-black" /> : <ChevronUp size={20} className="text-black" />}
                         </div>
                     </div>
                 </div>

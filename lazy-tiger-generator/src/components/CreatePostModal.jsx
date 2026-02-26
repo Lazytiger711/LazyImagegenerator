@@ -103,14 +103,14 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
             <div
-                className="bg-white rounded-3xl shadow-2xl overflow-hidden w-full max-w-lg max-h-[90vh] overflow-y-auto"
+                className="bg-white rounded-xl border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] overflow-hidden w-full max-w-lg max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="flex justify-between items-center p-4 border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur z-10">
-                    <h2 className="text-lg font-bold text-gray-800">새 게시물 만들기</h2>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <X size={20} />
+                <div className="flex justify-between items-center p-4 border-b-4 border-black sticky top-0 bg-white z-10">
+                    <h2 className="text-xl font-black text-black">새 게시물 만들기</h2>
+                    <button onClick={onClose} className="p-2 bg-white border-2 border-transparent hover:border-black rounded-xl hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none transition-all">
+                        <X size={20} className="text-black" />
                     </button>
                 </div>
 
@@ -118,18 +118,18 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                 <div className="p-6">
                     {/* Image Upload Area */}
                     <div
-                        className="mb-6 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer relative aspect-video flex flex-col items-center justify-center group"
+                        className="mb-6 border-4 border-black border-dashed rounded-xl bg-[#c0f2a6] hover:bg-[#a5e687] shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all cursor-pointer relative aspect-video flex flex-col items-center justify-center group"
                         onClick={() => fileInputRef.current?.click()}
                     >
                         {imagePreview ? (
                             <img src={imagePreview} alt="Preview" className="w-full h-full object-contain rounded-xl" />
                         ) : (
                             <>
-                                <div className="w-16 h-16 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                <div className="w-16 h-16 rounded-full bg-white text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                     <Upload size={28} />
                                 </div>
-                                <p className="text-sm font-bold text-gray-500">이미지를 선택하거나 드래그하세요</p>
-                                <p className="text-xs text-gray-400 mt-1">JPG, PNG up to 5MB</p>
+                                <p className="text-sm font-black text-black">이미지를 선택하거나 드래그하세요</p>
+                                <p className="text-xs font-bold text-gray-700 mt-1">JPG, PNG up to 5MB</p>
                             </>
                         )}
                         <input
@@ -142,50 +142,50 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                     </div>
 
                     {/* Inputs */}
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-xs font-bold text-gray-500 mb-1 ml-1">제목 <span className="text-red-500">*</span></label>
+                    <div className="space-y-5">
+                        <div className="relative">
+                            <label className="block text-xs font-black text-black mb-1 ml-1 uppercase">제목 <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="멋진 제목을 지어주세요"
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium"
+                                className="w-full bg-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] rounded-xl px-4 py-3 text-sm outline-none focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all font-bold text-black"
                             />
                         </div>
-                        <div>
-                            <label className="block text-xs font-bold text-gray-500 mb-1 ml-1">설명 (선택)</label>
+                        <div className="relative">
+                            <label className="block text-xs font-black text-black mb-1 ml-1 uppercase">설명 (선택)</label>
                             <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="작품에 대한 설명을 적어주세요..."
                                 rows={3}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium resize-none"
+                                className="w-full bg-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] rounded-xl px-4 py-3 text-sm outline-none focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all font-bold text-black resize-none"
                             />
                         </div>
-                        <div>
-                            <label className="block text-xs font-bold text-gray-500 mb-1 ml-1">비밀번호 <span className="text-red-500">*</span> <span className="text-xs font-normal text-gray-400">(수정/삭제 시 필요)</span></label>
+                        <div className="relative">
+                            <label className="block text-xs font-black text-black mb-1 ml-1 uppercase">비밀번호 <span className="text-red-500">*</span> <span className="text-xs font-bold text-gray-500">(수정/삭제 시 필요)</span></label>
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="비밀번호를 입력하세요"
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium font-mono"
+                                className="w-full bg-white border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] rounded-xl px-4 py-3 text-sm outline-none focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all font-bold text-black font-mono"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-100 flex justify-end sticky bottom-0 bg-white/95 backdrop-blur z-10">
+                <div className="p-4 border-t-4 border-black flex justify-end sticky bottom-0 bg-white z-10">
                     <button
                         onClick={handleSubmit}
                         disabled={!imageFile || !title || !password || isSubmitting}
                         className={`
-                            px-6 py-2.5 rounded-xl font-bold text-white flex items-center transition-all
+                            px-6 py-2.5 rounded-xl font-black flex items-center transition-all border-4 border-black uppercase text-sm
                             ${!imageFile || !title || !password || isSubmitting
-                                ? 'bg-gray-300 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-orange-500 to-red-500 shadow-lg hover:shadow-xl hover:scale-105'
+                                ? 'bg-gray-200 text-gray-500 shadow-none'
+                                : 'bg-[#FF90E8] text-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none'
                             }
                         `}
                     >
