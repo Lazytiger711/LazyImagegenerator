@@ -52,7 +52,7 @@ export default function BottomNav({ onNewPost }) {
                                 <button
                                     key={tab.id}
                                     onClick={tab.action}
-                                    className="flex flex-col items-center justify-center p-3 rounded-full bg-[#c0f2a6] border-2 border-black text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-[#a5e687] hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-0 active:translate-x-0 active:shadow-none transition-all -mt-4 mb-2"
+                                    className="flex flex-col items-center justify-center p-3 rounded-full bg-[#FFB233] border-2 border-black text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-[#FFA500] hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-0 active:translate-x-0 active:shadow-none transition-all -mt-4 mb-2"
                                 >
                                     <Icon size={28} strokeWidth={2.5} />
                                 </button>
@@ -66,7 +66,7 @@ export default function BottomNav({ onNewPost }) {
                                 className={`
                   flex flex-col items-center justify-center py-2 px-4 rounded-xl transition-all min-w-[60px]
                   ${active
-                                        ? 'bg-[#FF90E8] text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-1'
+                                        ? 'bg-[#FF6B00] text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-1'
                                         : 'text-black hover:bg-yellow-200 border-2 border-transparent hover:border-black hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-1'
                                     }
                 `}

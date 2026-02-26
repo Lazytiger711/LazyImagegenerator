@@ -341,7 +341,7 @@ export default function App() {
               {t('workspace.hint')}
             </p>
             {/* Wrapper to control size if needed, but flex-1 with padding works well to isolate it */}
-            <div className="border-4 border-black border-dashed rounded-xl bg-[#c0f2a6] shadow-[4px_4px_0_0_rgba(0,0,0,1)] min-h-[120px]">
+            <div className="border-4 border-black border-dashed rounded-xl bg-[#FFB233] shadow-[4px_4px_0_0_rgba(0,0,0,1)] min-h-[120px]">
               <Workspace items={workspaceItems} onRemove={handleRemoveItem} onClearAll={handleClearAll} />
             </div>
           </div>
@@ -351,7 +351,7 @@ export default function App() {
 
             {/* Visual Mapping Header */}
             <div className="w-full max-w-5xl mb-3 flex items-center">
-              <div className="w-8 h-8 rounded-lg bg-[#FF90E8] text-black flex items-center justify-center mr-2 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+              <div className="w-8 h-8 rounded-lg bg-[#FF6B00] text-black flex items-center justify-center mr-2 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
                 <Grid size={18} />
               </div>
               <div>

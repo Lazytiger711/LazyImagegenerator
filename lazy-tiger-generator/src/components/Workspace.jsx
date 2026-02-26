@@ -7,7 +7,7 @@ export default function Workspace({ items, onRemove, onClearAll }) {
     const { t } = useTranslation();
 
     return (
-        <div className="flex-1 h-full flex flex-col transition-colors p-6 bg-gray-50">
+        <div className="flex-1 h-full flex flex-col transition-colors p-4 sm:p-6 bg-transparent">
             {/* Workspace Header */}
             <div className="mb-6 flex justify-between items-end">
                 <div>
@@ -31,8 +31,8 @@ export default function Workspace({ items, onRemove, onClearAll }) {
 
             {/* Display Area */}
             <div className={`
-                    flex-1 rounded-3xl border-2 border-dashed border-gray-200 transition-all p-8
-                    flex content-start flex-wrap overflow-y-auto bg-white/50
+                    flex-1 transition-all p-2 sm:p-4
+                    flex content-start flex-wrap overflow-y-auto bg-transparent gap-4
                     ${items.length === 0 ? 'items-center justify-center' : ''}
                 `}
             >

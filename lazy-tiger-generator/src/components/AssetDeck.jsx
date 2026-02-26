@@ -87,7 +87,7 @@ export default function AssetDeck({ disabledIds = [], onAssetClick, lockedCatego
                 {/* Header (Always Visible) */}
                 <div
                     onClick={() => setIsMobileOpen(!isMobileOpen)}
-                    className="p-4 border-b-4 border-black bg-[#FF90E8] flex items-center justify-between cursor-pointer md:cursor-default h-14 shrink-0"
+                    className="p-4 border-b-4 border-black bg-[#FF6B00] flex items-center justify-between cursor-pointer md:cursor-default h-14 shrink-0"
                 >
                     <div className="flex items-center">
                         <div>

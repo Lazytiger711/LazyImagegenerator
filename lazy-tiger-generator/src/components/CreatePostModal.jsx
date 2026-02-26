@@ -118,7 +118,7 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                 <div className="p-6">
                     {/* Image Upload Area */}
                     <div
-                        className="mb-6 border-4 border-black border-dashed rounded-xl bg-[#c0f2a6] hover:bg-[#a5e687] shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all cursor-pointer relative aspect-video flex flex-col items-center justify-center group"
+                        className="mb-6 border-4 border-black border-dashed rounded-xl bg-[#FFB233] hover:bg-[#FFA500] shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all cursor-pointer relative aspect-video flex flex-col items-center justify-center group"
                         onClick={() => fileInputRef.current?.click()}
                     >
                         {imagePreview ? (
@@ -185,7 +185,7 @@ export default function CreatePostModal({ onClose, onPostCreated }) {
                             px-6 py-2.5 rounded-xl font-black flex items-center transition-all border-4 border-black uppercase text-sm
                             ${!imageFile || !title || !password || isSubmitting
                                 ? 'bg-gray-200 text-gray-500 shadow-none'
-                                : 'bg-[#FF90E8] text-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none'
+                                : 'bg-[#FF6B00] text-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:relative hover:-top-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none'
                             }
                         `}
                     >

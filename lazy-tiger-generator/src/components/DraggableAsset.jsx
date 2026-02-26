@@ -38,7 +38,7 @@ const DraggableAsset = ({ item, type, disabled, onClick, isSelected }) => {
                 ${disabled
                     ? 'bg-gray-100 opacity-50 grayscale cursor-not-allowed'
                     : isSelected
-                        ? 'bg-[#FF90E8] shadow-[4px_4px_0_0_rgba(0,0,0,1)] -translate-x-1 -translate-y-1 z-10'
+                        ? 'bg-[#FF6B00] shadow-[4px_4px_0_0_rgba(0,0,0,1)] -translate-x-1 -translate-y-1 z-10'
                         : 'bg-white shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:z-10 cursor-grab active:cursor-grabbing group active:translate-x-0 active:translate-y-0 active:shadow-none cursor-pointer'
                 }
                 `}

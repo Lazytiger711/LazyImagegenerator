@@ -165,7 +165,7 @@ export default function GuidePage() {
                 <div className="text-center">
                     <button
                         onClick={() => navigate('/create')}
-                        className="inline-flex items-center justify-center px-8 py-4 bg-[#FF90E8] text-black border-4 border-black rounded-xl font-black uppercase text-lg hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
+                        className="inline-flex items-center justify-center px-8 py-4 bg-[#FF6B00] text-black border-4 border-black rounded-xl font-black uppercase text-lg hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all shadow-[4px_4px_0_0_rgba(0,0,0,1)]"
                     >
                         {t('guide.start_button')}
                         <Wand2 className="ml-2" size={20} />

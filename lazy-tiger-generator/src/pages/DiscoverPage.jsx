@@ -148,7 +148,7 @@ export default function DiscoverPage() {
                         <button
                             onClick={() => setSortBy('popular')}
                             className={`px-3 py-2 sm:px-4 rounded-xl font-black text-sm uppercase transition-all flex items-center whitespace-nowrap shrink-0 border-2 border-transparent ${sortBy === 'popular'
-                                ? 'bg-[#FF90E8] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
+                                ? 'bg-[#FF6B00] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
                                 : 'text-black hover:bg-yellow-200 hover:border-black'
                                 }`}
                         >
@@ -158,7 +158,7 @@ export default function DiscoverPage() {
                         <button
                             onClick={() => setSortBy('recent')}
                             className={`px-3 py-2 sm:px-4 rounded-xl font-black text-sm uppercase transition-all flex items-center whitespace-nowrap shrink-0 border-2 border-transparent ${sortBy === 'recent'
-                                ? 'bg-[#FF90E8] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
+                                ? 'bg-[#FF6B00] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
                                 : 'text-black hover:bg-yellow-200 hover:border-black'
                                 }`}
                         >
@@ -168,7 +168,7 @@ export default function DiscoverPage() {
                         <button
                             onClick={() => setSortBy('likes')}
                             className={`px-3 py-2 sm:px-4 rounded-xl font-black text-sm uppercase transition-all flex items-center whitespace-nowrap shrink-0 border-2 border-transparent ${sortBy === 'likes'
-                                ? 'bg-[#FF90E8] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
+                                ? 'bg-[#FF6B00] text-black border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] -translate-y-0.5'
                                 : 'text-black hover:bg-yellow-200 hover:border-black'
                                 }`}
                         >
@@ -179,7 +179,7 @@ export default function DiscoverPage() {
 
                     <button
                         onClick={() => navigate('/guide')}
-                        className="px-3 py-2 sm:px-4 bg-white text-black font-black uppercase rounded-xl shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-[#c0f2a6] hover:-translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none border-2 border-black transition-all flex items-center text-sm whitespace-nowrap shrink-0"
+                        className="px-3 py-2 sm:px-4 bg-white text-black font-black uppercase rounded-xl shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-[#FFB233] hover:-translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none border-2 border-black transition-all flex items-center text-sm whitespace-nowrap shrink-0"
                     >
                         <BookOpen size={18} className="mr-1.5" />
                         Guide
