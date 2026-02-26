@@ -32,8 +32,8 @@ export default function Workspace({ items, onRemove, onClearAll }) {
             {/* Display Area */}
             <div className={`
                     flex-1 transition-all p-2 sm:p-4
-                    flex content-start flex-wrap overflow-y-auto bg-transparent gap-4
-                    ${items.length === 0 ? 'items-center justify-center' : ''}
+                    flex justify-center flex-wrap overflow-y-auto bg-transparent gap-4
+                    ${items.length === 0 ? 'items-center' : ''}
                 `}
             >
                 {items.map((item) => (
