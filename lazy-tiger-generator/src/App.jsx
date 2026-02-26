@@ -474,14 +474,13 @@ export default function App() {
       `}</style>
 
       {/* Mobile Asset Deck (Floating w/ Explicit Override) */}
-      {/* Mobile Asset Deck (Floating) */}
       <div className="md:hidden">
         <AssetDeck
           disabledIds={disabledOptions}
           lockedCategories={lockedCategories}
           onAssetClick={handleAssetClick}
           currentSelections={selections}
-          className="!fixed !bottom-[70px] !left-2 !right-2 !z-[100] !rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] border-4 border-black bg-white"
+          className="!fixed !bottom-[85px] !left-3 !right-3 !w-auto !z-[100] !rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] border-4 border-black bg-white overflow-hidden"
         />
       </div>
 

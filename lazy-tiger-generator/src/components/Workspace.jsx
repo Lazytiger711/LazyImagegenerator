@@ -9,10 +9,10 @@ export default function Workspace({ items, onRemove, onClearAll }) {
     return (
         <div className="flex-1 h-full flex flex-col transition-colors p-4 sm:p-6 bg-transparent">
             {/* Workspace Header */}
-            <div className="mb-6 flex justify-between items-end">
+            <div className="mb-6 flex flex-col md:flex-row md:justify-between items-start md:items-end gap-3">
                 <div>
-                    <h2 className="text-2xl font-black text-gray-800">{t('workspace.title')}</h2>
-                    <p className="text-sm text-gray-500">{t('workspace.desc')}</p>
+                    <h2 className="text-2xl font-black text-gray-800 break-keep">{t('workspace.title')}</h2>
+                    <p className="text-sm text-gray-500 break-keep">{t('workspace.desc')}</p>
                 </div>
                 <div className="flex items-center gap-2">
                     {items.length > 0 && (
