@@ -361,11 +361,20 @@ export const usePromptGenerator = ({
             try {
                 const baseGridDesc = getGridDescription();
 
-                // Include Context Text
-                const textParts = [];
-                if (subjectText.trim()) textParts.push(subjectText.trim());
-                if (contextText.trim()) textParts.push(contextText.trim());
-                const fullSubject = textParts.join(", ") || "Subject";
+                // Tag extraction logic for unified subjectText
+                let rawText = subjectText.trim() || "Subject";
+                let extractedSubject = rawText;
+                let cleanFullText = rawText;
+
+                // Look for @word (any non-whitespace characters after @)
+                const tagMatch = rawText.match(/@([^\s]+)/);
+                if (tagMatch) {
+                    extractedSubject = tagMatch[1]; // The word itself without @
+                    // Remove the @ symbol from the final prompt text
+                    cleanFullText = rawText.replace(/@/g, "");
+                }
+
+                const fullSubject = cleanFullText;
 
                 // 1. Resolve Effective Settings (Meme Priority)
                 const p = selections.meme.presets;
@@ -407,13 +416,19 @@ export const usePromptGenerator = ({
                     return base;
                 };
 
+                // The AI Vision logic uses the text to know what object to place in the orange boxes.
+                // We use the `extractedSubject` (either the tagged word, or the full sentence) for that logic.
+                // If there's a specific grid hint, we replace "MAIN SUBJECT" generic string with our extracted subject temporarily if we want to.
+                // The AI Vision actually generates its own `objectDescriptions` based on the palette tags (`subject`, `sub_subject`, etc).
+                // So here, we just pass the full scene description to the LLM.
+
                 if (selections.meme.id !== 'none') {
                     // MEME MODE
                     const memePrompt = selections.meme.prompt;
                     const resolutionPrompt = selections.resolution?.prompt || "";
                     const subjectInsertion = fullSubject ? `, featuring ${fullSubject}` : "";
                     generatedText = `${memePrompt}${subjectInsertion}, high quality. ${resolutionPrompt}`;
-                    instructionPrefix = `**System Instruction:**\nGenerate the image based on the specific Meme Template described below. You MUST strictly adhere to the visual composition, camera angle, and style of this meme. Insert the user's subject (${fullSubject}) into this scene naturally.\n\n`;
+                    instructionPrefix = `**System Instruction:**\nGenerate the image based on the specific Meme Template described below. You MUST strictly adhere to the visual composition, camera angle, and style of this meme. Insert the user's focus (${fullSubject}) into this scene naturally.\n\n`;
                     setFinalPrompt(instructionPrefix + generatedText);
                 } else {
                     // STANDARD MODE
@@ -455,12 +470,19 @@ export const usePromptGenerator = ({
                         selections.style.neg,
                         "high quality, detailed"
                     ].filter(Boolean).join(', ');
-                    const layoutContent = baseGridDesc ? `(Layout Constraint) ${baseGridDesc}` : "";
+
+                    // Here we replace the generic 'MAIN SUBJECT (subject)' string from getGridDescription 
+                    // with our intelligently extracted subject (either the @tag or the whole text)
+                    let layoutContent = baseGridDesc ? `(Layout Constraint) ${baseGridDesc}` : "";
+                    if (layoutContent) {
+                        // The grid logic outputs "MAIN SUBJECT (주 피사체)". We can replace it with our extracted subject to make the prompt more coherent.
+                        layoutContent = layoutContent.replace(/MAIN SUBJECT \([^)]+\)/g, extractedSubject);
+                    }
 
                     const sections = [
                         { label: '1. VISUAL STYLE', content: styleContent },
                         { label: '2. CAMERA ANGLE', content: cameraContent },
-                        { label: '3. MAIN SUBJECT', content: subjectContent },
+                        { label: '3. SCENE DESCRIPTION', content: subjectContent },
                         { label: '4. COMPOSITION', content: compositionContent },
                         { label: '5. LIGHTING', content: lightingContent },
                         { label: '6. TECHNICAL', content: technicalContent },

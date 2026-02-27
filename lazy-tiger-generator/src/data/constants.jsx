@@ -3,8 +3,8 @@ import { Ban, Eye, MoveVertical, Camera, Film, Box, Paintbrush, Pencil, Zap, Mon
 // Removed import.meta.glob to prevent Vite from bundling icons
 const getIcon = (path) => {
     if (typeof path === 'string' && path.startsWith('/icons/')) {
-        // Fetch directly from GitHub to avoid base64 inlining in Figma
-        return `https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/assets${path}`;
+        // Fetch directly from Vercel Blob
+        return `https://dl4ttbo2srjs23fx.public.blob.vercel-storage.com${path}`;
     }
     return path;
 };

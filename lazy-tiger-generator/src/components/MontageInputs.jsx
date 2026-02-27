@@ -1,18 +1,49 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, Box, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
 
 const MontageInputs = React.memo(function MontageInputs({
-    subjectType,
-    setSubjectType,
     subjectText,
     setSubjectText,
     recordBlur,
-    contextText,
-    setContextText,
     applyChaos
 }) {
     const { t } = useTranslation();
+    const subjectRef = useRef(null);
+    const highlightRef = useRef(null);
+
+    const adjustHeight = () => {
+        if (subjectRef.current && highlightRef.current) {
+            subjectRef.current.style.height = 'auto';
+            const newHeight = `${Math.max(46, subjectRef.current.scrollHeight)}px`;
+            subjectRef.current.style.height = newHeight;
+            highlightRef.current.style.height = newHeight;
+        }
+    };
+
+    useEffect(() => {
+        adjustHeight();
+    }, [subjectText]);
+
+    // Sync scrolling between textarea and highlight div
+    const handleScroll = () => {
+        if (subjectRef.current && highlightRef.current) {
+            highlightRef.current.scrollTop = subjectRef.current.scrollTop;
+            highlightRef.current.scrollLeft = subjectRef.current.scrollLeft;
+        }
+    };
+
+    const renderHighlights = (text) => {
+        // Splitting by @word while keeping the match
+        const parts = text.split(/(@[^\s]+)/g);
+        return parts.map((part, index) => {
+            if (part.startsWith('@')) {
+                return <span key={index} className="bg-orange-100 text-orange-600 font-bold rounded px-1 -mx-1">{part}</span>;
+            }
+            return <span key={index}>{part}</span>;
+        });
+    };
 
     return (
         <div className="p-6 pb-4 shrink-0 border-b border-gray-200 bg-white z-20 shadow-sm">
@@ -27,55 +58,41 @@ const MontageInputs = React.memo(function MontageInputs({
             </div>
 
             <div className="flex flex-col space-y-3">
-                <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1 ml-1">
-                        <label className="block text-xs font-bold text-gray-500">
-                            {subjectType === 'character' ? t('sections.main_character') : t('sections.main_subject')}
-                        </label>
+                <div className="flex-1 w-full relative">
+                    <label className="block text-xs font-bold text-gray-500 mb-1 ml-1 cursor-pointer" onClick={() => subjectRef.current?.focus()}>
+                        PROMPT (장면 설명)
+                    </label>
 
-                        {/* Subject Type Toggle */}
-                        <div className="flex bg-gray-100 p-0.5 rounded-lg border border-gray-200">
-                            <button
-                                onClick={() => setSubjectType('character')}
-                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center transition-all ${subjectType === 'character' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-                                title="Character Mode"
-                            >
-                                <User size={12} className="mr-1" /> {t('common.character')}
-                            </button>
-                            <button
-                                onClick={() => setSubjectType('object')}
-                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center transition-all ${subjectType === 'object' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-                                title="Object Mode"
-                            >
-                                <Box size={12} className="mr-1" /> {t('common.object')}
-                            </button>
+                    <div className="relative w-full">
+                        {/* Highlight Layer */}
+                        <div
+                            ref={highlightRef}
+                            className="absolute top-0 left-0 w-full h-full bg-gray-50 border border-transparent rounded-xl px-4 py-3 text-sm font-medium whitespace-pre-wrap break-words overflow-hidden pointer-events-none text-transparent"
+                            style={{ minHeight: '46px', fontFamily: 'inherit', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+                            aria-hidden="true"
+                        >
+                            {renderHighlights(subjectText)}
                         </div>
+
+                        {/* Interactive Textarea */}
+                        <textarea
+                            ref={subjectRef}
+                            rows={1}
+                            value={subjectText}
+                            onChange={(e) => setSubjectText(e.target.value)}
+                            onScroll={handleScroll}
+                            onBlur={recordBlur}
+                            placeholder={t('placeholders.unified_prompt') || "어떤 장면을 만들고 싶으신가요? (예: 눈 덮인 산을 오르는 호랑이)"}
+                            className="w-full relative z-10 bg-transparent text-gray-900 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium resize-none overflow-hidden outline-none caret-orange-500"
+                            style={{ minHeight: '46px', margin: 0 }}
+                            spellCheck={false}
+                        />
                     </div>
 
-                    <p className={`text-[10px] mb-2 ml-1 font-medium ${subjectType === 'character' ? 'text-orange-500' : 'text-blue-500'}`}>
-                        {subjectType === 'character'
-                            ? t('sections.character_hint')
-                            : t('sections.object_hint')}
+                    <p className="text-[10px] mt-1.5 ml-1 font-medium text-gray-400">
+                        <span className="text-orange-500 font-bold mr-1">💡 TIP:</span>
+                        {t('sections.tagging_hint') || "핵심 피사체 앞에 @를 붙이면 캔버스 영역에 더 정확히 배치됩니다. (예: 숲 속의 @고양이)"}
                     </p>
-                    <input
-                        type="text"
-                        value={subjectText}
-                        onChange={(e) => setSubjectText(e.target.value)}
-                        onBlur={recordBlur}
-                        placeholder={subjectType === 'character' ? t('placeholders.character') : t('placeholders.object')}
-                        className={`w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 transition-all font-medium ${subjectType === 'character' ? 'focus:ring-orange-200 focus:border-orange-400' : 'focus:ring-blue-200 focus:border-blue-400'}`}
-                    />
-                </div>
-                <div className="flex-1">
-                    <label className="block text-xs font-bold text-gray-500 mb-1 ml-1">{t('sections.context')}</label>
-                    <input
-                        type="text"
-                        value={contextText}
-                        onChange={(e) => setContextText(e.target.value)}
-                        onBlur={recordBlur}
-                        placeholder={t('placeholders.context')}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all font-medium"
-                    />
                 </div>
 
                 {/* Chaos Button (New Location) */}

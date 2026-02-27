@@ -20,7 +20,7 @@ export default function Header({
                         Lazy <span className="text-orange-500 hidden sm:inline">Image</span>
                     </span>
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-100 flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] overflow-hidden shrink-0">
-                        <img src="https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/logo.png" alt="Tiger Logo" className="w-full h-full object-cover" />
+                        <img src="https://dl4ttbo2srjs23fx.public.blob.vercel-storage.com/logo.png" alt="Tiger Logo" className="w-full h-full object-cover" />
                     </div>
                     {/* Supabase Connection Status Indicator (Simple) */}
                     <div className={`w-3 h-3 rounded-full border-2 border-black ${supabase ? 'bg-green-400' : 'bg-red-400'} shrink-0`} title="Supabase Connected"></div>
