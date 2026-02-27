@@ -8,7 +8,7 @@ import CreatePostModal from '../components/CreatePostModal';
 // Removed import.meta.glob to load icons via external URL and prevent Figma inline bloat
 const getGuideIcon = (path) => {
     if (typeof path === 'string' && path.startsWith('/icons/')) {
-        return `https://raw.githubusercontent.com/Lazytiger711/LazyImagegenerator/main/public/assets${path}`;
+        return `https://dl4ttbo2srjs23fx.public.blob.vercel-storage.com${path}`;
     }
     return path;
 };
