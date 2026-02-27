@@ -132,13 +132,13 @@ export function useSupabaseActions({
             setToastMsg("공유 링크 생성 중...");
             setShowToast(true);
 
-            // Save with is_public = true
+            // Save with is_public = false (Private share)
             const { data, error } = await supabase
                 .from('prompts')
                 .insert([
                     {
                         prompt_text: finalPrompt,
-                        is_public: true,
+                        is_public: false,
                         settings: {
                             shot: selections.shot,
                             angle: selections.angle,
