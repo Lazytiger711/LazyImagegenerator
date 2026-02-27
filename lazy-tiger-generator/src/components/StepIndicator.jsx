@@ -5,8 +5,11 @@ export default function StepIndicator({ currentStep = 0, steps }) {
     const { t } = useTranslation();
 
     return (
-        <div className="w-full bg-white border-b border-gray-200 py-5 px-4 md:py-6 md:px-8">
-            <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 md:gap-6">
+        <div className="w-full bg-white border-b border-gray-200 py-3 px-2 md:py-6 md:px-8">
+            <div className="max-w-5xl mx-auto flex items-center justify-between gap-1 md:gap-6 relative">
+                {/* Background Line Connector (Visible on all sizes now) */}
+                <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -translate-y-[calc(50%+10px)] md:-translate-y-[calc(50%+14px)] z-0" />
+
                 {steps.map((step, index) => {
                     const isActive = index === currentStep;
                     const isCompleted = index < currentStep;
@@ -14,18 +17,18 @@ export default function StepIndicator({ currentStep = 0, steps }) {
                     return (
                         <div
                             key={step.id}
-                            className="flex flex-col items-center flex-1 relative"
+                            className="flex flex-col items-center flex-1 relative z-10"
                         >
                             {/* Icon Container */}
                             <div
                                 className={`
-                  w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center
+                  w-12 h-12 md:w-20 md:h-20 rounded-full flex items-center justify-center
                   transition-all duration-300 relative
                   ${isActive
-                                        ? 'bg-orange-100 ring-4 ring-orange-200 scale-110'
+                                        ? 'bg-orange-100 ring-4 ring-orange-200 scale-105 md:scale-110'
                                         : isCompleted
                                             ? 'bg-green-50'
-                                            : 'bg-gray-50'
+                                            : 'bg-gray-50 border border-gray-200'
                                     }
                 `}
                             >
@@ -33,14 +36,14 @@ export default function StepIndicator({ currentStep = 0, steps }) {
                                     src={step.icon}
                                     alt={t(step.label)}
                                     className={`
-                    w-12 h-12 md:w-16 md:h-16 object-contain transition-all
+                    w-7 h-7 md:w-16 md:h-16 object-contain transition-all
                     ${isActive ? 'scale-110' : isCompleted ? 'opacity-70' : 'opacity-40 grayscale'}
                   `}
                                 />
 
                                 {/* Checkmark for completed steps */}
                                 {isCompleted && (
-                                    <div className="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                                    <div className="absolute -top-1 -right-1 md:-top-1 md:-right-1 bg-green-500 text-white rounded-full w-4 h-4 md:w-6 md:h-6 flex items-center justify-center text-[10px] md:text-sm shadow-sm ring-2 ring-white">
                                         ✓
                                     </div>
                                 )}
@@ -49,7 +52,7 @@ export default function StepIndicator({ currentStep = 0, steps }) {
                             {/* Label */}
                             <span
                                 className={`
-                  mt-2 text-sm md:text-base font-bold transition-colors
+                  mt-1.5 md:mt-2 text-[10px] md:text-base font-bold transition-colors whitespace-nowrap
                   ${isActive
                                         ? 'text-orange-600'
                                         : isCompleted
@@ -60,16 +63,6 @@ export default function StepIndicator({ currentStep = 0, steps }) {
                             >
                                 {t(step.label)}
                             </span>
-
-                            {/* Connector Line (except for last item) */}
-                            {index < steps.length - 1 && (
-                                <div className="hidden md:block absolute top-10 left-[calc(50%+2.5rem)] w-[calc(100%-5rem)] h-0.5 bg-gray-200">
-                                    <div
-                                        className={`h-full bg-orange-400 transition-all duration-500 ${isCompleted ? 'w-full' : 'w-0'
-                                            }`}
-                                    />
-                                </div>
-                            )}
                         </div>
                     );
                 })}

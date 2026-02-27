@@ -27,35 +27,35 @@ export default function Header({
                 </div>
 
                 {/* Right side: Actions */}
-                <div className="flex items-center justify-end flex-wrap gap-2 sm:gap-3 ml-auto">
+                <div className="flex items-center justify-end flex-wrap gap-1 sm:gap-3 ml-auto">
                     <button
                         onClick={() => setShowGallery(true)}
-                        className="px-2 sm:px-3 py-1.5 bg-[#FF90E8] text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none font-bold transition-all flex items-center shrink-0"
+                        className="p-1 px-1.5 sm:px-3 sm:py-1.5 bg-[#FF90E8] text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none font-bold transition-all flex items-center shrink-0"
                     >
-                        <ImageIcon size={16} className="sm:mr-1.5" />
-                        <span className="hidden sm:inline">{t('common.my_gallery')}</span>
+                        <ImageIcon size={14} className="sm:w-4 sm:h-4 sm:mr-1.5" />
+                        <span className="hidden sm:inline text-xs sm:text-sm">{t('common.my_gallery')}</span>
                     </button>
 
                     <button
                         onClick={() => setShowFeedback(true)}
-                        className="p-1.5 sm:px-3 sm:py-1.5 bg-yellow-300 text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none font-bold transition-all flex items-center shrink-0"
+                        className="p-1 px-1.5 sm:px-3 sm:py-1.5 bg-yellow-300 text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none font-bold transition-all flex items-center shrink-0"
                         title={t('common.feedback')}
                     >
-                        <MessageSquare size={16} />
-                        <span className="hidden md:inline ml-1.5">{t('common.feedback')}</span>
+                        <MessageSquare size={14} className="sm:w-4 sm:h-4" />
+                        <span className="hidden md:inline ml-1.5 text-xs sm:text-sm">{t('common.feedback')}</span>
                     </button>
                     <button
                         onClick={toggleLanguage}
-                        className="p-1.5 sm:px-3 sm:py-1.5 bg-white text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none font-bold transition-all flex items-center text-sm uppercase shrink-0"
+                        className="p-1 px-1.5 sm:px-3 sm:py-1.5 bg-white text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none font-bold transition-all flex items-center text-[10px] sm:text-sm uppercase shrink-0"
                     >
                         {i18n.language === 'en' ? 'EN' : 'KO'}
                     </button>
                     <button
                         onClick={() => window.location.reload()}
-                        className="p-1.5 sm:p-2 bg-white text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none transition-all shrink-0"
+                        className="p-1 px-1.5 sm:p-2 bg-white text-black border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-none rounded-none transition-all shrink-0"
                         title={t('common.reset')}
                     >
-                        <RefreshCw size={18} />
+                        <RefreshCw size={14} className="sm:w-[18px] sm:h-[18px]" />
                     </button>
                 </div>
             </div>
